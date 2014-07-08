@@ -19,7 +19,7 @@
 
 	var genericParameterEditController = {
 
-		__name: 'hifive.templateEditor.GenericParameterEditController',
+		__name: 'hifive.templateEditor.controller.GenericParameterEditController',
 
 		__construct: function() {
 		// 空construct

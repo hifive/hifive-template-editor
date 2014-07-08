@@ -35,7 +35,7 @@
 
 <link rel="stylesheet" href="src/main/webapp/resources/components/editor/css/editor-external.css">
 
-<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="src/main/webapp/resources/components/editor/css/index.css">
 
 
 <script src="src/main/webapp/resources/lib/jquery/jquery-2.0.3.min.js"></script>
@@ -48,11 +48,9 @@
 <script src="src/main/webapp/resources/lib/hifive/ejs-h5mod.js"></script>
 <script src="src/main/webapp/resources/lib/hifive/h5.js"></script>
 
-<!--
-<script src="h5.debug.js"></script>
- -->
+<script src="src/main/webapp/resources/lib/hifive/h5.dev.js"></script>
 
-<script src="src/main/webapp/resources/components/editor/h5.ext.js"></script>
+<script src="src/main/webapp/resources/components/editor/src/h5.ext.js"></script>
 
 
 
@@ -115,15 +113,10 @@
 
 <script>
 	$(function() {
-		/*
-		sample.jsでコントローラ化
-		h5.core.controller('#ejsEditorRoot', hifive.editor.controller.ejs.TemplateEditController);
-		 */
 
 		$('.dividedBox').each(function() {
 			h5.core.controller(this, h5.ui.container.DividedBox);
 		});
-
 
 		$(window).bind('resize', function() {
 			var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {

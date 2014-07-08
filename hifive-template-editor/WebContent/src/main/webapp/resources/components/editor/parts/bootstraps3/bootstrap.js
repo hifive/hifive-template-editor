@@ -20,7 +20,7 @@
 	//	var holderData = hifive.editor.ui.holderData;
 	var getButtonSchema = hifive.editor.ui.getBootstrap3ButtonSchema;
 
-	var NO_UNIT = hifive.editor.controller.GenericParameterEditController.NO_UNIT;
+	var NO_UNIT = hifive.templateEditor.controller.GenericParameterEditController.NO_UNIT;
 
 	var SINGLE_BUTTON_GROUP_SCHEMA = [{
 		label: '縦配置',
