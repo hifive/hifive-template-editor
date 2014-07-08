@@ -50,6 +50,8 @@
 			}
 		},
 
+		__templates: 'sample.ejs',
+
 		_editorLogic: hifive.templateEditor.sample.editorSampleLogic,
 
 		__ready: function() {
