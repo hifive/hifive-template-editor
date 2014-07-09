@@ -216,6 +216,13 @@
 
 			try {
 				this._previewController.preview(template);
+
+				var generated = this._previewController.generate(template);
+				var myOrigin = location.protocol + '//' + location.host;
+
+				var frame = this.$find('#frame')[0];
+				frame.contentWindow.postMessage(generated, myOrigin);
+				// window.postMessage(generated);
 			}
 			catch (e) {
 				this._setMessage(e.message);

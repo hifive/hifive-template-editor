@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<script type="text/javascript">
+	var myOrigin = location.protocol + '//' + location.host;
+	window.addEventListener('message', function(e) {
+
+		if (e.origin === myOrigin) {
+			var template = e.data;
+			document.body.innerHTML = template;
+
+		} else {
+			console.log("originが一致していない");
+		}
+	}, false);
+</script>
+
+</head>
+<body>
+</body>
+</html>

@@ -88,11 +88,16 @@ html,body {
 	color: black;
 }
 /* -end- */
-
 .tabPanels {
 	height: 50%;
 }
 
 .applyTemplate {
 	height: 50%;
+}
+
+#frame {
+	border: 1px solid blue;
+	background-color: white;
+	color: black;
 }

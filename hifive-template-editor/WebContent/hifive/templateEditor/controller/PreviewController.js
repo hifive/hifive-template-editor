@@ -1,17 +1,15 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
@@ -101,7 +99,7 @@
 			if (element) {
 				this._$target = $(element);
 			} else {
-				//elementがnullの場合にjQueryオブジェクトを作らない
+				// elementがnullの場合にjQueryオブジェクトを作らない
 				this._$target = null;
 			}
 		},
@@ -112,14 +110,14 @@
 		 * @param template
 		 */
 		preview: function(template) {
-			//テンプレートが不正な場合ここで例外が発生する
+			// テンプレートが不正な場合ここで例外が発生する
 			this._view.register(TEMPLATE_ID, template);
 
 			var generated = this._view.get(TEMPLATE_ID, this._data);
 
 			var $target = this._$target ? this._$target : $(this.rootElement);
 
-			if(window.opener) {
+			if (window.opener) {
 				var page = window.opener.hifive.editor.u.getFocusedPageController();
 				page.setHtml(this._$target[0], generated);
 
@@ -127,16 +125,31 @@
 
 				var templateId = $target.attr(DATA_TEMPLATE_ID);
 
-				if(templateId){
-					var $tmpl = $('script[type="text/ejs"][id="'+ templateId +'"]', doc)
+				if (templateId) {
+					var $tmpl = $('script[type="text/ejs"][id="' + templateId + '"]', doc)
 					$tmpl[0].text = template;
 				}
 
-			}
-			else {
+			} else {
 				$target.html(generated);
 			}
+		},
+
+		/**
+		 * テンプレート文字列とオブジェクトデータからテンプレートを生成し、返します。
+		 *
+		 * @param template
+		 * @return generated
+		 */
+		generate: function(template) {
+			// テンプレートが不正な場合ここで例外が発生する
+			this._view.register(TEMPLATE_ID, template);
+
+			var generated = this._view.get(TEMPLATE_ID, this._data);
+
+			return generated;
 		}
+
 	};
 
 	// =========================================================================
