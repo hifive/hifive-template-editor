@@ -68,9 +68,9 @@
 
 	var templateEditController = {
 		/**
-		 * @memberOf hifive.templateEditor.controller.TemplateEditController
+		 * @memberOf hifive.templateEditor.controller.TemplateEditorController
 		 */
-		__name: 'hifive.templateEditor.controller.TemplateEditController',
+		__name: 'hifive.templateEditor.controller.TemplateEditorController',
 
 		__meta: {
 			_previewController: {

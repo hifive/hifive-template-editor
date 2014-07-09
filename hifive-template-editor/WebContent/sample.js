@@ -17,7 +17,7 @@
 	var JSON_DATA_URL = 'sample.json';
 	var TEMPLATE_DATA_URL = 'sample.ejs';
 
-	var editorLogic = {
+	var templateEditorLogic = {
 		__name: 'hifive.templateEditor.sample.editorSampleLogic',
 
 		loadJsonData: function() {
@@ -33,7 +33,7 @@
 		}
 
 	};
-	h5.core.expose(editorLogic);
+	h5.core.expose(templateEditorLogic);
 })(jQuery);
 
 (function($) {
@@ -42,7 +42,7 @@
 
 		__name: 'hifive.templateEditor.sample.editorSampleController',
 
-		_templateEditorController: hifive.templateEditor.controller.TemplateEditController,
+		_templateEditorController: hifive.templateEditor.controller.TemplateEditorController,
 
 		__meta: {
 			_templateEditorController: {
@@ -52,13 +52,13 @@
 
 		__templates: 'sample.ejs',
 
-		_editorLogic: hifive.templateEditor.sample.editorSampleLogic,
+		_templateEditorLogic: hifive.templateEditor.sample.editorSampleLogic,
 
 		__ready: function() {
 
-			this._editorLogic.loadJsonData().done(
+			this._templateEditorLogic.loadJsonData().done(
 					this.own(function(json) {
-						this._editorLogic.loadTemplateData().done(
+						this._templateEditorLogic.loadTemplateData().done(
 								this.own(function(template) {
 									// var templateText = this.view.get('dummyId', json);
 									var trimTemplate = template.replace(/<script.*>/, '').replace(

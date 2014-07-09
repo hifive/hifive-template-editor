@@ -19,9 +19,9 @@
 
 	var componentPaletteController = {
 		/**
-		 * @memberOf hifive.editor.controller.ComponentPaletteController
+		 * @memberOf hifive.templateEditor.controller.ComponentPaletteController
 		 */
-		__name: 'hifive.editor.controller.ComponentPaletteController',
+		__name: 'hifive.templateEditor.controller.ComponentPaletteController',
 
 		_isDragging: false,
 
