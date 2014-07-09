@@ -27,7 +27,11 @@ html,body {
 	width: 100%;
 }
 
-.sourceText,.dataText {
+.sourceText {
+	height: 270px;
+}
+
+.dataText {
 	width: 100%;
 	height: 270px;
 }
@@ -53,14 +57,16 @@ html,body {
 }
 
 #ejsEditorRoot {
+	width: 100%;
 	height: 100%;
 	overflow: auto;
 }
 
 .componentPalette {
-	width: 170px;
-	height: 100%;
+	height: 270px;
 	overflow: auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .applyTemplateBtn {
@@ -71,24 +77,22 @@ html,body {
 	background-color: silver;
 }
 
-/* 追加 EJSテンプレートツール*/
+/* TESTタブ用 */
 .testBootstrap {
 	background-color: red;
 }
+/* -end- */
 
+/* データオブジェクトタブで文字が白になってるため応急処置 */
 .dataText {
 	color: black;
 }
+/* -end- */
 
-/*
-.dividedBox box {
-	height: 49%;
-}
- */
 .tabPanels {
 	height: 50%;
 }
 
-.dummy {
+.applyTemplate {
 	height: 50%;
 }
