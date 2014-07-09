@@ -2,14 +2,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
+<link rel="stylesheet" href="res/lib/bootstrap3.2/css/bootstrap.css" media="screen">
+<link rel="stylesheet" href="index.css">
 <script type="text/javascript">
 	var myOrigin = location.protocol + '//' + location.host;
 	window.addEventListener('message', function(e) {
 
 		if (e.origin === myOrigin) {
 			var template = e.data;
-			document.body.innerHTML = template;
+			/* document.body.innerHTML = template; */
+			document.getElementsByTagName('div')[0].innerHTML = template
 
 		} else {
 			console.log("originが一致していない");
@@ -19,5 +21,6 @@
 
 </head>
 <body>
+	<div class="templateApplicationRoot"></div>
 </body>
 </html>
