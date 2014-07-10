@@ -44,13 +44,15 @@
 
 		_templateEditorController: hifive.templateEditor.controller.TemplateEditorController,
 
+		_trimTemplate: null,
+
+		_json: null,
+
 		__meta: {
 			_templateEditorController: {
 				rootElement: '#ejsEditorRoot'
 			}
 		},
-
-		__templates: 'sample.ejs',
 
 		_templateEditorLogic: hifive.templateEditor.sample.editorSampleLogic,
 
@@ -58,22 +60,30 @@
 
 			this._templateEditorLogic.loadJsonData().done(
 					this.own(function(json) {
+
+						this._json = json;
+
 						this._templateEditorLogic.loadTemplateData().done(
 								this.own(function(template) {
-									// var templateText = this.view.get('dummyId', json);
-									var trimTemplate = template.replace(/<script.*>/, '').replace(
-											/<\/script>/, '');
 
-									this._templateEditorController.init(trimTemplate, json);
+									this._trimTemplate = template.replace(/<script.*>/, '')
+											.replace(/<\/script>/, '');
 
 								}));
+
 					})).fail(
 					function(XMLHttpRequest, textStatus, errorThrown) {
 						alert("XMLHttpRequest : " + XMLHttpRequest.status + " textStatus : "
 								+ textStatus + " errorThrown : " + errorThrown.message);
 					});
 
+		},
+
+		'{rootElement} readyComp': function() {
+			this._templateEditorController.init(this._trimTemplate, this._json);
 		}
+
+
 	};
 
 	h5.core.expose(editorSampleController);

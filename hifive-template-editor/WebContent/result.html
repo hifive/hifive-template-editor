@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Result</title>
+
+<link rel="stylesheet" href="res/lib/hifive/h5.css">
+<link rel="stylesheet" href="index.css">
+
+
+<script src="res/lib/jquery/jquery-2.0.3.min.js"></script>
+<script src="res/lib/hifive/h5.js"></script>
+<script src="res/lib/hifive/h5.dev.js"></script>
+
+<script src="result.js"></script>
+
+<script>
+	$(function() {
+		/*
+		window.onload = function(e) {
+			var myOrigin = location.protocol + '//' + location.host;
+			var data = {
+				eventName: 'loadComp'
+			};
+			window.postMessage(data, myOrigin);
+		}
+		 */
+		$(window).bind('message', function(e) {
+			var myOrigin = location.protocol + '//' + location.host;
+			if (e.originalEvent.origin === myOrigin) {
+
+				$('body').trigger(e.originalEvent.data.eventName, e.originalEvent.data.data);
+
+			} else {
+				console.log('originが一致していない');
+			}
+		});
+
+	});
+</script>
+
+</head>
+<body>
+	<div class="templateApplicationRoot"></div>
+</body>
+</html>

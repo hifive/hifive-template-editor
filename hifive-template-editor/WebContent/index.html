@@ -80,6 +80,8 @@
 	h5.core.controller.registerAlias('c', 'hifive.templateEditor.controller');
 </script>
 
+<script src="hifive/templateEditor/js/dependencyMap.js"></script>
+
 <script src="hifive/templateEditor/controller/GenericParameterEditController.js"></script>
 
 <script src="hifive/templateEditor/controller/PreviewController.js"></script>
@@ -107,38 +109,45 @@
 <script src="/quiz/res/src/common/util.js"></script>
 
 
+
 <script>
-	$(function() {
+	$(window).bind('message', function(e) {
+		var myOrigin = location.protocol + '//' + location.host;
+		if (e.origin === myOrigin) {
 
-		$('.dividedBox').each(function() {
-			h5.core.controller(this, h5.ui.container.DividedBox);
+			$('#ejsEditorRoot').trigger(e.data.eventName, e.data.data);
+
+		} else {
+			console.log('originが一致していない');
+		}
+	});
+
+	$('.dividedBox').each(function() {
+		h5.core.controller(this, h5.ui.container.DividedBox);
+	});
+
+	$(window).bind('resize', function() {
+		var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {
+			name: 'h5.ui.container.DividedBox',
+			deep: true
 		});
 
-		$(window).bind('resize', function() {
-			var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {
-				name: 'h5.ui.container.DividedBox',
-				deep: true
-			});
+		for (var i = 0, len = dividedBoxes.length; i < len; i++) {
+			dividedBoxes[i].refresh();
+		}
+	});
 
-			for (var i = 0, len = dividedBoxes.length; i < len; i++) {
-				dividedBoxes[i].refresh();
-			}
-		});
-
+	$('iframe').load(function() {
+		console.log('load comp');
 	});
 </script>
 
 <script src="sample.js"></script>
 
-<!--
-	<style>をindex.cssに外部化
--->
 
 </head>
 <body class='bg-carbon'>
 	<div class="rootBox">
-
-
 
 
 		<div id="ejsEditorRoot" class="dividedBox vertical container">
@@ -190,9 +199,10 @@
 					<!-- 【設定】 -->
 					<div class="tab-pane" id="setting">
 						<ul class="lib-list">
-							<li><input class="lib" type="checkbox" value="dummy1">Dummy 1</li>
-							<li><input class="lib" type="checkbox" value="dummy2">Dummy 2</li>
+							<li><input class="lib" type="checkbox" value="bs3.2">Bootstrap3.2</li>
+							<li><input class="lib" type="checkbox" value="dummy">dummy</li>
 						</ul>
+						<input class="applyTemplateBtn" type="button" name="ok" value="適用" style="color: red">
 					</div>
 
 
@@ -203,17 +213,11 @@
 			<div class="applyTemplate col-xs-12">
 				<h5>テンプレート適用先</h5>
 				<!-- <div class="templateApplicationRoot"></div> -->
-				<iframe onLoad="console.log('iframe load');" class="frame col-xs-12" src="frame.html"></iframe>
+				<iframe class="frame col-xs-12" src="result.html"></iframe>
 			</div>
 
 		</div>
 
-		<!--
- 		<div class="row-fluid result">
-			<h5 class="span12">適用結果</h5>
-			<div class="span12 templateApplicationRoot"></div>
-		</div>
-		 -->
 	</div>
 </body>
 </html>

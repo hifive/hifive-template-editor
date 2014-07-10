@@ -89,6 +89,8 @@
 
 		_isCloseConfirmationSet: false,
 
+		_dependencyMap: hifive.templateEditor.js.dependencyMap,
+
 		__ready: function() {
 			var that = this;
 
@@ -123,43 +125,15 @@
 				}
 			});
 
-
-			this._previewController.setTarget(this.$find('.templateApplicationRoot'));
-
-			// TODO: ここ必要？window.openerはこの窓を開いた窓の参照を返す。
-			// if (window.opener) {
-			// this._targetWaitDeferred = h5.async.deferred();
-			// var promise = this._targetWaitDeferred.promise();
-			//
-			// this.indicator({
-			// target: document.body,
-			// promises: promise,
-			// block: true,
-			// message: 'ロード中...'
-			// }).show();
-			//
-			// var that = this;
-			// setTimeout(function() {
-			// if (that._targetWaitDeferred.state() === 'pending') {
-			// alert('テンプレートの適用先の設定に失敗しました。');
-			// that._targetWaitDeferred.resolve();
-			// }
-			// }, 2000);
-			//
-			// return promise;
-			// }
 		},
 
 		init: function(template, json) {
 
-			var jsonData = JSON.stringify(json);
+			this.setDataText(JSON.stringify(json));
 
-			this.setDataText(jsonData);
-			// var templateText = this.view.get(template, json);
 			this.setTemplateText(template);
 
 			this._applyTemplate();
-
 		},
 
 		setTarget: function(element) {
@@ -192,40 +166,63 @@
 			this._applyTemplate();
 		},
 
-		'.lib change': function(context, elem) {
-			// console.log('test');
+		'.frame load':function(){
+			console.log('onload event handler in TemplateEditorController');
+		},
 
-			var checked = elem[0].checked;
-			if (checked == null) {
-				return;
-			}
 
+		'.applyButton click': function() {
 			if (checked) {
 				var ifmHead = this.$find('.frame').contents().find('head');
 				var css = this.$find('.frame').contents()[0].createElement('link');
-				css.href = 'res/lib/bootstrap3.2/css/dummy.css';
+				css.href = 'res/lib/bootstrap3.2/css/bootstrap.css';
 				css.type = 'text/css';
 				css.rel = 'stylesheet';
 				css.media = 'screen';
 
-				try {
-					ifmHead[0].appendChild(css);
-				}
-				catch (e) {
-					console.log('cssファイルが見つからない');
-				}
+				ifmHead[0].appendChild(css);
 			}
 
 		},
 
-		'{rootElement} load': function() {
-			console.log('iframe load');
+
+		'{rootElement} loadComp': function() {
+
+			// チェックされたライブラリを選別
+			var applyLibs = [];
+			$('.lib').each(function() {
+				if ($(this).prop('checked')) {
+					applyLibs.push($(this).val());
+				}
+			});
+
+
+			// 選択されたライブラリのパスをマップから取得
+			var lib = null;
+			for (var i = 0, len = applyLibs.length; i < len; i++) {
+				$.extend(lib, this._dependencyMap.map.applyLibs[i]);
+			}
+
+			var data = {
+				eventName: 'loadLib',
+				data: lib
+			};
+
+			this._sendMessage(data);
+
 		},
 
-		'{rootElement} ajaxError ': function() {
-			console.log('ajax success');
-		},
 
+		/**
+		 * postMessageを送ります
+		 *
+		 * @param data
+		 */
+		_sendMessage: function(data) {
+
+			var myOrigin = location.protocol + '//' + location.host;
+			this.$find('.frame')[0].contentWindow.postMessage(data, myOrigin);
+		},
 
 
 		_applyTemplate: function() {
@@ -251,13 +248,14 @@
 			this._previewController.setData(json);
 
 			try {
-				// this._previewController.preview(template);
-
 				var generated = this._previewController.generate(template);
-				var myOrigin = location.protocol + '//' + location.host;
+				var data = {
+					eventName: 'preview',
+					data: generated
+				};
 
-				var frame = this.$find('.frame')[0];
-				frame.contentWindow.postMessage(generated, myOrigin);
+				this._sendMessage(data);
+
 			}
 			catch (e) {
 				this._setMessage(e.message);
