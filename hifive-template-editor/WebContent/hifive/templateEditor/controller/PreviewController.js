@@ -109,32 +109,31 @@
 		 *
 		 * @param template
 		 */
-		preview: function(template) {
-			// テンプレートが不正な場合ここで例外が発生する
-			this._view.register(TEMPLATE_ID, template);
-
-			var generated = this._view.get(TEMPLATE_ID, this._data);
-
-			var $target = this._$target ? this._$target : $(this.rootElement);
-
-			if (window.opener) {
-				var page = window.opener.hifive.editor.u.getFocusedPageController();
-				page.setHtml(this._$target[0], generated);
-
-				var doc = page.getDocument();
-
-				var templateId = $target.attr(DATA_TEMPLATE_ID);
-
-				if (templateId) {
-					var $tmpl = $('script[type="text/ejs"][id="' + templateId + '"]', doc)
-					$tmpl[0].text = template;
-				}
-
-			} else {
-				$target.html(generated);
-			}
-		},
-
+		// preview: function(template) {
+		// // テンプレートが不正な場合ここで例外が発生する
+		// this._view.register(TEMPLATE_ID, template);
+		//
+		// var generated = this._view.get(TEMPLATE_ID, this._data);
+		//
+		// var $target = this._$target ? this._$target : $(this.rootElement);
+		//
+		// if (window.opener) {
+		// var page = window.opener.hifive.editor.u.getFocusedPageController();
+		// page.setHtml(this._$target[0], generated);
+		//
+		// var doc = page.getDocument();
+		//
+		// var templateId = $target.attr(DATA_TEMPLATE_ID);
+		//
+		// if (templateId) {
+		// var $tmpl = $('script[type="text/ejs"][id="' + templateId + '"]', doc)
+		// $tmpl[0].text = template;
+		// }
+		//
+		// } else {
+		// $target.html(generated);
+		// }
+		// },
 		/**
 		 * テンプレート文字列とオブジェクトデータからテンプレートを生成し、返します。
 		 *

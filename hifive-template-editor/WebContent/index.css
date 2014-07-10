@@ -34,6 +34,7 @@ html,body {
 .dataText {
 	width: 100%;
 	height: 270px;
+	color: black; /* データオブジェクトタブで文字が白になってるため応急処置 */
 }
 
 .sourceText {
@@ -46,7 +47,7 @@ html,body {
 }
 
 .templateApplicationRoot {
-	border: 1px solid blue;
+	/* border: 1px solid blue; */
 	background-color: white;
 	color: black;
 }
@@ -77,27 +78,16 @@ html,body {
 	background-color: silver;
 }
 
-/* TESTタブ用 */
-.testBootstrap {
-	background-color: red;
-}
-/* -end- */
-
-/* データオブジェクトタブで文字が白になってるため応急処置 */
-.dataText {
-	color: black;
-}
-/* -end- */
 .tabPanels {
 	height: 50%;
+	padding: 0 15px;
 }
 
 .applyTemplate {
 	height: 50%;
 }
 
-#frame {
-	border: 1px solid blue;
-	background-color: white;
-	color: black;
+.frame {
+	height: 66%;
+	padding: 0;
 }

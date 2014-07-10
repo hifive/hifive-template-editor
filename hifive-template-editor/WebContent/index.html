@@ -156,8 +156,7 @@
 					<li class="active"><a href="#template" data-toggle="tab">テンプレート文字列</a></li>
 					<li><a href="#data" data-toggle="tab">データオブジェクト(JSON形式)</a></li>
 					<li><a href="#css" data-toggle="tab">カスタムCSS</a></li>
-					<li><a href="#messages" data-toggle="tab">設定</a></li>
-					<li><a href="#test" data-toggle="tab">TEST</a></li>
+					<li><a href="#setting" data-toggle="tab">設定</a></li>
 				</ul>
 
 				<!-- タブコンテント -->
@@ -169,10 +168,10 @@
 							<div class="span12">
 								<h5>テンプレート文字列</h5>
 								<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-								<div class="sourceText pageWrapper col-xs-10">
+								<div class="sourceText pageWrapper col-xs-9">
 									<!-- contentEditable="true" -->
 								</div>
-								<div class="componentPalette col-xs-2" data-h5-controller="c:ComponentPaletteController"></div>
+								<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
 							</div>
 						</div>
 					</div>
@@ -189,12 +188,11 @@
 					<div class="tab-pane" id="css">カスタムCSS</div>
 
 					<!-- 【設定】 -->
-					<div class="tab-pane" id="messages">設定</div>
-
-
-					<div class="tab-pane col-xs-12" id="test">
-						<div class="testBootstrap col-xs-9">col-xs-9</div>
-						<div class="testBootstrap col-xs-3">col-xs-3</div>
+					<div class="tab-pane" id="setting">
+						<ul class="lib-list">
+							<li><input class="lib" type="checkbox" value="dummy1">Dummy 1</li>
+							<li><input class="lib" type="checkbox" value="dummy2">Dummy 2</li>
+						</ul>
 					</div>
 
 
@@ -202,10 +200,10 @@
 			</div>
 
 
-			<div class="applyTemplate">
+			<div class="applyTemplate col-xs-12">
 				<h5>テンプレート適用先</h5>
-				<div class="templateApplicationRoot"></div>
-				<iframe id="frame" src="frame.html" width="500" height="200"></iframe>
+				<!-- <div class="templateApplicationRoot"></div> -->
+				<iframe onLoad="console.log('iframe load');" class="frame col-xs-12" src="frame.html"></iframe>
 			</div>
 
 		</div>

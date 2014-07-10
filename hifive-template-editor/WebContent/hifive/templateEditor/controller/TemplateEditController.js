@@ -192,6 +192,42 @@
 			this._applyTemplate();
 		},
 
+		'.lib change': function(context, elem) {
+			// console.log('test');
+
+			var checked = elem[0].checked;
+			if (checked == null) {
+				return;
+			}
+
+			if (checked) {
+				var ifmHead = this.$find('.frame').contents().find('head');
+				var css = this.$find('.frame').contents()[0].createElement('link');
+				css.href = 'res/lib/bootstrap3.2/css/dummy.css';
+				css.type = 'text/css';
+				css.rel = 'stylesheet';
+				css.media = 'screen';
+
+				try {
+					ifmHead[0].appendChild(css);
+				}
+				catch (e) {
+					console.log('cssファイルが見つからない');
+				}
+			}
+
+		},
+
+		'{rootElement} load': function() {
+			console.log('iframe load');
+		},
+
+		'{rootElement} ajaxError ': function() {
+			console.log('ajax success');
+		},
+
+
+
 		_applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
 
@@ -215,14 +251,13 @@
 			this._previewController.setData(json);
 
 			try {
-				this._previewController.preview(template);
+				// this._previewController.preview(template);
 
 				var generated = this._previewController.generate(template);
 				var myOrigin = location.protocol + '//' + location.host;
 
-				var frame = this.$find('#frame')[0];
+				var frame = this.$find('.frame')[0];
 				frame.contentWindow.postMessage(generated, myOrigin);
-				// window.postMessage(generated);
 			}
 			catch (e) {
 				this._setMessage(e.message);
