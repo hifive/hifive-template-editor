@@ -111,16 +111,18 @@
 
 
 <script>
-	$(window).bind('message', function(e) {
+	/* $(window).bind('message', function(e) {
+		var ev = e.originalEvent;
 		var myOrigin = location.protocol + '//' + location.host;
-		if (e.origin === myOrigin) {
+		if (ev.origin === myOrigin) {
 
-			$('#ejsEditorRoot').trigger(e.data.eventName, e.data.data);
+			console.log('TemplateEditorController.jsで「' + ev.data.eventName + '」イベントをトリガする');
+			$(this._rootElement).trigger(ev.data.eventName, ev.data.data);
 
 		} else {
 			console.log('originが一致していない');
 		}
-	});
+	}); */
 
 	$('.dividedBox').each(function() {
 		h5.core.controller(this, h5.ui.container.DividedBox);
@@ -140,6 +142,20 @@
 	$('iframe').load(function() {
 		console.log('load comp');
 	});
+</script>
+
+<script id="tagEdit-table" type="text/ejs">
+[%# TODO タイトルは不要か
+<h3 >タグ属性編集<button type="button" class="btn-small apply">適用</button></h3>
+%]
+<h3 class="tagName">(ダブルクリックで選択)</h3>
+<table>
+<thead>
+<tr><th>属性名</th><th>属性値</th></tr>
+</thead>
+<tbody>
+</tbody>
+</tbody></table>
 </script>
 
 <script src="sample.js"></script>
@@ -175,7 +191,7 @@
 					<div class="tab-pane active" id="template">
 						<div class="row-fluid inputArea">
 							<div class="span12">
-								<h5>テンプレート文字列</h5>
+								<h3>テンプレート文字列</h3>
 								<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 								<div class="sourceText pageWrapper col-xs-9">
 									<!-- contentEditable="true" -->
@@ -188,16 +204,31 @@
 					<!-- 【データオブジェクト(JSON形式)】 -->
 					<div class="tab-pane" id="data">
 						<div class="row-fluid col-xs-12">
-							<h5>データオブジェクト(JSON形式)</h5>
+							<h3>データオブジェクト(JSON形式)</h3>
 							<textarea class="span12 dataText"></textarea>
 						</div>
 					</div>
 
 					<!-- 【カスタムCSS】 -->
-					<div class="tab-pane" id="css">カスタムCSS</div>
+					<div class="tab-pane" id="css">
+						<div id="editPanel" class="fill bg-carbon dividedBox vertical">
+							<div class="editorRoot fill autoSize"></div>
+							<div class="tagEdit fill autoSize" data-h5-controller="c:TagEditController"></div>
+							<div id="editCSSPanel" class="pane pane-full fill bg-carbon autoSize">
+								<div class="styleDef-wrapper">
+									<h3>
+										<button type="button" class="applyBtn btn-mini apply">適用</button>
+									</h3>
+									<textarea id="styleDef" class="col-xs-6"></textarea>
+									<div id="cssErrorMessage"></div>
+								</div>
+							</div>
+						</div>
+					</div>
 
 					<!-- 【設定】 -->
 					<div class="tab-pane" id="setting">
+						<h3>ライブラリ</h3>
 						<ul class="lib-list">
 							<li><input class="lib" type="checkbox" value="bs3.2">Bootstrap3.2</li>
 							<li><input class="lib" type="checkbox" value="dummy">dummy</li>
@@ -211,7 +242,7 @@
 
 
 			<div class="applyTemplate col-xs-12">
-				<h5>テンプレート適用先</h5>
+				<h3>テンプレート適用先</h3>
 				<!-- <div class="templateApplicationRoot"></div> -->
 				<iframe class="frame col-xs-12" src="result.html"></iframe>
 			</div>

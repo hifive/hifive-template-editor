@@ -94,6 +94,22 @@
 		__ready: function() {
 			var that = this;
 
+			$(window).bind(
+					'message',
+					function(e) {
+						var ev = e.originalEvent;
+						var myOrigin = location.protocol + '//' + location.host;
+						if (ev.origin === myOrigin) {
+
+							console.log('TemplateEditorController.jsで「' + ev.data.eventName
+									+ '」イベントをトリガする');
+							$(that.rootElement).trigger(ev.data.eventName, ev.data.data);
+
+						} else {
+							console.log('originが一致していない');
+						}
+					});
+
 			h5.u.obj.expose('hifive.editor', {
 
 				highlightDropTarget: function(pageX, pageY) {
@@ -167,10 +183,6 @@
 			this._applyTemplate();
 		},
 
-		'.frame load': function() {
-			console.log('onload event handler in TemplateEditorController');
-		},
-
 
 		/**
 		 * 設定タブの適用ボタンを選択したときのイベント。
@@ -211,17 +223,13 @@
 			}
 
 			var data = {
-				eventName: 'loadLib',
+				eventName: 'beginLoadLibrary',
 				data: libPath
 			};
 
 			this._sendMessage(data);
 		},
 
-
-		'{rootElement} resultEditorReadyComp': function() {
-			this._applyTemplate();
-		},
 
 
 		'{rootElement} loadComp': function() {
@@ -242,7 +250,7 @@
 			}
 
 			var data = {
-				eventName: 'loadLib',
+				eventName: 'beginLoadLibrary',
 				data: lib
 			};
 
@@ -254,7 +262,7 @@
 		/**
 		 * ライブラリのロードが終わったときのイベントハンドラです
 		 */
-		'{rootElement} loadLibComp': function() {
+		'{rootElement} loadLibraryComp': function() {
 			this._applyTemplate();
 		},
 

@@ -21,34 +21,29 @@
 		 */
 		__name: 'hifive.templateEditor.controller.ResultEditorController',
 
+		_parentWindow: null,// postMessageを送ったwindowオブジェクトへの参照
+
 
 		__ready: function() {
+			var that = this;
 			$(window).bind('message', function(e) {
 				var ev = e.originalEvent;
+
+				if (!that._parentWindow) {
+					that._parentWindow = ev.source;
+				}
+
 				var myOrigin = location.protocol + '//' + location.host;
 				if (ev.origin === myOrigin) {
 
 					console.log('result.jsで「' + ev.data.eventName + '」イベントをトリガする');
-					$('body').trigger(ev.data.eventName, ev.data.data);
-					// $('body').trigger(e.data.eventName, e.data.data);
+					$(that.rootElement).trigger(ev.data.eventName, ev.data.data);
+					// $('body').trigger(ev.data.eventName, ev.data.data);
 
 				} else {
 					console.log('originが一致していない');
 				}
 			});
-			// $(window)[0].addEventListener('message', function(e) {
-			// var myOrigin = location.protocol + '//' + location.host;
-			// if (e.origin === myOrigin) {
-			//
-			// console.log('result.jsで「' + e.data.eventName + '」イベントをトリガする');
-			// $('body').trigger(e.data.eventName, e.data.data);
-			//
-			// } else {
-			// console.log('originが一致していない');
-			// }
-			// });
-
-			// parent.$('#ejsEditorRoot').trigger('resultEditorReadyComp');
 		},
 
 
@@ -67,11 +62,11 @@
 		 *
 		 * @param context
 		 */
-		'{rootElement} loadLib': function(context) {
+		'{rootElement} beginLoadLibrary': function(context) {
 			// TODO:この時点でpathがない(ライブラリが選択されていない)ケースは除外されているはず
 			var path = context.evArg;
 
-			// TODO:選択ライブラリが1つの場合、型がobjectになっている?
+			// TODO:選択ライブラリが1つの場合、型がobjectになっている
 			if ($.type(path) !== 'array') {
 				path = [path];
 			}
@@ -94,10 +89,14 @@
 			var loadJS = h5.u.loadScript(jsPaths);
 
 			// js,cssをロードします
-			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(function() {
-				console.log('loadLib ロードできた');
-				parent.$('#ejsEditorRoot').trigger('loadLibComp');
-			});
+			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(this.own(function() {
+				console.log('result.jsで「beginLoadLibrary」イベント ロードできた');
+				var data = {
+					eventName: 'loadLibraryComp'
+				};
+				this._sendMessage(data);
+				// parent.$('#ejsEditorRoot').trigger('loadLibraryComp');
+			}));
 		},
 
 
@@ -121,24 +120,38 @@
 			return def;
 		},
 
+		/**
+		 * postMessageを送ります
+		 *
+		 * @param data
+		 */
+		_sendMessage: function(data) {
 
-	/**
-	 * postMessageを受け取ったときに呼ばれる関数です。渡されたイベント名をトリガします。
-	 *
-	 * @param e
-	 */
-	// _receiveMessage: function(e) {
-	// var myOrigin = location.protocol + '//' + location.host;
-	// if (e.origin === myOrigin) {
-	//
-	// console.log('result.jsで「' + e.data.eventName + '」イベントをトリガする');
-	// this.$find(this.rootElement).trigger(e.data.eventName, e.data.data);
-	// // $('body').trigger(e.data.eventName, e.data.data);
-	//
-	// } else {
-	// console.log('originが一致していない');
-	// }
-	// }
+			var myOrigin = location.protocol + '//' + location.host;
+			this._parentWindow.postMessage(data, myOrigin);
+		},
+
+
+		/**
+		 * postMessageを受け取ったときに呼ばれる関数です。渡されたイベント名をトリガします。
+		 *
+		 * @param e
+		 */
+		// _receiveMessage: function(e) {
+		// var myOrigin = location.protocol + '//' + location.host;
+		// if (e.origin === myOrigin) {
+		//
+		// console.log('result.jsで「' + e.data.eventName + '」イベントをトリガする');
+		// this.$find(this.rootElement).trigger(e.data.eventName, e.data.data);
+		// // $('body').trigger(e.data.eventName, e.data.data);
+		//
+		// } else {
+		// console.log('originが一致していない');
+		// }
+		// }
+		_testFunc: function() {
+			console.log('test func');
+		}
 	};
 
 	h5.core.expose(resultEditorController);
