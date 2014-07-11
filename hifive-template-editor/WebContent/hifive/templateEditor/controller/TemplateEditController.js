@@ -129,11 +129,12 @@
 
 		init: function(template, json) {
 
+			template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
+
 			this.setDataText(JSON.stringify(json));
 
 			this.setTemplateText(template);
 
-			this._applyTemplate();
 		},
 
 		setTarget: function(element) {
@@ -166,23 +167,39 @@
 			this._applyTemplate();
 		},
 
-		'.frame load':function(){
+		'.frame load': function() {
 			console.log('onload event handler in TemplateEditorController');
 		},
 
 
-		'.applyButton click': function() {
-			if (checked) {
-				var ifmHead = this.$find('.frame').contents().find('head');
-				var css = this.$find('.frame').contents()[0].createElement('link');
-				css.href = 'res/lib/bootstrap3.2/css/bootstrap.css';
-				css.type = 'text/css';
-				css.rel = 'stylesheet';
-				css.media = 'screen';
+		'.applyLibBtn click': function(context) {
 
-				ifmHead[0].appendChild(css);
+			// チェックされたライブラリを選別
+			var applyLibs = [];
+			this.$find('.lib').each(function() {
+				if ($(this).prop('checked')) {
+					applyLibs.push($(this).val());
+				}
+			});
+
+			// 選択されたライブラリのパスをマップから取得
+			var libPath = [];
+			for (var i = 0, len = applyLibs.length; i < len; i++) {
+				libPath.push(this._dependencyMap.map[applyLibs[i]]);
 			}
 
+			var data = {
+				eventName: 'loadLib',
+				data: libPath
+			};
+
+			this._sendMessage(data);
+
+		},
+
+
+		'{rootElement} resultEditorReadyComp': function() {
+			this._applyTemplate();
 		},
 
 
@@ -200,7 +217,7 @@
 			// 選択されたライブラリのパスをマップから取得
 			var lib = null;
 			for (var i = 0, len = applyLibs.length; i < len; i++) {
-				$.extend(lib, this._dependencyMap.map.applyLibs[i]);
+				$.extend(lib, this._dependencyMap.map[applyLibs[i]]);
 			}
 
 			var data = {

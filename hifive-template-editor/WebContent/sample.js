@@ -58,29 +58,20 @@
 
 		__ready: function() {
 
-			this._templateEditorLogic.loadJsonData().done(
-					this.own(function(json) {
+			this._templateEditorLogic.loadJsonData().done(this.own(function(json) {
+				this._json = json;
 
-						this._json = json;
+				this._templateEditorLogic.loadTemplateData().done(this.own(function(template) {
 
-						this._templateEditorLogic.loadTemplateData().done(
-								this.own(function(template) {
+					this._templateEditorController.init(template, json);
+				}));
 
-									this._trimTemplate = template.replace(/<script.*>/, '')
-											.replace(/<\/script>/, '');
-
-								}));
-
-					})).fail(
+			})).fail(
 					function(XMLHttpRequest, textStatus, errorThrown) {
 						alert("XMLHttpRequest : " + XMLHttpRequest.status + " textStatus : "
 								+ textStatus + " errorThrown : " + errorThrown.message);
 					});
 
-		},
-
-		'{rootElement} readyComp': function() {
-			this._templateEditorController.init(this._trimTemplate, this._json);
 		}
 
 

@@ -5,8 +5,8 @@
 
 		map: {
 			'bs3.2': {
-				'js': ['bootstrap.js'],
-				'css': ['bootstrap.css']
+				'js': ['res/lib/bootstrap3.2/js/bootstrap.js'],
+				'css': ['res/lib/bootstrap3.2/css/bootstrap.css']
 			},
 
 			'dummy': {

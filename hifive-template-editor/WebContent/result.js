@@ -27,23 +27,59 @@
 		 *
 		 * @param data
 		 */
-		'{rootElement} preview': function(data) {
-			this.$find('.templateApplicationRoot')[0].innerHTML = data;
+		'{rootElement} preview': function(context) {
+			this.$find('.templateApplicationRoot')[0].innerHTML = context.evArg;
 		},
 
 
+		'{rootElement} loadLib': function(context) {
+			var path = context.evArg;
 
-		'{rootElement} loadLib': function(path) {
-			console.log('loadLib 到達！');
+			if (typeof path === 'object') {
+				path = [path];
+			}
+
+			var jsPaths = [];
+			var cssPaths = [];
+			for (var i = 0, len = path.length; i < len; i++) {
+
+				// jsファイルのパスを格納
+				for (var j = 0, jsLen = path[i]['js'].length; j < jsLen; j++) {
+					jsPaths.push(path[i]['js'][j]);
+				}
+
+				// cssファイルのパスを格納
+				for (var k = 0, cssLen = path[i]['css'].length; k < cssLen; k++) {
+					cssPaths.push(path[i]['css'][k]);
+				}
+			}
+
+			var loadJS = h5.u.loadScript(jsPaths);
+
+			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(function(data) {
+				console.log('loadLib ロードできたっぽい？');
+			});
+
 		},
 
 		__ready: function() {
-			var myOrigin = location.protocol + '//' + location.host;
-			var data = {
-				eventName: 'readyComp'
-			};
-//			parent.$('')[0].contentWindow.postMessage(data, myOrigin);
-			parent.$('body').trigger('readyComp');
+			parent.$('#ejsEditorRoot').trigger('resultEditorReadyComp');
+		},
+
+
+		_loadCSS: function(cssPaths) {
+			var def = h5.async.deferred();
+			var cssFiles = [];
+			for (var i = 0, len = cssPaths.length; i < len; i++) {
+				var css = document.createElement('link');
+				css.href = cssPaths[i];
+				css.type = 'text/css';
+				css.rel = 'stylesheet';
+				css.media = 'screen';
+				cssFiles.push(css);
+				def.resolve(cssFiles);
+			}
+			return def;
 		}
 
 	};
