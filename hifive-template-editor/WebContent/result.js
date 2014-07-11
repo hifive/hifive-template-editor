@@ -56,8 +56,9 @@
 
 			var loadJS = h5.u.loadScript(jsPaths);
 
-			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(function(data) {
-				console.log('loadLib ロードできたっぽい？');
+			// js,cssをロードします
+			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(function() {
+				console.log('loadLib ロードできた');
 			});
 
 		},
@@ -67,17 +68,22 @@
 		},
 
 
+		/**
+		 * CSSファイルをロードします
+		 *
+		 * @param cssPaths
+		 * @returns
+		 */
 		_loadCSS: function(cssPaths) {
 			var def = h5.async.deferred();
-			var cssFiles = [];
 			for (var i = 0, len = cssPaths.length; i < len; i++) {
 				var css = document.createElement('link');
 				css.href = cssPaths[i];
 				css.type = 'text/css';
 				css.rel = 'stylesheet';
 				css.media = 'screen';
-				cssFiles.push(css);
-				def.resolve(cssFiles);
+				$('head')[0].appendChild(css);
+				def.resolve();
 			}
 			return def;
 		}
