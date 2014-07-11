@@ -28,15 +28,21 @@
 			window.postMessage(data, myOrigin);
 		}
 		 */
+		/*
 		$(window).bind('message', function(e) {
-			var myOrigin = location.protocol + '//' + location.host;
-			if (e.originalEvent.origin === myOrigin) {
+		var myOrigin = location.protocol + '//' + location.host;
+		if (e.originalEvent.origin === myOrigin) {
 
-				$('body').trigger(e.originalEvent.data.eventName, e.originalEvent.data.data);
+			$('body').trigger(e.originalEvent.data.eventName, e.originalEvent.data.data);
 
-			} else {
-				console.log('originが一致していない');
-			}
+		} else {
+			console.log('originが一致していない');
+		}
+		});
+		 */
+		window.onload = (function() {
+			console.log('result.jsで「onload」イベントが起きた！ applyLibraryイベをトリガする');
+			parent.$('#ejsEditorRoot').trigger('applyLibrary');
 		});
 
 	});

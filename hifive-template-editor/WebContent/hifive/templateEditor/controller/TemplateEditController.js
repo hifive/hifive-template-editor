@@ -172,7 +172,22 @@
 		},
 
 
+		/**
+		 * 設定タブの適用ボタンを選択したときのイベント。
+		 * <p>
+		 * iframeをリロードします。
+		 *
+		 * @param context
+		 */
 		'.applyLibBtn click': function(context) {
+			this.$find('iframe')[0].contentDocument.location.reload(true);
+		},
+
+
+		/**
+		 * チェックされたライブラリの選別・パスを取得しpostMessageします。
+		 */
+		'{rootElement} applyLibrary': function() {
 
 			// チェックされたライブラリを選別
 			var applyLibs = [];
@@ -181,6 +196,13 @@
 					applyLibs.push($(this).val());
 				}
 			});
+
+			// チェックされたライブラリがない場合、テンプレートを適用する
+			if (applyLibs.length === 0) {
+				this._applyTemplate();
+				return;
+			}
+
 
 			// 選択されたライブラリのパスをマップから取得
 			var libPath = [];
@@ -194,7 +216,6 @@
 			};
 
 			this._sendMessage(data);
-
 		},
 
 
@@ -205,7 +226,7 @@
 
 		'{rootElement} loadComp': function() {
 
-			// チェックされたライブラリを選別
+			// チェックされたライブラリを選別します
 			var applyLibs = [];
 			$('.lib').each(function() {
 				if ($(this).prop('checked')) {
@@ -214,7 +235,7 @@
 			});
 
 
-			// 選択されたライブラリのパスをマップから取得
+			// 選択されたライブラリのパスをマップから取得します
 			var lib = null;
 			for (var i = 0, len = applyLibs.length; i < len; i++) {
 				$.extend(lib, this._dependencyMap.map[applyLibs[i]]);
@@ -231,6 +252,14 @@
 
 
 		/**
+		 * ライブラリのロードが終わったときのイベントハンドラです
+		 */
+		'{rootElement} loadLibComp': function() {
+			this._applyTemplate();
+		},
+
+
+		/**
 		 * postMessageを送ります
 		 *
 		 * @param data
@@ -242,6 +271,9 @@
 		},
 
 
+		/**
+		 * テンプレートを生成してpostMessageで送ります。
+		 */
 		_applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
 

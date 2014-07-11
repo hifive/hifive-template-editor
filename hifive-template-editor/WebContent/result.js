@@ -22,8 +22,38 @@
 		__name: 'hifive.templateEditor.controller.ResultEditorController',
 
 
+		__ready: function() {
+			$(window).bind('message', function(e) {
+				var ev = e.originalEvent;
+				var myOrigin = location.protocol + '//' + location.host;
+				if (ev.origin === myOrigin) {
+
+					console.log('result.jsで「' + ev.data.eventName + '」イベントをトリガする');
+					$('body').trigger(ev.data.eventName, ev.data.data);
+					// $('body').trigger(e.data.eventName, e.data.data);
+
+				} else {
+					console.log('originが一致していない');
+				}
+			});
+			// $(window)[0].addEventListener('message', function(e) {
+			// var myOrigin = location.protocol + '//' + location.host;
+			// if (e.origin === myOrigin) {
+			//
+			// console.log('result.jsで「' + e.data.eventName + '」イベントをトリガする');
+			// $('body').trigger(e.data.eventName, e.data.data);
+			//
+			// } else {
+			// console.log('originが一致していない');
+			// }
+			// });
+
+			// parent.$('#ejsEditorRoot').trigger('resultEditorReadyComp');
+		},
+
+
 		/**
-		 * テンプレートを反映
+		 * テンプレートを反映します
 		 *
 		 * @param data
 		 */
@@ -32,10 +62,17 @@
 		},
 
 
+		/**
+		 * チェックされたライブラリをロードします
+		 *
+		 * @param context
+		 */
 		'{rootElement} loadLib': function(context) {
+			// TODO:この時点でpathがない(ライブラリが選択されていない)ケースは除外されているはず
 			var path = context.evArg;
 
-			if (typeof path === 'object') {
+			// TODO:選択ライブラリが1つの場合、型がobjectになっている?
+			if ($.type(path) !== 'array') {
 				path = [path];
 			}
 
@@ -59,12 +96,8 @@
 			// js,cssをロードします
 			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(function() {
 				console.log('loadLib ロードできた');
+				parent.$('#ejsEditorRoot').trigger('loadLibComp');
 			});
-
-		},
-
-		__ready: function() {
-			parent.$('#ejsEditorRoot').trigger('resultEditorReadyComp');
 		},
 
 
@@ -86,8 +119,26 @@
 				def.resolve();
 			}
 			return def;
-		}
+		},
 
+
+	/**
+	 * postMessageを受け取ったときに呼ばれる関数です。渡されたイベント名をトリガします。
+	 *
+	 * @param e
+	 */
+	// _receiveMessage: function(e) {
+	// var myOrigin = location.protocol + '//' + location.host;
+	// if (e.origin === myOrigin) {
+	//
+	// console.log('result.jsで「' + e.data.eventName + '」イベントをトリガする');
+	// this.$find(this.rootElement).trigger(e.data.eventName, e.data.data);
+	// // $('body').trigger(e.data.eventName, e.data.data);
+	//
+	// } else {
+	// console.log('originが一致していない');
+	// }
+	// }
 	};
 
 	h5.core.expose(resultEditorController);
