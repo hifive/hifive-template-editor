@@ -14,8 +14,8 @@
  */
 
 (function($) {
-	var JSON_DATA_URL = 'sample.json';
-	var TEMPLATE_DATA_URL = 'sample.ejs';
+	var JSON_DATA_URL = 'sample/sample.json';
+	var TEMPLATE_DATA_URL = 'sample/sample.ejs';
 
 	var templateEditorLogic = {
 		__name: 'hifive.templateEditor.sample.editorSampleLogic',
