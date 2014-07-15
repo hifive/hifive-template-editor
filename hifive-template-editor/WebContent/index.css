@@ -75,7 +75,8 @@ textarea {
 }
 
 .applyTemplateBtn {
-	margin-right: 10px;
+	margin-top: 20px;
+	margin-bottom: 10px;
 }
 
 .divider,.dividerHandler {
@@ -94,6 +95,7 @@ textarea {
 .frame {
 	height: 66%;
 	padding: 0;
+	background-color: white;
 }
 
 #styleDef {
@@ -102,4 +104,12 @@ textarea {
 
 .applyBtn {
 	color: blue;
+}
+
+.lib-list label input {
+	font-size: 20px;
+}
+
+.applyLibBtn {
+	color: black
 }

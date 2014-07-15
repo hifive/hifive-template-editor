@@ -78,6 +78,9 @@
 			},
 			_sourceEditorController: {
 				rootElement: '.sourceText'
+			},
+			_cssEditorController: {
+				rootElement: '#editCSSPanel'
 			}
 		},
 
@@ -85,11 +88,17 @@
 
 		_sourceEditorController: hifive.templateEditor.controller.SourceEditorController,
 
+		_cssEditorController: hifive.templateEditor.controller.CSSEditorController,
+
 		_targetWaitDeferred: null,
 
 		_isCloseConfirmationSet: false,
 
 		_dependencyMap: hifive.templateEditor.js.dependencyMap,
+
+		_indicator: null,
+
+		_indicatorDeferred: null,
 
 		__ready: function() {
 			var that = this;
@@ -185,14 +194,38 @@
 
 
 		/**
-		 * 設定タブの適用ボタンを選択したときのイベント。
+		 * 設定タブの適用ボタンをクリックしたときのイベント。
 		 * <p>
 		 * iframeをリロードします。
 		 *
 		 * @param context
 		 */
 		'.applyLibBtn click': function(context) {
+			this.beginIndicator();
+
+			// this._indicatorPromise = indicator.promise;
+			// this._indicatorMessage = indicator.message;
+
 			this.$find('iframe')[0].contentDocument.location.reload(true);
+		},
+
+
+		/**
+		 * インジケータを表示する
+		 */
+		beginIndicator: function() {
+
+			var dfd = this.deferred();
+
+			// インジケータの表示
+			var indicator = this.indicator({
+				promises: dfd.promise(),
+				target: document.body,
+				message: 'プレビューページをリロードしています'
+			}).show();
+
+			this._indicator = indicator;
+			this._indicatorDeferred = dfd;
 		},
 
 
@@ -201,9 +234,14 @@
 		 */
 		'{rootElement} applyLibrary': function() {
 
+			// インジケータのメッセージを更新
+			if (this._indicator) {
+				this._indicator.message('ライブラリをロードしています');
+			}
+
 			// チェックされたライブラリを選別
 			var applyLibs = [];
-			this.$find('.lib').each(function() {
+			this.$find('.lib-list input').each(function() {
 				if ($(this).prop('checked')) {
 					applyLibs.push($(this).val());
 				}
@@ -232,38 +270,51 @@
 
 
 
-		'{rootElement} loadComp': function() {
-
-			// チェックされたライブラリを選別します
-			var applyLibs = [];
-			$('.lib').each(function() {
-				if ($(this).prop('checked')) {
-					applyLibs.push($(this).val());
-				}
-			});
-
-
-			// 選択されたライブラリのパスをマップから取得します
-			var lib = null;
-			for (var i = 0, len = applyLibs.length; i < len; i++) {
-				$.extend(lib, this._dependencyMap.map[applyLibs[i]]);
-			}
-
-			var data = {
-				eventName: 'beginLoadLibrary',
-				data: lib
-			};
-
-			this._sendMessage(data);
-
-		},
+		// '{rootElement} loadComp': function() {
+		//
+		// // チェックされたライブラリを選別します
+		// var applyLibs = [];
+		// $('.lib').each(function() {
+		// if ($(this).prop('checked')) {
+		// applyLibs.push($(this).val());
+		// }
+		// });
+		//
+		//
+		// // 選択されたライブラリのパスをマップから取得します
+		// var lib = null;
+		// for (var i = 0, len = applyLibs.length; i < len; i++) {
+		// $.extend(lib, this._dependencyMap.map[applyLibs[i]]);
+		// }
+		//
+		// var data = {
+		// eventName: 'beginLoadLibrary',
+		// data: lib
+		// };
+		//
+		// this._sendMessage(data);
+		//
+		// },
 
 
 		/**
 		 * ライブラリのロードが終わったときのイベントハンドラです
 		 */
 		'{rootElement} loadLibraryComp': function() {
+			this._indicator.message('テンプレートのプレビューを再生成しています');
 			this._applyTemplate();
+		},
+
+
+		/**
+		 * テンプレートの反映が終わったときのイベントハンドラです
+		 */
+		'{rootElement} applyTemplateComp': function() {
+			if (this._indicator) {
+				this._indicatorDeferred.resolve();
+				// this._indicatorPromise = null;
+				// this._indicatorMessage = null;
+			}
 		},
 
 

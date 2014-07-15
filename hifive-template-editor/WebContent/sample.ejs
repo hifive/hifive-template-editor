@@ -17,4 +17,40 @@
 			[% } %]
 		</tbody>
 	</table>
+
+	<h2>水平フォーム(Bootstrap3.2)</h2>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="Email">Eメール</label>
+			<div class="col-sm-10">
+				<input type="email" class="form-control" id="Email" placeholder="Eメール">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="Password">パスワード</label>
+			<div class="col-sm-10">
+				<input type="password" class="form-control" id="Password" placeholder="パスワード">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox"> 記憶する
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-default">サインイン</button>
+			</div>
+		</div>
+	</form>
+
+
+
 </script>

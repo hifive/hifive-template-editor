@@ -86,7 +86,9 @@
 
 <script src="hifive/templateEditor/controller/PreviewController.js"></script>
 <script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
+<script src="hifive/templateEditor/controller/CSSEditorController.js"></script>
 <script src="hifive/templateEditor/controller/TemplateEditController.js"></script>
+
 
 <script src="/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
 
@@ -108,7 +110,9 @@
 
 <script src="/quiz/res/src/common/util.js"></script>
 
-
+<script id="tmp-cssErrorMessage" type="text/ejs">
+<p>[%= message %]</p>
+</script>
 
 <script>
 	/* $(window).bind('message', function(e) {
@@ -165,21 +169,17 @@
 <body class='bg-carbon'>
 	<div class="rootBox">
 
-
 		<div id="ejsEditorRoot" class="dividedBox vertical container">
-
 
 			<div class="tabPanels">
 
 				<!-- 適用しているテンプレートIDを表示 -->
-				<span class="templateIdText"></span>
-				<button class="btn btn-primary applyTemplateBtn">再適用</button>
-				<span class="statusMessage"></span>
+				<!-- <span class="templateIdText"></span> <span class="statusMessage"></span> -->
 
 				<!-- タブ -->
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#template" data-toggle="tab">テンプレート文字列</a></li>
-					<li><a href="#data" data-toggle="tab">データオブジェクト(JSON形式)</a></li>
+					<li class="active"><a href="#template" data-toggle="tab">テンプレート</a></li>
+					<li><a href="#data" data-toggle="tab">データオブジェクト</a></li>
 					<li><a href="#css" data-toggle="tab">カスタムCSS</a></li>
 					<li><a href="#setting" data-toggle="tab">設定</a></li>
 				</ul>
@@ -189,8 +189,8 @@
 
 					<!-- 【テンプレート文字列】 -->
 					<div class="tab-pane active" id="template">
-						<div class="row-fluid inputArea">
-							<div class="span12">
+						<div class="row inputArea">
+							<div class="col-xs-12">
 								<h3>テンプレート文字列</h3>
 								<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 								<div class="sourceText pageWrapper col-xs-9">
@@ -203,18 +203,18 @@
 
 					<!-- 【データオブジェクト(JSON形式)】 -->
 					<div class="tab-pane" id="data">
-						<div class="row-fluid col-xs-12">
-							<h3>データオブジェクト(JSON形式)</h3>
-							<textarea class="span12 dataText"></textarea>
+						<div class="row col-xs-12">
+							<h3>データオブジェクト</h3>
+							<textarea class="col-xs-12 dataText"></textarea>
 						</div>
 					</div>
 
 					<!-- 【カスタムCSS】 -->
 					<div class="tab-pane" id="css">
-						<div id="editPanel" class="fill bg-carbon dividedBox vertical">
-							<div class="editorRoot fill autoSize"></div>
+						<div id="editPanel" class="bg-carbon dividedBox vertical">
+							<div class="editorRoot autoSize"></div>
 							<div class="tagEdit fill autoSize" data-h5-controller="c:TagEditController"></div>
-							<div id="editCSSPanel" class="pane pane-full fill bg-carbon autoSize">
+							<div id="editCSSPanel" class="pane pane-full bg-carbon autoSize">
 								<div class="styleDef-wrapper">
 									<h3>
 										<button type="button" class="applyBtn btn-mini apply">適用</button>
@@ -229,26 +229,46 @@
 					<!-- 【設定】 -->
 					<div class="tab-pane" id="setting">
 						<h3>ライブラリ</h3>
-						<ul class="lib-list">
-							<li><input class="lib" type="checkbox" value="bs3.2">Bootstrap3.2</li>
-							<li><input class="lib" type="checkbox" value="dummy">dummy</li>
-						</ul>
-						<input class="applyLibBtn" type="button" name="ok" value="適用" style="color: red">
-					</div>
+						<div class="lib-list">
 
+							<!-- <div class="col-xs-4">
+								<input id="bs-lib" class="lib" type="checkbox" value="bs3.2"><label for="bs-lib">Bootstrap3.2</label>
+							</div>
+
+							<div class="col-xs-4">
+								<input id="jqm-lib" class="lib" type="checkbox" value="jqm1.3.0"><label for="jqm-lib">jQuery
+									Mobile 1.3.0</label>
+							</div>
+
+							<div class="col-xs-4"></div> -->
+
+							<label class="checkbox-inline col-xs-4"> <input type="checkbox" value="bs3.2"> Bootstrap3.2
+							</label> <label class="checkbox-inline col-xs-4"> <input type="checkbox" value="jqm1.3.0"> jQuery Mobile
+								1.3.0
+							</label>
+
+						</div>
+
+						<div>
+							<input class="applyLibBtn" type="button" name="ok" value="適用">
+						</div>
+					</div>
 
 				</div>
 			</div>
 
 
 			<div class="applyTemplate col-xs-12">
-				<h3>テンプレート適用先</h3>
+				<div>
+					<h3 class="col-xs-2">プレビュー</h3>
+					<button class="btn btn-primary applyTemplateBtn col-xs-2">再適用</button>
+				</div>
 				<!-- <div class="templateApplicationRoot"></div> -->
 				<iframe class="frame col-xs-12" src="result.html"></iframe>
 			</div>
-
 		</div>
 
 	</div>
+
 </body>
 </html>

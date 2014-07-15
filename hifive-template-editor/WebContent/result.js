@@ -54,6 +54,10 @@
 		 */
 		'{rootElement} preview': function(context) {
 			this.$find('.templateApplicationRoot')[0].innerHTML = context.evArg;
+			var data = {
+				eventName: 'applyTemplateComp'
+			};
+			this._sendMessage(data);
 		},
 
 
