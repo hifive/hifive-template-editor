@@ -201,10 +201,7 @@
 		 * @param context
 		 */
 		'.applyLibBtn click': function(context) {
-			this.beginIndicator();
-
-			// this._indicatorPromise = indicator.promise;
-			// this._indicatorMessage = indicator.message;
+			this._beginIndicator();
 
 			this.$find('iframe')[0].contentDocument.location.reload(true);
 		},
@@ -213,7 +210,7 @@
 		/**
 		 * インジケータを表示する
 		 */
-		beginIndicator: function() {
+		_beginIndicator: function() {
 
 			var dfd = this.deferred();
 
@@ -269,34 +266,6 @@
 		},
 
 
-
-		// '{rootElement} loadComp': function() {
-		//
-		// // チェックされたライブラリを選別します
-		// var applyLibs = [];
-		// $('.lib').each(function() {
-		// if ($(this).prop('checked')) {
-		// applyLibs.push($(this).val());
-		// }
-		// });
-		//
-		//
-		// // 選択されたライブラリのパスをマップから取得します
-		// var lib = null;
-		// for (var i = 0, len = applyLibs.length; i < len; i++) {
-		// $.extend(lib, this._dependencyMap.map[applyLibs[i]]);
-		// }
-		//
-		// var data = {
-		// eventName: 'beginLoadLibrary',
-		// data: lib
-		// };
-		//
-		// this._sendMessage(data);
-		//
-		// },
-
-
 		/**
 		 * ライブラリのロードが終わったときのイベントハンドラです
 		 */
@@ -312,8 +281,6 @@
 		'{rootElement} applyTemplateComp': function() {
 			if (this._indicator) {
 				this._indicatorDeferred.resolve();
-				// this._indicatorPromise = null;
-				// this._indicatorMessage = null;
 			}
 		},
 
