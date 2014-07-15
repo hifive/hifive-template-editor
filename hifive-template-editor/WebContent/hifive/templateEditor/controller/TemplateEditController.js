@@ -100,6 +100,8 @@
 
 		_indicatorDeferred: null,
 
+		_target: null,// postMessageの送信先
+
 		__ready: function() {
 
 			h5.u.obj.expose('hifive.editor', {
@@ -133,6 +135,8 @@
 				}
 			});
 
+			this._target = $('iframe')[0];
+
 		},
 
 
@@ -153,24 +157,35 @@
 		},
 
 
-		// /**
-		// * @param element
-		// */
-		// setTarget: function(element) {
-		// this._previewController.setTarget(element);
-		//
-		// if (this._targetWaitDeferred) {
-		// this._targetWaitDeferred.resolve();
-		// this.$find('.result').css('display', 'none');
-		// }
-		// },
+		/**
+		 * postMessageの送信先を設定します。
+		 *
+		 * @param element
+		 */
+		setTarget: function(element) {
+			if (element) {
+				this._target = element;
+			} else {
+				this._target = null;
+			}
+		},
 
 
+		/**
+		 * テンプレートをセットします。
+		 *
+		 * @param text
+		 */
 		setTemplateText: function(text) {
 			this._sourceEditorController.setText(text);
 		},
 
 
+		/**
+		 * データオブジェクトをテキストエリアに反映します。
+		 *
+		 * @param json
+		 */
 		setDataText: function(json) {
 			this.$find('.dataText').val(json);
 		},
@@ -182,7 +197,7 @@
 
 
 		/**
-		 * メッセージを受け取った時のイベントハンドラです。
+		 * メッセージを受け取った時のイベントハンドラ。
 		 */
 		'{window} message': function(context) {
 			var ev = context.event.originalEvent;
@@ -211,7 +226,7 @@
 
 
 		/**
-		 * 設定タブの適用ボタンをクリックしたときのイベント。
+		 * 設定タブの適用ボタンをクリックしたときのイベントハンドラ。
 		 * <p>
 		 * iframeをリロードします。
 		 *
@@ -221,12 +236,12 @@
 			// インジケータを表示します
 			this._beginIndicator();
 
-			this.$find('iframe')[0].contentDocument.location.reload(true);
+			this._target.contentDocument.location.reload(true);
 		},
 
 
 		/**
-		 * インジケータを表示する
+		 * 画面にインジケータを表示します
 		 */
 		_beginIndicator: function() {
 
@@ -262,14 +277,14 @@
 				}
 			});
 
-			// チェックされたライブラリがない場合、テンプレートを適用する
+			// チェックされたライブラリがない場合、テンプレートを適用します。
 			if (applyLibs.length === 0) {
 				this._applyTemplate();
 				return;
 			}
 
 
-			// 選択されたライブラリのパスをマップから取得
+			// 選択されたライブラリのパスをマップから取得します。
 			var libPath = [];
 			for (var i = 0, len = applyLibs.length; i < len; i++) {
 				libPath.push(this._dependencyMap.map[applyLibs[i]]);
@@ -289,6 +304,8 @@
 		 */
 		'{rootElement} loadLibraryComp': function() {
 			this._indicator.message('テンプレートのプレビューを再生成しています');
+
+			// テンプレートを適用します。
 			this._applyTemplate();
 		},
 
@@ -297,6 +314,7 @@
 		 * テンプレートの反映が終わったときのイベントハンドラです
 		 */
 		'{rootElement} applyTemplateComp': function() {
+			// インジケータが表示されていれば、非表示にします。
 			if (this._indicator) {
 				this._indicatorDeferred.resolve();
 			}
@@ -309,9 +327,9 @@
 		 * @param data
 		 */
 		_sendMessage: function(data) {
-
 			var myOrigin = location.protocol + '//' + location.host;
-			this.$find('.frame')[0].contentWindow.postMessage(data, myOrigin);
+
+			this._target.contentWindow.postMessage(data, myOrigin);
 		},
 
 
