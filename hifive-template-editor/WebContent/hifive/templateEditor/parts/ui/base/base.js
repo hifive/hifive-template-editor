@@ -1,24 +1,22 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
 (function() {
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// 基本タグの定義
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base',
 		palette: 'base',
@@ -26,9 +24,9 @@
 		isGroup: true
 	});
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// 見出し
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.heading',
 		palette: 'base.heading',
@@ -198,9 +196,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// テキスト
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.text',
 		palette: 'base.text',
@@ -390,9 +388,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// リスト
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.list',
 		palette: 'base.list',
@@ -523,9 +521,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// テーブル
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.table',
 		palette: 'base.table',
@@ -545,7 +543,7 @@
 			return $elem;
 		}
 
-		//別途対応
+		// 別途対応
 		var editSchema = [];
 
 		var creator = {
@@ -558,9 +556,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// フォーム部品
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.form',
 		palette: 'base.form',
@@ -868,9 +866,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// 画像・メディア
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.media',
 		palette: 'base.media',
@@ -1080,9 +1078,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// ボタン
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.button',
 		palette: 'base.button',
@@ -1110,9 +1108,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// リンク
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'base.link',
 		palette: 'base.link',

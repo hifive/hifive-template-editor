@@ -1,17 +1,15 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
@@ -82,8 +80,8 @@
 		},
 
 		getText: function() {
-			//TODO textContent, text()だと改行コードがなくなる。
-			var raw = $(this.rootElement)[0].innerText; //.text();
+			// TODO textContent, text()だと改行コードがなくなる。
+			var raw = $(this.rootElement)[0].innerText; // .text();
 
 			var text = raw.replace(/\xA0/g, ' ');
 			return text;
@@ -97,8 +95,8 @@
 
 			switch (keyCode) {
 			case 9:
-				//Chromeの場合、連続する空白文字は強制的に"&nbsp;\x20"の組で表現される。
-				//そのため、getText()時に&nbsp;を通常のスペースに置換して返している
+				// Chromeの場合、連続する空白文字は強制的に"&nbsp;\x20"の組で表現される。
+				// そのため、getText()時に&nbsp;を通常のスペースに置換して返している
 				document.execCommand('insertText', false, '    ');
 				needsPreventDefault = true;
 				break;
@@ -126,10 +124,10 @@
 			context.event.preventDefault();
 		},
 
-	//コピー時にSpace -> Tab変換する、等
-	//		'{rootElement} copy': function(context) {
-	//			var ev = context.event.originalEvent;
-	//		}
+	// コピー時にSpace -> Tab変換する、等
+	// '{rootElement} copy': function(context) {
+	// var ev = context.event.originalEvent;
+	// }
 	};
 
 	// =========================================================================

@@ -1,17 +1,15 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
@@ -51,7 +49,7 @@
 					}
 					var places = $.isArray(c.__contents.palette) ? c.__contents.palette
 							: [c.__contents.palette];
-					for ( var i = 0, l = places.length; i < l; i++) {
+					for (var i = 0, l = places.length; i < l; i++) {
 						componentsOnPalette.push({
 							place: places[i],
 							contents: c.__contents
@@ -75,7 +73,7 @@
 			var childrens = {
 				'': data
 			};
-			for ( var i = 0, l = componentsOnPalette.length; i < l; i++) {
+			for (var i = 0, l = componentsOnPalette.length; i < l; i++) {
 				var place = componentsOnPalette[i].place;
 				// 一つ上のフォルダの場所名。ないなら空文字。
 				var placeRoot = place.replace(/^[^\.]*?$|\.[^\.]*?$/, '');
@@ -101,8 +99,8 @@
 					}
 					node.children = childrens[place];
 					// フォルダノードの状態設定
-					//TODO 定数フラグ化
-					node.state = 'close'; //'open';
+					// TODO 定数フラグ化
+					node.state = 'close'; // 'open';
 					node.attr.rel = 'folder';
 
 					// 親のchildren又はルートに挿入。
@@ -228,7 +226,7 @@
 				return;
 			}
 
-			//ドロップターゲットのハイライトを消す
+			// ドロップターゲットのハイライトを消す
 			hifive.editor.hideDropTarget();
 
 			this._isDragging = false;

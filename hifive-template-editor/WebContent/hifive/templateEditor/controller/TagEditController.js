@@ -125,8 +125,8 @@
 
 		_triggerPageChange: function() {
 			var pageController = hifive.editor.u.getFocusedPageController();
-			//pageController.trigger(hifive.editor.consts.EVENT_PAGE_CONTENTS_CHANGE);
-			pageController._triggerPageContentsChange(); //TODO 本当はページ側で編集処理すべき
+			// pageController.trigger(hifive.editor.consts.EVENT_PAGE_CONTENTS_CHANGE);
+			pageController._triggerPageContentsChange(); // TODO 本当はページ側で編集処理すべき
 		},
 
 		// クラスは変更不可なものはinputに表示していないので、それも含めて設定する
@@ -140,7 +140,7 @@
 			if (!applyClasses.length) {
 				target.removeAttribute('class');
 			}
-			for ( var i = 0, l = applyClasses.length; i < l; i++) {
+			for (var i = 0, l = applyClasses.length; i < l; i++) {
 				$(target).addClass(applyClasses[i]);
 			}
 		},
@@ -184,7 +184,7 @@
 			});
 
 			// targetが持ってる属性で、inputにない属性はtargetから消す
-			for ( var i = 0, l = target.attributes.length; i < l; i++) {
+			for (var i = 0, l = target.attributes.length; i < l; i++) {
 				var attrName = target.attributes[i].name;
 				if ($.inArray(attrName, attributeNames) === -1) {
 					target.removeAttribute(attrName);
@@ -193,7 +193,7 @@
 				}
 			}
 			// PROPERTY_ATTRIBUTESのうち、inputにないものはfalseを設定する
-			for ( var i = 0, l = PROPERTY_ATTRIBUTES.length; i < l; i++) {
+			for (var i = 0, l = PROPERTY_ATTRIBUTES.length; i < l; i++) {
 				var prop = PROPERTY_ATTRIBUTES[i];
 				if ($.inArray(prop, attributeNames) === -1) {
 					$(target).prop(prop, false);
@@ -224,7 +224,7 @@
 
 			// デフォルトで編集項目に表示する属性と、要素が持っている編集可能な属性値を列挙
 			var attributes = [];
-			for ( var i = 0, l = DEFAULT_EDITABLE_ATTRIBUTES.length; i < l; i++) {
+			for (var i = 0, l = DEFAULT_EDITABLE_ATTRIBUTES.length; i < l; i++) {
 				var name = DEFAULT_EDITABLE_ATTRIBUTES[i];
 				var value = '';
 				if (name === 'innerHTML') {
@@ -238,7 +238,7 @@
 					fix: true
 				});
 			}
-			for ( var i = 0, l = element.attributes.length; i < l; i++) {
+			for (var i = 0, l = element.attributes.length; i < l; i++) {
 				var attr = element.attributes[i];
 				var name = attr.name;
 				var value = attr.value;
@@ -248,7 +248,7 @@
 				}
 				var hidden = false;
 				// 編集不可能属性にマッチするかどうかチェック
-				for ( var j = 0, len = IGNORE_ATTRIBUTES.length; j < len; j++) {
+				for (var j = 0, len = IGNORE_ATTRIBUTES.length; j < len; j++) {
 					if (name.match(getRegex(IGNORE_ATTRIBUTES[j]))) {
 						hidden = true;
 					}
@@ -261,7 +261,7 @@
 			}
 
 			// 属性値を持たない属性が定義されていたら追加
-			for ( var i = 0, l = PROPERTY_ATTRIBUTES.length; i < l; i++) {
+			for (var i = 0, l = PROPERTY_ATTRIBUTES.length; i < l; i++) {
 				var name = PROPERTY_ATTRIBUTES[i];
 				if ($(element).prop(name) && !element.hasAttribute(name)) {
 					attributes.push({
@@ -284,8 +284,8 @@
 
 			if ($classInput.val()) {
 				var classes = $classInput.val().split(' ');
-				for ( var i = 0, l = IGNORE_CLASS_NAME.length; i < l; i++) {
-					for ( var j = 0, len = classes.length; j < len; j++) {
+				for (var i = 0, l = IGNORE_CLASS_NAME.length; i < l; i++) {
+					for (var j = 0, len = classes.length; j < len; j++) {
 						if (classes[j].match(getRegex(IGNORE_CLASS_NAME[i]))) {
 							hiddenClasses.push(classes[j]);
 							classes.splice(j, 1);

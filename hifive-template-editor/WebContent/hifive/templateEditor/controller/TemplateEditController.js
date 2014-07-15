@@ -101,23 +101,6 @@
 		_indicatorDeferred: null,
 
 		__ready: function() {
-			var that = this;
-
-			$(window).bind(
-					'message',
-					function(e) {
-						var ev = e.originalEvent;
-						var myOrigin = location.protocol + '//' + location.host;
-						if (ev.origin === myOrigin) {
-
-							console.log('TemplateEditorController.jsで「' + ev.data.eventName
-									+ '」イベントをトリガする');
-							$(that.rootElement).trigger(ev.data.eventName, ev.data.data);
-
-						} else {
-							console.log('originが一致していない');
-						}
-					});
 
 			h5.u.obj.expose('hifive.editor', {
 
@@ -142,16 +125,23 @@
 
 					var html = $view[0].outerHTML;
 
-					$(that._sourceEditorController.rootElement).focus();
+					$(this._sourceEditorController.rootElement).focus();
 
 					document.execCommand('insertText', false, html);
 
-					that._applyTemplate();
+					this._applyTemplate();
 				}
 			});
 
 		},
 
+
+		/**
+		 * テンプレートとデータオブジェクトをキャッシュします
+		 *
+		 * @param template
+		 * @param json
+		 */
 		init: function(template, json) {
 
 			template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
@@ -162,33 +152,60 @@
 
 		},
 
-		setTarget: function(element) {
-			this._previewController.setTarget(element);
 
-			if (this._targetWaitDeferred) {
-				this._targetWaitDeferred.resolve();
-				this.$find('.result').css('display', 'none');
-			}
-		},
+		// /**
+		// * @param element
+		// */
+		// setTarget: function(element) {
+		// this._previewController.setTarget(element);
+		//
+		// if (this._targetWaitDeferred) {
+		// this._targetWaitDeferred.resolve();
+		// this.$find('.result').css('display', 'none');
+		// }
+		// },
+
 
 		setTemplateText: function(text) {
 			this._sourceEditorController.setText(text);
 		},
 
+
 		setDataText: function(json) {
 			this.$find('.dataText').val(json);
 		},
 
-		setTemplateId: function(templateId) {
-			this.$find('.templateIdText').text('テンプレートID:' + templateId);
+
+		// setTemplateId: function(templateId) {
+		// this.$find('.templateIdText').text('テンプレートID:' + templateId);
+		// },
+
+
+		/**
+		 * メッセージを受け取った時のイベントハンドラです。
+		 */
+		'{window} message': function(context) {
+			var ev = context.event.originalEvent;
+			var myOrigin = location.protocol + '//' + location.host;
+
+			if (ev.origin === myOrigin) {
+
+				this.log.debug('TemplateEditorController.jsで「' + ev.data.eventName + '」イベントをトリガする');
+
+				$(this.rootElement).trigger(ev.data.eventName, ev.data.data);
+
+			} else {
+				this.log.debug('originが一致していない');
+			}
 		},
+
 
 		'.applyTemplateBtn click': function() {
 			this._applyTemplate();
 		},
 
+
 		'{rootElement} textChange': function() {
-			// this._setCloseConfirmation();
 			this._applyTemplate();
 		},
 
@@ -201,6 +218,7 @@
 		 * @param context
 		 */
 		'.applyLibBtn click': function(context) {
+			// インジケータを表示します
 			this._beginIndicator();
 
 			this.$find('iframe')[0].contentDocument.location.reload(true);

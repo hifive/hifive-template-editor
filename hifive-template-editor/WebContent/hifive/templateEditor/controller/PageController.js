@@ -127,7 +127,7 @@
 			var $cell = $(layoutCell);
 
 			if (!$cell.hasClass('row')) {
-				//TODO デフォルトコンテナ取得方法
+				// TODO デフォルトコンテナ取得方法
 				DEFAULT_BODY_CONTAINER.addComponent(window, containerElem, layoutCell,
 						beforeElement, elemToAdd, pageX, pageY, designTimeData);
 				return;
@@ -195,7 +195,7 @@
 		addComponent: function(window, containerElem, layoutCell, beforeElement, elemToAdd, pageX,
 				pageY, designTimeData) {
 
-			if (layoutCell.tagName.toLowerCase() === 'body') { //FIXME
+			if (layoutCell.tagName.toLowerCase() === 'body') { // FIXME
 				if (beforeElement) {
 					$(beforeElement).after(elemToAdd);
 				} else {
@@ -203,8 +203,8 @@
 				}
 			}
 
-			if (!beforeElement && layoutCell.tagName.toLowerCase() !== 'body') { //FIXME
-				//beforeがnull -> 先頭に挿入
+			if (!beforeElement && layoutCell.tagName.toLowerCase() !== 'body') { // FIXME
+				// beforeがnull -> 先頭に挿入
 				$(layoutCell).prepend(elemToAdd);
 				return;
 			}
@@ -314,7 +314,7 @@
 			deep: true
 		});
 
-		for ( var i = 0, len = controllers.length; i < len; i++) {
+		for (var i = 0, len = controllers.length; i < len; i++) {
 			controllers[i].dispose();
 		}
 	}
@@ -349,7 +349,7 @@
 		case hifive.editor.consts.SELECTION_MODE_TEMPLATE:
 			$layoutCellElem = $(elem).closest(TEMPLATE_ELEM_SELECTOR);
 			break;
-		case hifive.editor.consts.SELECTION_MODE_COMPOMENT: //デフォルト
+		case hifive.editor.consts.SELECTION_MODE_COMPOMENT: // デフォルト
 		default:
 			$layoutCellElem = $(elem).closest(LAYOUT_CELL_SELECTOR);
 			break;
@@ -366,10 +366,10 @@
 			layoutContainer = DEFAULT_BODY_CONTAINER;
 		}
 
-		//FIXME
+		// FIXME
 		layoutContainer = BOOTSTRAP_GRID_CONTAINER;
 
-		//TODO layoutCellがContainerに含まれているかをチェックすべきか
+		// TODO layoutCellがContainerに含まれているかをチェックすべきか
 
 		return {
 			container: layoutContainer,
@@ -401,7 +401,7 @@
 
 		var component = getComponentByElement(elem);
 
-		//FIXME 必要なものだけ取得するようにする
+		// FIXME 必要なものだけ取得するようにする
 		var templateRoot = $(elem).closest(TEMPLATE_ELEM_SELECTOR);
 
 		return {
@@ -413,7 +413,7 @@
 
 	function isAppendable(target, elemToAdd) {
 		var tag = target.tagName.toLowerCase();
-		return tag === 'div' || tag === 'form'; //TODO 正しくする
+		return tag === 'div' || tag === 'form'; // TODO 正しくする
 	}
 
 
@@ -452,7 +452,7 @@
 			dir += 'w';
 			break;
 		case 1:
-			//内部(の可能性がある)
+			// 内部(の可能性がある)
 			if (rangeY === 1) {
 				dir = RANGE_IN;
 			} else if (rangeY !== 0 && rangeY !== 2) {
@@ -522,7 +522,7 @@
 
 	(function() {
 
-		//TODO overlayController??
+		// TODO overlayController??
 		var manipulationController = {
 			/**
 			 * @memberOf hifive.editor.controller.page.ManipulationController
@@ -569,7 +569,7 @@
 					return target.templateRoot;
 				case hifive.editor.consts.SELECTION_MODE_COMPONENT:
 				default:
-					//コンポーネント単位で選択
+					// コンポーネント単位で選択
 					return target.component;
 				}
 			},
@@ -594,7 +594,7 @@
 
 				var order = $.inArray(group, OVERLAY_GROUP_ORDER);
 
-				//TODO ここの処理はもう少しきれいにできそう
+				// TODO ここの処理はもう少しきれいにできそう
 				if (order <= 0) {
 					this.$find('.regionLayer').prepend($region);
 				} else if (order >= OVERLAY_GROUP_ORDER.length - 1) {
@@ -630,10 +630,10 @@
 
 			_removeRegion: function(element, id, group) {
 				if (element) {
-					for ( var i = 0, len = this._regionOverlays.length; i < len; i++) {
+					for (var i = 0, len = this._regionOverlays.length; i < len; i++) {
 						var r = this._regionOverlays[i];
 						if (r.element === element) {
-							//elementのみ、groupでの絞り込みを行っている
+							// elementのみ、groupでの絞り込みを行っている
 							if (group && r.group !== group) {
 								continue;
 							}
@@ -646,7 +646,7 @@
 				}
 
 				if (id) {
-					for ( var i = 0, len = this._regionOverlays.length; i < len; i++) {
+					for (var i = 0, len = this._regionOverlays.length; i < len; i++) {
 						var r = this._regionOverlays[i];
 						if (r.id === id) {
 							r.$region.remove();
@@ -657,7 +657,7 @@
 				}
 
 				if (group) {
-					for ( var i = this._regionOverlays.length - 1; i >= 0; i--) {
+					for (var i = this._regionOverlays.length - 1; i >= 0; i--) {
 						var r = this._regionOverlays[i];
 						if (r.group === group) {
 							r.$region.remove();
@@ -668,7 +668,7 @@
 			},
 
 			_getRegionAt: function(pageX, pageY, group) {
-				for ( var i = 0, len = this._regionOverlays.length; i < len; i++) {
+				for (var i = 0, len = this._regionOverlays.length; i < len; i++) {
 					var r = this._regionOverlays[i];
 					if (isInRegion(r.$region, pageX, pageY) && r.group === group) {
 						return r;
@@ -682,7 +682,7 @@
 					return null;
 				}
 
-				for ( var i = 0, len = this._regionOverlays.length; i < len; i++) {
+				for (var i = 0, len = this._regionOverlays.length; i < len; i++) {
 					var r = this._regionOverlays[i];
 					if (r.element === element) {
 						return r;
@@ -703,10 +703,10 @@
 					return;
 				}
 
-				for ( var i = 0, len = this._regionOverlays.length; i < len; i++) {
+				for (var i = 0, len = this._regionOverlays.length; i < len; i++) {
 					var r = this._regionOverlays[i];
 					if (r.element === elem && r.group === REGION_GROUP_OVER) {
-						//すでに同じ要素にオーバーレイしてある
+						// すでに同じ要素にオーバーレイしてある
 						return;
 					}
 				}
@@ -733,7 +733,7 @@
 				var $el = $(overlay.element);
 				var $r = overlay.$region;
 
-				//margin表示
+				// margin表示
 				var mTop = parseInt($el.css('marginTop')) || 0;
 				var mLeft = parseInt($el.css('marginLeft')) || 0;
 				var mRight = parseInt($el.css('marginRight')) || 0;
@@ -749,7 +749,7 @@
 					borderColor: METRICS_MARGIN_COLOR
 				});
 
-				//border表示
+				// border表示
 				var bTop = parseInt($el.css('borderTop')) || 0;
 				var bLeft = parseInt($el.css('borderLeft')) || 0;
 				var bRight = parseInt($el.css('borderRight')) || 0;
@@ -771,7 +771,7 @@
 
 				this.log.debug('bT={0},bL={1}, bB={3}', bTop, bLeft, null, bBottom);
 
-				//padding表示
+				// padding表示
 				var pTop = parseInt($el.css('paddingTop')) || 0;
 				var pLeft = parseInt($el.css('paddingLeft')) || 0;
 				var pRight = parseInt($el.css('paddingRight')) || 0;
@@ -795,7 +795,7 @@
 			'{rootElement} elementSelect': function(context) {
 				var elements = context.evArg.elements;
 
-				for ( var i = 0, len = elements.length; i < len; i++) {
+				for (var i = 0, len = elements.length; i < len; i++) {
 					var el = elements[i];
 
 					var overlayRect = this._getOverlayRect(el);
@@ -807,7 +807,7 @@
 			'{rootElement} elementUnselect': function(context) {
 				var elements = context.evArg.elements;
 
-				for ( var i = 0, len = elements.length; i < len; i++) {
+				for (var i = 0, len = elements.length; i < len; i++) {
 					var el = elements[i];
 					this._removeRegion(el, null, REGION_GROUP_SELECTED);
 				}
@@ -825,7 +825,7 @@
 				this._lastPageY = context.event.pageY;
 
 				if (this._draggingDirection) {
-					//ドラッグ中（リサイズ中）はカーソルを変えない
+					// ドラッグ中（リサイズ中）はカーソルを変えない
 					return;
 				}
 
@@ -870,7 +870,7 @@
 					return;
 				}
 
-				//popupがあるということは、必ずリサイズ可能状態であるということ
+				// popupがあるということは、必ずリサイズ可能状態であるということ
 
 				if (shiftKey === true && ctrlKey === true) {
 					popup.setContents(MSG_BORDER);
@@ -910,7 +910,7 @@
 			_isFocusInPage: false,
 
 			'{document} click': function(context) {
-				//TODO FocusManagerを作るべきか
+				// TODO FocusManagerを作るべきか
 				if ($.contains(this.rootElement, context.event.target)) {
 					this._isFocusInPage = true;
 				} else {
@@ -925,7 +925,7 @@
 
 				var code = context.event.keyCode;
 				if (code === KEY_DELETE) {
-					//deleteキー
+					// deleteキー
 					this._removeElements();
 				}
 
@@ -1083,8 +1083,8 @@
 			},
 
 			'.pageVeil click': function(context) {
-				//ベールをクリックされたということは、エディタの範囲外をクリックされたということなので
-				//オーバーレイは閉じる
+				// ベールをクリックされたということは、エディタの範囲外をクリックされたということなので
+				// オーバーレイは閉じる
 				this._pageController._closePopupOverlay('all');
 
 				var component = this._getElement(context.event.pageX, context.event.pageY);
@@ -1111,7 +1111,7 @@
 			},
 
 			'[href="#remove"] click': function(context) {
-				//TODO ContextMenu改良後はselectMenuItemにする
+				// TODO ContextMenu改良後はselectMenuItemにする
 				this._removeElements();
 
 				return false;
@@ -1120,7 +1120,7 @@
 			_removeElements: function() {
 				var elemToRemove = this._pageController.getSelectedElements().slice(0);
 
-				for ( var i = 0, len = elemToRemove.length; i < len; i++) {
+				for (var i = 0, len = elemToRemove.length; i < len; i++) {
 					var el = elemToRemove[i];
 
 					this._pageController.removeComponent(el);
@@ -1129,8 +1129,8 @@
 
 			'{rootElement} mouseup': function(context) {
 				if (context.event.button !== 2) {
-					//右クリック以外なら何もしない
-					//TODO ContextMenuが改良されたらshowにする
+					// 右クリック以外なら何もしない
+					// TODO ContextMenuが改良されたらshowにする
 					return;
 				}
 
@@ -1169,7 +1169,7 @@
 			_refresh: function() {
 				this._resizeOverlay();
 
-				for ( var i = 0, len = this._regionOverlays.length; i < len; i++) {
+				for (var i = 0, len = this._regionOverlays.length; i < len; i++) {
 					var overlay = this._regionOverlays[i];
 
 					var el = overlay.element;
@@ -1217,9 +1217,9 @@
 					w = outerW;
 				}
 
-				//this.log.debug(
-				//	'resizeOverlay: oW={6},oH={7},pcw={0},pch={1},psw={2},psh={3},w={4},h={5}',
-				//	pageCW, pageCH, pageSW, pageSH, w, h, outerW, outerH);
+				// this.log.debug(
+				// 'resizeOverlay: oW={6},oH={7},pcw={0},pch={1},psw={2},psh={3},w={4},h={5}',
+				// pageCW, pageCH, pageSW, pageSH, w, h, outerW, outerH);
 
 				this.$find('.pageOverlay').css({
 					width: w,
@@ -1238,68 +1238,68 @@
 				$(this.rootElement).find('.status').remove();
 			}
 
-		//			'{body} h5trackmove': function(context) {
-		//				if (!this._isDragging) {
-		//					return;
-		//				}
+		// '{body} h5trackmove': function(context) {
+		// if (!this._isDragging) {
+		// return;
+		// }
 		//
-		//				context.event.preventDefault();
+		// context.event.preventDefault();
 		//
-		//				hifive.editor.highlightDropTarget(context.event.pageX, context.event.pageY);
+		// hifive.editor.highlightDropTarget(context.event.pageX, context.event.pageY);
 		//
-		//				hifive.editor.u.moveElementBy(this._$dragProxy, context.event.dx, context.event.dy);
+		// hifive.editor.u.moveElementBy(this._$dragProxy, context.event.dx, context.event.dy);
 		//
-		//				this.trigger('cancelPreview');
-		//			},
+		// this.trigger('cancelPreview');
+		// },
 
-		//			'{body} h5trackend': function(context) {
-		//				if (!this._isDragging) {
-		//					return;
-		//				}
+		// '{body} h5trackend': function(context) {
+		// if (!this._isDragging) {
+		// return;
+		// }
 		//
-		//				//ドロップターゲットのハイライトを消す
-		//				hifive.editor.hideDropTarget();
+		// //ドロップターゲットのハイライトを消す
+		// hifive.editor.hideDropTarget();
 		//
-		//				this._isDragging = false;
+		// this._isDragging = false;
 		//
-		//				var $removedDragProxy = this._$dragProxy.remove();
+		// var $removedDragProxy = this._$dragProxy.remove();
 		//
-		//				this._$dragProxy = null;
+		// this._$dragProxy = null;
 		//
-		//				// TODO ドラッグを行う
+		// // TODO ドラッグを行う
 		//
-		//				var selected = this._pageController.getSelectedElements();
-		//				if (selected.length === 0) {
-		//					return;
-		//				}
+		// var selected = this._pageController.getSelectedElements();
+		// if (selected.length === 0) {
+		// return;
+		// }
 
-		//TODO touchの場合pageXYが入らない気がする。FW側で対応するか
-		//				var target= this._getElement(context.event.pageX, context.event.pageY);
-		//				this.log.debug('TARGET');
-		//this.log.debug(target);
+		// TODO touchの場合pageXYが入らない気がする。FW側で対応するか
+		// var target= this._getElement(context.event.pageX, context.event.pageY);
+		// this.log.debug('TARGET');
+		// this.log.debug(target);
 		//
-		//				if(!target) {
-		//					return;
-		//				}
+		// if(!target) {
+		// return;
+		// }
 		//
-		//				this._pageController.moveComponent(target, selected);
+		// this._pageController.moveComponent(target, selected);
 
 
 		// このチェックはdropされる側でやるべきか
-		//				var dropTarget = document.elementFromPoint(context.event.pageX, context.event.pageY);
+		// var dropTarget = document.elementFromPoint(context.event.pageX, context.event.pageY);
 		//
-		//				if (!$(dropTarget).is('.pageWrapper')
-		//						&& $(dropTarget).parents('.pageWrapper').length === 0) {
-		//					return;
-		//				}
+		// if (!$(dropTarget).is('.pageWrapper')
+		// && $(dropTarget).parents('.pageWrapper').length === 0) {
+		// return;
+		// }
 		//
-		//				var componentId = $removedDragProxy.attr('data-editor-component-name');
-		//				if (!componentId) {
-		//					return;
-		//				}
+		// var componentId = $removedDragProxy.attr('data-editor-component-name');
+		// if (!componentId) {
+		// return;
+		// }
 		//
-		//				hifive.editor.dropComponent(componentId, context.event.pageX, context.event.pageY);
-		//			}
+		// hifive.editor.dropComponent(componentId, context.event.pageX, context.event.pageY);
+		// }
 
 		};
 		h5.core.expose(manipulationController);
@@ -1420,7 +1420,7 @@
 								function() {
 									that._addCustomStylesheet();
 
-									//ページを離れる前に警告を出す
+									// ページを離れる前に警告を出す
 									var cssPromise = insertCss(this.contentDocument,
 											hifive.editor.u
 													.getAbsoluteSrcPath('h5editorPageStyles.css'),
@@ -1514,7 +1514,7 @@
 				var $view = $(view);
 				$view.attr(DATA_COMPONENT, componentId);
 
-				//TODO コンポーネントIDをdata()で持たせるかdata-*属性で持たせるかは要検討
+				// TODO コンポーネントIDをdata()で持たせるかdata-*属性で持たせるかは要検討
 				$view.data(DATA_COMPONENT_ID, this._lastComponentId++);
 
 
@@ -1536,17 +1536,17 @@
 				}));
 
 
-				//				var appendable = (selectionMode === hifive.editor.consts.SELECTION_MODE_ELEMENT)
-				//						&& isAppendable(componentAtPoint, $view[0]);
+				// var appendable = (selectionMode === hifive.editor.consts.SELECTION_MODE_ELEMENT)
+				// && isAppendable(componentAtPoint, $view[0]);
 				//
-				//				if (appendable) {
-				//					componentAtPoint = layoutTarget.cell.lastChild;
-				//				}
+				// if (appendable) {
+				// componentAtPoint = layoutTarget.cell.lastChild;
+				// }
 				//
-				//				//element挿入の場合はcellとbeforeElementを同じにする
-				//				layoutTarget.container.addComponent(this._pageContainer.contentWindow,
-				//						layoutTarget.container, layoutTarget.cell, componentAtPoint, view, pageX,
-				//						pageY);
+				// //element挿入の場合はcellとbeforeElementを同じにする
+				// layoutTarget.container.addComponent(this._pageContainer.contentWindow,
+				// layoutTarget.container, layoutTarget.cell, componentAtPoint, view, pageX,
+				// pageY);
 
 				this._triggerPageContentsChange();
 			},
@@ -1577,14 +1577,14 @@
 
 				// insertCss, jsを使ってリソースを追加する。
 				var promises = [];
-				for ( var i = 0, l = resources.css.length; i < l; i++) {
+				for (var i = 0, l = resources.css.length; i < l; i++) {
 					var css = resources.css[i];
 					css.each(function() {
 						promises.push(insertCss(doc, this.getAttribute('href'), false, this
 								.getAttribute(hifive.editor.consts.DATA_H5_MODULE)));
 					});
 				}
-				for ( var i = 0, l = resources.js.length; i < l; i++) {
+				for (var i = 0, l = resources.js.length; i < l; i++) {
 					var js = resources.js[i];
 					js.each(function() {
 						promises.push(insertScript(doc, this.getAttribute('src'), false, this
@@ -1622,29 +1622,29 @@
 
 				var pageContainerOffset = $(this._pageContainer).offset();
 
-				//				this.log.debug('pCOff top={0},left={1}', pageContainerOffset.top,
-				//						pageContainerOffset.left);
+				// this.log.debug('pCOff top={0},left={1}', pageContainerOffset.top,
+				// pageContainerOffset.left);
 
 				var cell = target.cell;
 
 				this.log.debug(cell);
 
-				//ドロップ対象が0x0のサイズかもしれないので、単純にgetOverlayRect()してはいけない
+				// ドロップ対象が0x0のサイズかもしれないので、単純にgetOverlayRect()してはいけない
 				var dropCellSize = target.container.getDropCellSize(this._pageContainer,
 						target.cell);
 				var cw = dropCellSize.width;
 				var ch = dropCellSize.height;
 
-				//				var cw = $(cell).innerWidth();
-				//				var ch = $(cell).innerHeight();
+				// var cw = $(cell).innerWidth();
+				// var ch = $(cell).innerHeight();
 
 				var offpos = $(cell).offset();
 
-				//				this.log.debug('offpos left={0},top={1}', offpos.left, offpos.top);
+				// this.log.debug('offpos left={0},top={1}', offpos.left, offpos.top);
 
 				var rootPos = this._toRootPos(offpos.left, offpos.top);
 
-				//				this.log.debug('rootPos x={0},y={1}', rootPos.x, rootPos.y);
+				// this.log.debug('rootPos x={0},y={1}', rootPos.x, rootPos.y);
 
 				var $target = $(this.view.get('cellArea'));
 
@@ -1653,7 +1653,7 @@
 				var ctop = rootPos.y - pageContainerOffset.top;
 				var cleft = rootPos.x - pageContainerOffset.left;
 
-				//				this.log.debug('cw={0},ch={1},ctop={2},cleft={3}', cw, ch, ctop, cleft);
+				// this.log.debug('cw={0},ch={1},ctop={2},cleft={3}', cw, ch, ctop, cleft);
 
 				$target.css({
 					width: cw,
@@ -1698,7 +1698,7 @@
 			},
 
 			'{document} closeEditor': function() {
-				//TODO {document}はやめる。AppControllerによる制御にする。
+				// TODO {document}はやめる。AppControllerによる制御にする。
 				this._hideEditor();
 			},
 
@@ -1814,14 +1814,14 @@
 
 				var isComplete = false;
 				if (creator && creator.remove) {
-					//TODO designData を渡す
+					// TODO designData を渡す
 					isComplete = creator.remove(elem);
 				}
 
 				if (isComplete !== true) {
-					//isCompleteがtrueの場合、コンポーネントが
-					//内部コントローラも含めて全責任を持って削除処理を行ったとみなす
-					//TODO designDataも削除
+					// isCompleteがtrueの場合、コンポーネントが
+					// 内部コントローラも含めて全責任を持って削除処理を行ったとみなす
+					// TODO designDataも削除
 					disposeControllers(elem);
 					$(elem, this._pageContainer.contentDocument).remove();
 				}
@@ -1869,8 +1869,8 @@
 				var dx = -ev.originalEvent.wheelDeltaX || 0;
 				var dy = -ev.originalEvent.wheelDeltaY || -ev.wheelDelta;
 
-				//scrollBy()を呼ぶと、contentWindowでscrollイベントが発生する。
-				//そのイベントのリスナーがpageViewChangeイベントを発生させる。そのためここではtriggerしない。
+				// scrollBy()を呼ぶと、contentWindowでscrollイベントが発生する。
+				// そのイベントのリスナーがpageViewChangeイベントを発生させる。そのためここではtriggerしない。
 				this._pageContainer.contentWindow.scrollBy(dx, dy);
 			},
 
@@ -1892,11 +1892,11 @@
 					return;
 				}
 				// 現在適用中のスタイルを削除
-				for ( var i = (stylesheet.rules || stylesheet.cssRules).length - 1; i >= 0; i--) {
+				for (var i = (stylesheet.rules || stylesheet.cssRules).length - 1; i >= 0; i--) {
 					stylesheet.deleteRule ? stylesheet.deleteRule(i) : stylesheet.removeRule(i);
 				}
 
-				for ( var i = 0, l = cssObjArray.length; i < l; i++) {
+				for (var i = 0, l = cssObjArray.length; i < l; i++) {
 					var cssObj = cssObjArray[i];
 					var selector = cssObj.selector;
 					var definitions = cssObj.definitions;
@@ -1905,7 +1905,7 @@
 						defStr = definitions;
 					} else {
 						defStr = '';
-						for ( var j = 0, len = definitions.length; j < len; j++) {
+						for (var j = 0, len = definitions.length; j < len; j++) {
 							var propValObj = definitions[j];
 							defStr += propValObj.key + ':' + propValObj.value + ';';
 						}
@@ -1926,7 +1926,7 @@
 			},
 
 			setCustomCss: function(cssText) {
-				//パースに失敗すると例外が発生する
+				// パースに失敗すると例外が発生する
 				var parseObj = hifive.editor.u.parseCSS(cssText);
 				this._applyCSS(parseObj);
 
@@ -1953,7 +1953,7 @@
 
 			focus: function(element) {
 				if (!this.isSelected(element)) {
-					//非選択状態であれば自動的に選択状態に(追加)する
+					// 非選択状態であれば自動的に選択状態に(追加)する
 					this.select(element);
 				}
 
@@ -2000,7 +2000,7 @@
 
 				var actuals = [];
 
-				for ( var i = 0, len = elems.length; i < len; i++) {
+				for (var i = 0, len = elems.length; i < len; i++) {
 					var elem = elems[i];
 
 					if (this.isSelected(elem)) {
@@ -2024,10 +2024,10 @@
 			},
 
 			unselect: function(element) {
-				//TODO element"s"で受け取れるようにする
-				//イベントもelement"s"にして配列にする
+				// TODO element"s"で受け取れるようにする
+				// イベントもelement"s"にして配列にする
 
-				//TODO 要素がinnerHTML等で置換されていると正しくunselectできない
+				// TODO 要素がinnerHTML等で置換されていると正しくunselectできない
 
 
 				if (this.isSelected(element)) {
@@ -2069,8 +2069,8 @@
 			 * @returns {___anonymous33757_33781}
 			 */
 			createOverlay: function(group, param) {
-				//TODO 同一groupのオーバーレイが既にあったらそれをクローズして新しいポップアップを返す
-				//groupが'all'の場合、全てのオーバーレイをキャンセルして新しいオーバーレイを出す
+				// TODO 同一groupのオーバーレイが既にあったらそれをクローズして新しいポップアップを返す
+				// groupが'all'の場合、全てのオーバーレイをキャンセルして新しいオーバーレイを出す
 
 				this._closePopupOverlay(group);
 
@@ -2103,7 +2103,7 @@
 
 				if ($sameGroupPopup[0]) {
 					$sameGroupPopup.each(function() {
-						//同一グループのオーバーレイが存在する場合、コントローラを全てdisposeしたうえでルートを取り除く
+						// 同一グループのオーバーレイが存在する場合、コントローラを全てdisposeしたうえでルートを取り除く
 						$(h5.core.controllerManager.getControllers(this, {
 							deep: true
 						})).each(function() {

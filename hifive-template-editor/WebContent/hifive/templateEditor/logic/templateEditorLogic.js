@@ -36,7 +36,6 @@
 
 
 		/**
-		 *
 		 * @param url
 		 */
 		_getData: function(url) {

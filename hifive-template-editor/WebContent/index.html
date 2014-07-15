@@ -67,14 +67,9 @@
 
 	h5.u.obj.ns('hifive.templateEditor.settings').savePathBase = '/hifive-template-editor/WebContent/hifive/templateEditor/storage/files/';
 
-
 	//JsBaseとCssBaseは同一でもよい
 	h5.u.obj.ns('hifive.templateEditor.settings').libraryJsBase = '/hifive-template-editor/WebContent/res/lib';
 	h5.u.obj.ns('hifive.templateEditor.settings').libraryCssBase = '/hifive-template-editor/WebContent/res/lib';
-
-	//h5.u.obj.ns('hifive.editor.settings').userLibraryJsBase = '/hifiveVisualEditor/lib';
-	//h5.u.obj.ns('hifive.editor.settings').userLibraryCssBase = '/hifiveVisualEditor/lib';
-
 
 	h5.ext.basePath = './';
 	h5.core.controller.registerAlias('c', 'hifive.templateEditor.controller');
@@ -83,32 +78,25 @@
 <script src="hifive/templateEditor/js/dependencyMap.js"></script>
 
 <script src="hifive/templateEditor/controller/GenericParameterEditController.js"></script>
-
 <script src="hifive/templateEditor/controller/PreviewController.js"></script>
 <script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
 <script src="hifive/templateEditor/controller/CSSEditorController.js"></script>
 <script src="hifive/templateEditor/controller/TemplateEditController.js"></script>
 
-
 <script src="/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
 
 
-
 <!-- u.jsが必要 -->
+
 <script>
 	// 環境変数の設定
 	hifive.editor.u.setEnv('SYSTEM_LIB', '/hifive-template-editor/WebContent/res/lib');
-	// 	hifive.editor.u.setEnv('USER_LIB', '/hifiveVisualEditor/editor/lib');
 </script>
 
 <script src="hifive/templateEditor/parts/ui/ui.common.js"></script>
 <script src="hifive/templateEditor/parts/ui/base/base.js"></script>
 <script src="hifive/templateEditor/parts/ui/layout/layout.js"></script>
-<!-- <script src="parts/ui/hifive/components.js"></script> -->
-<!-- <script src="parts/ui/bootstrap/bootstrap.js"></script> -->
 <script src="hifive/templateEditor/parts/bootstraps3/bootstrap.js"></script>
-
-<script src="/quiz/res/src/common/util.js"></script>
 
 <script id="tmp-cssErrorMessage" type="text/ejs">
 <p>[%= message %]</p>
@@ -123,19 +111,6 @@
 </script>
 
 <script>
-	/* $(window).bind('message', function(e) {
-		var ev = e.originalEvent;
-		var myOrigin = location.protocol + '//' + location.host;
-		if (ev.origin === myOrigin) {
-
-			console.log('TemplateEditorController.jsで「' + ev.data.eventName + '」イベントをトリガする');
-			$(this._rootElement).trigger(ev.data.eventName, ev.data.data);
-
-		} else {
-			console.log('originが一致していない');
-		}
-	}); */
-
 	$(window).bind('resize', function() {
 		var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {
 			name: 'h5.ui.container.DividedBox',
@@ -211,9 +186,9 @@
 
 					<!-- 【カスタムCSS】 -->
 					<div class="tab-pane" id="css">
-						<div id="editPanel" class="bg-carbon dividedBox vertical">
+						<div id="editPanel" class="bg-carbon vertical">
 							<div class="editorRoot autoSize"></div>
-							<div class="tagEdit fill autoSize" data-h5-controller="c:TagEditController"></div>
+							<div class="tagEdit autoSize" data-h5-controller="c:TagEditController"></div>
 							<div id="editCSSPanel" class="pane pane-full bg-carbon autoSize">
 								<div class="styleDef-wrapper">
 									<h3>
@@ -254,7 +229,6 @@
 					<h3 class="col-xs-2">プレビュー</h3>
 					<button class="btn btn-primary applyTemplateBtn col-xs-2">再適用</button>
 				</div>
-				<!-- <div class="templateApplicationRoot"></div> -->
 				<iframe class="frame col-xs-12" src="hifive/templateEditor/preview.html"></iframe>
 			</div>
 		</div>

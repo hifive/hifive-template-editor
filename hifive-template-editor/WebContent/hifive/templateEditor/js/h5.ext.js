@@ -1,17 +1,15 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
@@ -178,7 +176,7 @@
 	}
 
 	function alreadyBound(controllerName, controllers) {
-		for ( var i = 0, len = controllers.length; i < len; i++) {
+		for (var i = 0, len = controllers.length; i < len; i++) {
 			if (controllers[i].__name === controllerName) {
 				return true;
 			}
@@ -241,7 +239,7 @@
 
 					var attrControllerNameList = attrControllers.split(',');
 
-					for ( var i = 0, len = attrControllerNameList.length; i < len; i++) {
+					for (var i = 0, len = attrControllerNameList.length; i < len; i++) {
 						var attrControllerName = getFullname($.trim(attrControllerNameList[i]));
 
 						if (attrControllerName === '') {
@@ -299,7 +297,7 @@
 	var autoRunList = [];
 
 	function registerAutoRun(selector, feature) {
-		for ( var i = 0, len = autoRunList.length; i < len; i++) {
+		for (var i = 0, len = autoRunList.length; i < len; i++) {
 			var auto = autoRunList[i];
 			if (auto.selector === selector && auto.feature === feature) {
 				fwLogger.debug(FW_MESSAGE_SAME_AUTO_RUN, selector, feature.__name);
@@ -324,7 +322,7 @@
 
 	// autoRun: 関数が渡されていたらそれを実行、引数は対象要素。コントローラの場合はコントローラ化。
 	function autoRun() {
-		for ( var i = 0, len = autoRunList.length; i < len; i++) {
+		for (var i = 0, len = autoRunList.length; i < len; i++) {
 			var auto = autoRunList[i];
 			var selector = auto.selector;
 			var f = auto.feature;
@@ -419,10 +417,10 @@
 			var resolvers = h5.settings.dependencyResolvers;
 			var resolversLen = resolvers.length;
 
-			for ( var i = 0, keyLen = this._keys.length; i < keyLen; i++) {
+			for (var i = 0, keyLen = this._keys.length; i < keyLen; i++) {
 				var canResolve = false;
 
-				for ( var j = 0; j < resolversLen; j++) {
+				for (var j = 0; j < resolversLen; j++) {
 					if (resolvers[j].canResolve(this._keys[i])) {
 						canResolve = true;
 						break;
@@ -452,10 +450,10 @@
 
 			var resolveStates = [];
 
-			for ( var i = 0, keyLen = this._keys.length; i < keyLen; i++) {
+			for (var i = 0, keyLen = this._keys.length; i < keyLen; i++) {
 				var key = this._keys[i];
 
-				for ( var j = 0; j < resolversLen; j++) {
+				for (var j = 0; j < resolversLen; j++) {
 					var resolver = resolvers[j];
 					if (resolver.canResolve(key)) {
 						resolveStates.push(resolver.resolve(key));
@@ -471,7 +469,7 @@
 	function require(keys) {
 		if (arguments.length > 1) {
 			// 可変長で受け取った場合は配列化する
-			throw new Error('配列じゃないとだめ'); //TODO
+			throw new Error('配列じゃないとだめ'); // TODO
 		}
 		return new Dependency(keys);
 	}
@@ -593,7 +591,7 @@
 			var controllers = h5.core.controllerManager.getControllers(this.rootElement, {
 				deep: true
 			});
-			for ( var i = 0, len = controllers.length; i < len; i++) {
+			for (var i = 0, len = controllers.length; i < len; i++) {
 				controllers[i].dispose();
 			}
 
@@ -644,7 +642,7 @@
 	});
 
 
-	//実行制御のマップ { キー: タイマーID }
+	// 実行制御のマップ { キー: タイマーID }
 	var execKeyMap = {};
 
 	function execSlippery(key, func, delay, args) {
@@ -709,7 +707,7 @@
 	}
 
 	h5.u.obj.expose('h5.ui.popupManager', {
-		//TODO PopUp -> Popup
+		// TODO PopUp -> Popup
 		createPopUp: createPopUp,
 		getPopUp: getPopUp
 	});
@@ -721,7 +719,7 @@
 
 	var FOLLOW_GAP_WIDTH_DEFAULT = 3;
 
-	//TODO システム扱いにしてgetControllers()で取得されないようにするべき
+	// TODO システム扱いにしてgetControllers()で取得されないようにするべき
 	var followMousePopupController = {
 		__name: 'h5.ext.ui.FollowMousePopupController',
 
@@ -760,7 +758,7 @@
 			var gap = this._gap;
 
 			if (this._position.indexOf('l') !== -1) {
-				//上側に出す
+				// 上側に出す
 				px -= this._$target.outerWidth();
 				px -= gap;
 			} else {

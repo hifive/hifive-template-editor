@@ -1,23 +1,21 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
 (function() {
 
-	//	var holderData = hifive.editor.ui.holderData;
+	// var holderData = hifive.editor.ui.holderData;
 	var getButtonSchema = hifive.editor.ui.getBootstrap3ButtonSchema;
 
 	var NO_UNIT = hifive.templateEditor.controller.GenericParameterEditController.NO_UNIT;
@@ -81,87 +79,87 @@
 				}]
 			}]);
 	//
-	//	function getNavTabsSchema(selector) {
+	// function getNavTabsSchema(selector) {
 	//
-	//		var NAV_TABS_SCHEMA = [{
-	//			label: 'タイプ',
-	//			selector: selector,
-	//			type: 'enum',
-	//			enumValue: [['Basic tabs', 'nav-tabs'], ['Basic pills', 'nav-pills']],
-	//			target: 'class'
-	//		}, {
-	//			label: '縦配置',
-	//			selector: selector,
-	//			type: 'boolean',
-	//			booleanValue: 'nav-stacked',
-	//			target: 'class'
-	//		}, {
-	//			label: '各タブ',
-	//			selector: selector + ' > li',
-	//			type: 'multiple',
-	//			newItem: '<li><a href="#" data-toggle="tab">New</a></li>',
-	//			schema: [{
-	//				label: 'ラベル',
-	//				selector: '> a',
-	//				type: 'string',
-	//				target: 'text'
-	//			}, {
-	//				label: 'HREF属性',
-	//				selector: '> a',
-	//				type: 'string',
-	//				target: 'attr(href)'
-	//			}, {
-	//				label: '選択',
-	//				selector: '',
-	//				type: 'boolean',
-	//				booleanValue: 'active',
-	//				target: 'class'
-	//			}, {
-	//				label: '無効',
-	//				selector: '',
-	//				type: 'boolean',
-	//				booleanValue: 'disabled',
-	//				target: 'class'
-	//			}, {
-	//				label: '横位置',
-	//				selector: '',
-	//				type: 'enum',
-	//				enumValue: [['左寄せ', 'pull-left'], ['右寄せ', 'pull-right']],
-	//				target: 'class'
-	//			}]
-	//		}];
+	// var NAV_TABS_SCHEMA = [{
+	// label: 'タイプ',
+	// selector: selector,
+	// type: 'enum',
+	// enumValue: [['Basic tabs', 'nav-tabs'], ['Basic pills', 'nav-pills']],
+	// target: 'class'
+	// }, {
+	// label: '縦配置',
+	// selector: selector,
+	// type: 'boolean',
+	// booleanValue: 'nav-stacked',
+	// target: 'class'
+	// }, {
+	// label: '各タブ',
+	// selector: selector + ' > li',
+	// type: 'multiple',
+	// newItem: '<li><a href="#" data-toggle="tab">New</a></li>',
+	// schema: [{
+	// label: 'ラベル',
+	// selector: '> a',
+	// type: 'string',
+	// target: 'text'
+	// }, {
+	// label: 'HREF属性',
+	// selector: '> a',
+	// type: 'string',
+	// target: 'attr(href)'
+	// }, {
+	// label: '選択',
+	// selector: '',
+	// type: 'boolean',
+	// booleanValue: 'active',
+	// target: 'class'
+	// }, {
+	// label: '無効',
+	// selector: '',
+	// type: 'boolean',
+	// booleanValue: 'disabled',
+	// target: 'class'
+	// }, {
+	// label: '横位置',
+	// selector: '',
+	// type: 'enum',
+	// enumValue: [['左寄せ', 'pull-left'], ['右寄せ', 'pull-right']],
+	// target: 'class'
+	// }]
+	// }];
 	//
-	//		return NAV_TABS_SCHEMA;
-	//	}
+	// return NAV_TABS_SCHEMA;
+	// }
 	//
-	//	var MEDIA_SCHEMA = [{
-	//		label: '画像リンク',
-	//		selector: '> a',
-	//		type: 'string',
-	//		target: 'attr(href)'
-	//	}, {
-	//		label: '画像SRC',
-	//		selector: '> a img',
-	//		type: 'string',
-	//		target: 'attr(src)'
-	//	}, {
-	//		label: '画像位置',
-	//		selector: '> a',
-	//		type: 'enum',
-	//		enumValue: [['左寄せ', 'pull-left'], ['右寄せ', 'pull-right']],
-	//		target: 'class'
-	//	}, {
-	//		label: 'タイトル',
-	//		selector: '> div.media-body h4.media-heading',
-	//		type: 'string',
-	//		target: 'text'
-	//	}, {
-	//		label: '本文',
-	//		selector: '> div.media-body span',
-	//		type: 'string',
-	//		inputType: 'textarea',
-	//		target: 'text'
-	//	}];
+	// var MEDIA_SCHEMA = [{
+	// label: '画像リンク',
+	// selector: '> a',
+	// type: 'string',
+	// target: 'attr(href)'
+	// }, {
+	// label: '画像SRC',
+	// selector: '> a img',
+	// type: 'string',
+	// target: 'attr(src)'
+	// }, {
+	// label: '画像位置',
+	// selector: '> a',
+	// type: 'enum',
+	// enumValue: [['左寄せ', 'pull-left'], ['右寄せ', 'pull-right']],
+	// target: 'class'
+	// }, {
+	// label: 'タイトル',
+	// selector: '> div.media-body h4.media-heading',
+	// type: 'string',
+	// target: 'text'
+	// }, {
+	// label: '本文',
+	// selector: '> div.media-body span',
+	// type: 'string',
+	// inputType: 'textarea',
+	// target: 'text'
+	// }];
 
 	// グリッド幅を指定する編集スキーマ
 	var GRID_SCHEMA = {
@@ -171,13 +169,13 @@
 		enumValue: [],
 		target: 'class'
 	};
-	for ( var i = 1; i <= 12; i++) {
+	for (var i = 1; i <= 12; i++) {
 		GRID_SCHEMA.enumValue.push([i, 'col-md-' + i]);
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// ブートストラップ3部品
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'bootstrap3',
 		palette: 'bootstrap3',
@@ -190,9 +188,9 @@
 		},
 		depends: 'jquery'
 	});
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// フォーム部品
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'bootstrap3.form',
 		palette: 'bootstrap3.form',
@@ -478,9 +476,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// ボタン
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'bootstrap3.button',
 		palette: 'bootstrap3.button',
@@ -643,9 +641,9 @@
 		};
 		hifive.editor.addCreator(creator);
 	})();
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// レイアウト
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'bootstrap3.layout',
 		palette: 'bootstrap3.layout',
@@ -704,9 +702,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// ページヘッダ
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'bootstrap3.pageheader',
 		palette: 'bootstrap3.pageheader',
@@ -782,9 +780,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// ナビゲーション
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'bootstrap3.nav',
 		palette: 'bootstrap3.nav',
@@ -806,7 +804,7 @@
 			return $elem;
 		}
 
-		//別途検討
+		// 別途検討
 		var editSchema = [{
 			label: '反転色',
 			type: 'boolean',
@@ -1156,9 +1154,9 @@
 		hifive.editor.addCreator(creator);
 	})();
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	// 通知
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	hifive.editor.addCreator({
 		id: 'bootstrap3.info',
 		palette: 'bootstrap3.info',

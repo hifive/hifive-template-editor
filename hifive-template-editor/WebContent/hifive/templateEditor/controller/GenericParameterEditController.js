@@ -1,17 +1,15 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
@@ -129,7 +127,7 @@
 			this._view.replaceWith(newView);
 			this._view = newView;
 
-			//TODO リプレース処理はPageControllerに寄せたい
+			// TODO リプレース処理はPageControllerに寄せたい
 			this._triggerPageChange();
 		},
 
@@ -166,7 +164,7 @@
 			// 適用ボタン追加
 			form.append('<button type="button" class="btn-small apply">適用</button>');
 
-			//Enter押下時のsubmit抑制用。要検証 Opera、Android、iOS
+			// Enter押下時のsubmit抑制用。要検証 Opera、Android、iOS
 			form.append($('<input type="text"/>').css({
 				margin: 0,
 				padding: 0,
@@ -190,7 +188,7 @@
 								if (schema.enumValue) {
 									var enumValue = [];
 									$.each(schema.enumValue, function(i, v) {
-										//名前付き配列の場合、値のみに置き換える。
+										// 名前付き配列の場合、値のみに置き換える。
 										if ($.isArray(v)) {
 											enumValue.push(v[1]);
 										} else {
@@ -278,7 +276,7 @@
 										control.append(option);
 										enumValue.push(value);
 									});
-									//名前付きの配列の場合、値のみに置き換える
+									// 名前付きの配列の場合、値のみに置き換える
 									schema.enumValue = enumValue;
 									value = that._getValue(element, schema.target, {
 										enumValue: enumValue,
@@ -300,7 +298,7 @@
 									var min = (schema.constraint) ? schema.constraint.min : null;
 									var max = (schema.constraint) ? schema.constraint.max : null;
 
-									//判定条件は要検討
+									// 判定条件は要検討
 									var isRange = (!h5.env.ua.isIE && !h5.env.ua.isFirefox
 											&& min != null && max != null && schema.inputType != 'text');
 
@@ -451,9 +449,9 @@
 									_appendControl(controls, control, schema);
 									break;
 								case 'string':
-									//if(schema.target == 'class'){
-									//	wrap.append('<span class="add-on">@</span>');
-									//}
+									// if(schema.target == 'class'){
+									// wrap.append('<span class="add-on">@</span>');
+									// }
 									if (schema.inputType == 'textarea') {
 										control = $('<textarea rows="5"></textarea>');
 									} else {
@@ -495,7 +493,7 @@
 									// schema._itemParentが実際に追加先になる要素。
 									if (element.length) {
 										if (schema.schema) {
-											for ( var i = 0; i < element.length; i++) {
+											for (var i = 0; i < element.length; i++) {
 												var option = $('<option></option>').text(i).val(i);
 												control.append(option);
 											}
@@ -592,7 +590,7 @@
 								resultArray.push(v);
 							}
 						});
-						//対象外とした値をoption経由で返却
+						// 対象外とした値をoption経由で返却
 						option.ignoreArray = ignoreArray;
 					}
 					return resultArray.join(' ');
@@ -631,7 +629,7 @@
 			}
 		},
 
-		//prototype.js v1.5.0 259
+		// prototype.js v1.5.0 259
 		_camelize: function(str) {
 			var parts = str.split('-'),len = parts.length;
 			if (len == 1)
@@ -640,7 +638,7 @@
 			var camelized = str.charAt(0) == '-' ? parts[0].charAt(0).toUpperCase()
 					+ parts[0].substring(1) : parts[0];
 
-			for ( var i = 1; i < len; i++)
+			for (var i = 1; i < len; i++)
 				camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
 
 			return camelized;
@@ -703,7 +701,7 @@
 				newSelectSubForm.empty();
 				var subForm = schema._elementSubForm;
 				if (schema._element.length) {
-					for ( var i = 0; i < schema._element.length; i++) {
+					for (var i = 0; i < schema._element.length; i++) {
 						var option = $('<option></option>').text(i).val(i);
 						newSelectSubForm.append(option);
 					}
@@ -840,7 +838,7 @@
 				schema._element = newElement;
 			}
 
-			//TODO セット処理はPageControllerに寄せたい
+			// TODO セット処理はPageControllerに寄せたい
 			this._triggerPageChange();
 		},
 
@@ -1051,8 +1049,8 @@
 							element.attr(match[2], value);
 						}
 					case 'style':
-						//var name = this._camelize(match[2]);
-						//element[0].style[name] = value;
+						// var name = this._camelize(match[2]);
+						// element[0].style[name] = value;
 						element.css(match[2], value);
 					}
 					if (option.reflect)
@@ -1089,8 +1087,8 @@
 
 		_triggerPageChange: function() {
 			var pageController = hifive.editor.u.getFocusedPageController();
-			//pageController.trigger(hifive.editor.consts.EVENT_PAGE_CONTENTS_CHANGE);
-			pageController._triggerPageContentsChange(); //TODO 本当はPageController側でやるべき
+			// pageController.trigger(hifive.editor.consts.EVENT_PAGE_CONTENTS_CHANGE);
+			pageController._triggerPageContentsChange(); // TODO 本当はPageController側でやるべき
 		}
 	};
 

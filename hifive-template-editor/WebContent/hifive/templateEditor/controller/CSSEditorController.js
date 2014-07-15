@@ -23,7 +23,7 @@
 		'{#styleDef} keydown': function(context, $target) {
 			var that = this;
 
-			h5.ext.u.execSlippery('CSSEditor_keydown', function(){
+			h5.ext.u.execSlippery('CSSEditor_keydown', function() {
 				that._applyCss($target.val());
 			}, 200);
 		},
@@ -34,7 +34,8 @@
 				if (pageController) {
 					pageController.setCustomCss(str);
 				}
-			} catch (e) {
+			}
+			catch (e) {
 				// エラーメッセージの表示
 				this.view.update($('#cssErrorMessage'), 'tmp-cssErrorMessage', e);
 				return;
@@ -44,7 +45,7 @@
 		},
 
 		setCustomCss: function(cssText) {
-			//パースに失敗すると例外が発生する
+			// パースに失敗すると例外が発生する
 			var parseObj = hifive.editor.u.parseCSS(cssText);
 			this._applyCSS(parseObj);
 
@@ -62,11 +63,11 @@
 				return;
 			}
 			// 現在適用中のスタイルを削除
-			for ( var i = (stylesheet.rules || stylesheet.cssRules).length - 1; i >= 0; i--) {
+			for (var i = (stylesheet.rules || stylesheet.cssRules).length - 1; i >= 0; i--) {
 				stylesheet.deleteRule ? stylesheet.deleteRule(i) : stylesheet.removeRule(i);
 			}
 
-			for ( var i = 0, l = cssObjArray.length; i < l; i++) {
+			for (var i = 0, l = cssObjArray.length; i < l; i++) {
 				var cssObj = cssObjArray[i];
 				var selector = cssObj.selector;
 				var definitions = cssObj.definitions;
@@ -75,7 +76,7 @@
 					defStr = definitions;
 				} else {
 					defStr = '';
-					for ( var j = 0, len = definitions.length; j < len; j++) {
+					for (var j = 0, len = definitions.length; j < len; j++) {
 						var propValObj = definitions[j];
 						defStr += propValObj.key + ':' + propValObj.value + ';';
 					}

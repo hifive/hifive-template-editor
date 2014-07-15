@@ -1,17 +1,15 @@
 /*
  * Copyright (C) 2013-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
  */
 
@@ -19,9 +17,9 @@
 	var DATA_COMPONENT = hifive.editor.consts.DATA_COMPONENT;
 	var DATA_H5_MODULE = hifive.editor.consts.DATA_H5_MODULE;
 
-	//documentのスクロール量を取得する。
+	// documentのスクロール量を取得する。
 	function getDocumentScrollTop(doc) {
-		//webkit -> body, others -> documentElement
+		// webkit -> body, others -> documentElement
 		return doc.documentElement.scrollTop || doc.body.scrollTop;
 	}
 
@@ -40,29 +38,29 @@
 	}
 
 
-	//スマートデバイス・タブレットの場合はCSS Transform、それ以外はleft,topで動かす
+	// スマートデバイス・タブレットの場合はCSS Transform、それ以外はleft,topで動かす
 	function moveElementBy(element, dx, dy) {
 		var $element = $(element);
 
-		//		if (h5.env.ua.isSmartPhone || h5.env.ua.isTablet) {
-		//			//スマートフォン、タブレット端末の場合はCSS Transformを使用
-		//			var x = lastTranslatePos.x + dx;
-		//			var y = lastTranslatePos.y + dy;
+		// if (h5.env.ua.isSmartPhone || h5.env.ua.isTablet) {
+		// //スマートフォン、タブレット端末の場合はCSS Transformを使用
+		// var x = lastTranslatePos.x + dx;
+		// var y = lastTranslatePos.y + dy;
 		//
-		//			lastTranslatePos.x = x;
-		//			lastTranslatePos.y = y;
+		// lastTranslatePos.x = x;
+		// lastTranslatePos.y = y;
 		//
-		//			$target.css('-webkit-transform', h5.u.str.format('translate({0}px,{1}px)', x, y));
-		//		} else {
+		// $target.css('-webkit-transform', h5.u.str.format('translate({0}px,{1}px)', x, y));
+		// } else {
 
 		var currentPos = $element.position();
-		//それ以外（PCを想定）はleft,topで移動
+		// それ以外（PCを想定）はleft,topで移動
 		$element.css({
 			left: currentPos.left + dx,
 			top: currentPos.top + dy
 		});
 
-		//		}
+		// }
 	}
 
 	// CSS文字列のパース
@@ -303,7 +301,7 @@
 	function getComponentCreator(componentName) {
 		var ary = componentName.split('.');
 		var ret = hifive.editor.components;
-		for ( var i = 0, l = ary.length; i < l; i++) {
+		for (var i = 0, l = ary.length; i < l; i++) {
 			ret = ret[ary[i]];
 			if (ret == null) {
 				return null;
@@ -350,7 +348,7 @@
 			return path;
 		}
 
-		//composePath()のようなメソッドを作る(/のケアをする)
+		// composePath()のようなメソッドを作る(/のケアをする)
 		var absUrl = hifive.editor.settings.fileStoreBase + 'live/' + path;
 
 		return absUrl;
@@ -358,7 +356,7 @@
 
 
 	function getFocusedPageController() {
-		//TODO ページ部分がタブ化したときには、カレントを返すようにする
+		// TODO ページ部分がタブ化したときには、カレントを返すようにする
 		var pageController = h5.core.controllerManager.getControllers(document.body, {
 			deep: true,
 			name: 'hifive.editor.controller.PageController'
@@ -371,7 +369,7 @@
 	}
 
 	function isComponent(element) {
-	//TODO コンポーネントかどうか判定
+	// TODO コンポーネントかどうか判定
 	}
 
 	function setEnv(key, val) {
@@ -381,7 +379,7 @@
 	function replaceEnv(str) {
 		var match = str.match(/\$.*?\$/g);
 		if (match) {
-			for ( var i = 0, l = match.length; i < l; i++) {
+			for (var i = 0, l = match.length; i < l; i++) {
 				var param = match[i];
 				str = str.replace(param, hifive.editor.env[param.slice(1, param.length - 1)]);
 			}
@@ -410,7 +408,7 @@
 				name = null;
 			}
 			srcs = wrapInArray(srcs);
-			for ( var i = 0, l = srcs.length; i < l; i++) {
+			for (var i = 0, l = srcs.length; i < l; i++) {
 				// null,undefinedを区別なく探したいので"=="で比較
 				if (srcs[i].name == name) {
 					return srcs[i].path;
@@ -458,7 +456,7 @@
 		keys.sort();
 		var ret = [];
 		var preKey = null;
-		for ( var i = 0, l = keys.length; i < l; i++) {
+		for (var i = 0, l = keys.length; i < l; i++) {
 			if (!keys[i]) {
 				continue;
 			}
@@ -585,7 +583,7 @@
 		var css = [];
 
 		// ソースの包含関係を計算
-		for ( var i = 0, len = keys.length; i < len; i++) {
+		for (var i = 0, len = keys.length; i < len; i++) {
 			var creator = getComponentCreator(keys[i]);
 			if (creator && creator.requirements) {
 				var requirements = creator.requirements;
@@ -612,7 +610,7 @@
 		var js = [];
 		var css = [];
 
-		for ( var i = 0, len = keys.length; i < len; i++) {
+		for (var i = 0, len = keys.length; i < len; i++) {
 			var requirements = getComponentCreator(keys[i]).requirements;
 			if (requirements) {
 				addResourceWithSrcKey(requirements.jsMandatory, requirements.cssMandatory, js, css,
@@ -647,7 +645,7 @@
 				if (creator.depends) {
 					var depends = creator.depends;
 					depends = wrapInArray(depends);
-					for ( var i = 0, l = depends.length; i < l; i++) {
+					for (var i = 0, l = depends.length; i < l; i++) {
 						dependModuleNames.push(depends[i]);
 					}
 				}
@@ -669,7 +667,7 @@
 			// 依存関係未計算のものが無くなるまでループ
 			while (uncalcModules.length !== 0) {
 				var restTargets = [];
-				for ( var i = 0, l = uncalcModules.length; i < l; i++) {
+				for (var i = 0, l = uncalcModules.length; i < l; i++) {
 					var moduleName = uncalcModules[i];
 					if ($.inArray(moduleName, sortedDependModuleNames) !== -1) {
 						continue;
@@ -683,7 +681,7 @@
 
 					var depends = wrapInArray(module.depends);
 					var isDependsCalced = true;
-					for ( var j = 0, len = depends.length; j < len; j++) {
+					for (var j = 0, len = depends.length; j < len; j++) {
 						if ($.inArray(depends[j], sortedDependModuleNames) === -1) {
 							// dependsに書かれているものがsort済みにないならrestTargetsに追加。再度ループを回す。
 							restTargets.push(depends[j]);
@@ -705,10 +703,10 @@
 		// keysが必要なモジュール名を取得
 		var dependModuleNames = [];
 
-		for ( var i = 0, l = keys.length; i < l; i++) {
+		for (var i = 0, l = keys.length; i < l; i++) {
 			var creatorName = keys[i];
 			var depends = getDepends(creatorName);
-			for ( var j = 0, len = depends.length; j < len; j++) {
+			for (var j = 0, len = depends.length; j < len; j++) {
 				dependModuleNames.push(depends[j]);
 			}
 		}
@@ -718,7 +716,7 @@
 		// 必要なモジュール名からjs,cssを取得して返す
 		var js = [];
 		var css = [];
-		for ( var i = 0, l = sortedDependModuleNames.length; i < l; i++) {
+		for (var i = 0, l = sortedDependModuleNames.length; i < l; i++) {
 			var moduleName = sortedDependModuleNames[i];
 			var req = getComponentCreator(moduleName).dependencies;
 			if (req) {
@@ -741,7 +739,7 @@
 		var lastScript = $(head).find('script:last')[0];
 		var beforeNode = lastScript ? lastScript.nextSibling : null;
 
-		for ( var i = 0, l = scripts.length; i < l; i++) {
+		for (var i = 0, l = scripts.length; i < l; i++) {
 			var script = scripts[i];
 			if (typeof script === 'string') {
 				var path = script;
@@ -752,7 +750,7 @@
 			} else {
 				// エレメントノードもjQueryとして扱う
 				script = $(script);
-				for ( var j = 0, len = script.length; j < len; j++) {
+				for (var j = 0, len = script.length; j < len; j++) {
 					// 環境変数の入れ替え
 					var element = script[j];
 					element.setAttribute('src', replaceEnv(element.getAttribute('src')));
@@ -773,7 +771,7 @@
 		var lastLink = $(head).find('link:last')[0];
 		var beforeNode = lastLink ? lastLink.nextSibling : null;
 
-		for ( var i = 0, l = styles.length; i < l; i++) {
+		for (var i = 0, l = styles.length; i < l; i++) {
 			var style = styles[i];
 			if (typeof style === 'string') {
 				var path = style;
@@ -784,7 +782,7 @@
 			} else {
 				// エレメントノードもjQueryとして扱う
 				style = $(style);
-				for ( var j = 0, len = style.length; j < len; j++) {
+				for (var j = 0, len = style.length; j < len; j++) {
 					// 環境変数の入れ替え
 					var element = style[j];
 					element.setAttribute('href', replaceEnv(element.getAttribute('href')));
@@ -828,7 +826,8 @@
 
 		try {
 			w.__isChildWindow = true;
-		} catch (e) {
+		}
+		catch (e) {
 			// IEの場合既に開いているウィンドウがあったら書き込もうとするとエラーになる
 			w.close();
 			return openEditWindow();
@@ -838,7 +837,7 @@
 		$(body).addClass('hifiveUIDesignerChildWindow');
 
 		// タイトルの設定
-		//w.document.title = title ? title : 'hifive UI Designer';
+		// w.document.title = title ? title : 'hifive UI Designer';
 
 		return w;
 	}
