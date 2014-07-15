@@ -201,16 +201,35 @@
 		 */
 		'{window} message': function(context) {
 			var ev = context.event.originalEvent;
+			var data = ev.data;
+			if ($.type(data) === 'string') {
+				data = h5.u.obj.deserialize(data);
+			}
+
 			var myOrigin = location.protocol + '//' + location.host;
 
 			if (ev.origin === myOrigin) {
 
-				this.log.debug('TemplateEditorController.jsで「' + ev.data.eventName + '」イベントをトリガする');
+				switch (data.type) {
 
-				$(this.rootElement).trigger(ev.data.eventName, ev.data.data);
+				case 'applyLibrary':
+					this._applyLibrary();
+					break;
+
+				case 'loadLibraryComp':
+					this._loadLibraryComp();
+					break;
+
+				case 'applyTemplateComp':
+					this._applyTemplateComp();
+					break;
+
+				default:
+					this.log.warn('messageが不正です');
+				}
 
 			} else {
-				this.log.debug('originが一致していない');
+				this.log.debug('originが一致していません');
 			}
 		},
 
@@ -260,9 +279,9 @@
 
 
 		/**
-		 * チェックされたライブラリの選別・パスを取得しpostMessageします。
+		 * チェックされたライブラリのパスを取得しpostMessageします。
 		 */
-		'{rootElement} applyLibrary': function() {
+		_applyLibrary: function() {
 
 			// インジケータのメッセージを更新
 			if (this._indicator) {
@@ -291,8 +310,8 @@
 			}
 
 			var data = {
-				eventName: 'beginLoadLibrary',
-				data: libPath
+				type: 'beginLoadLibrary',
+				path: libPath
 			};
 
 			this._sendMessage(data);
@@ -302,7 +321,7 @@
 		/**
 		 * ライブラリのロードが終わったときのイベントハンドラです
 		 */
-		'{rootElement} loadLibraryComp': function() {
+		_loadLibraryComp: function() {
 			this._indicator.message('テンプレートのプレビューを再生成しています');
 
 			// テンプレートを適用します。
@@ -313,7 +332,7 @@
 		/**
 		 * テンプレートの反映が終わったときのイベントハンドラです
 		 */
-		'{rootElement} applyTemplateComp': function() {
+		_applyTemplateComp: function() {
 			// インジケータが表示されていれば、非表示にします。
 			if (this._indicator) {
 				this._indicatorDeferred.resolve();
@@ -329,7 +348,7 @@
 		_sendMessage: function(data) {
 			var myOrigin = location.protocol + '//' + location.host;
 
-			this._target.contentWindow.postMessage(data, myOrigin);
+			this._target.contentWindow.postMessage(h5.u.obj.serialize(data), myOrigin);
 		},
 
 
@@ -361,8 +380,8 @@
 			try {
 				var generated = this._previewController.generate(template);
 				var data = {
-					eventName: 'preview',
-					data: generated
+					type: 'preview',
+					template: generated
 				};
 
 				this._sendMessage(data);

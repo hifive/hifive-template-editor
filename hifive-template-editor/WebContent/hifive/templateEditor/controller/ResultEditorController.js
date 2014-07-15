@@ -82,7 +82,7 @@
 			this._applyTarget = $('.templateApplicationRoot')[0];
 
 			this._sendMessage({
-				eventName: 'applyLibrary'
+				type: 'applyLibrary'
 			});
 		},
 
@@ -94,22 +94,27 @@
 		 */
 		'{window} message': function(context) {
 			var ev = context.event.originalEvent;
+			var data = ev.data;
+			if ($.type(data) === 'string') {
+				data = h5.u.obj.deserialize(data);
+			}
+
 			var myOrigin = location.protocol + '//' + location.host;
 
 			if (ev.origin === myOrigin) {
 
-				// TODO:eventNameはデバッグでのみ使用している。後で消すこと
-				this.log.debug('result.jsで「' + ev.data.eventName + '」イベントをトリガする');
+				switch (data.type) {
 
-				var type = $.type(ev.data.data);
+				case 'preview':
+					this._preview(data);
+					break;
 
-				if (type === 'array') {
-					// ライブラリが渡された場合
-					this._beginLoadLibrary(ev.data.data);
+				case 'beginLoadLibrary':
+					this._beginLoadLibrary(data);
+					break;
 
-				} else if (type === 'string') {
-					// プレビューするデータが渡された場合
-					this._preview(ev.data.data);
+				default:
+					this.log.warn('messageが不正です');
 				}
 
 			} else {
@@ -124,14 +129,14 @@
 		 * @param data
 		 */
 		_preview: function(data) {
-			this._applyTarget.innerHTML = data;
+			this._applyTarget.innerHTML = data.template;
 
 			if (this._hasJQM) {
 				$('body').trigger('create');
 			}
 
 			this._sendMessage({
-				eventName: 'applyTemplateComp'
+				type: 'applyTemplateComp'
 			});
 		},
 
@@ -141,8 +146,9 @@
 		 *
 		 * @param context
 		 */
-		_beginLoadLibrary: function(path) {
+		_beginLoadLibrary: function(data) {
 
+			var path = data.path;
 			if ($.type(path) !== 'array') {
 				path = [path];
 			}
@@ -175,10 +181,8 @@
 
 			// js,cssをロードします
 			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(this.own(function() {
-				this.log.debug('result.jsで「beginLoadLibrary」イベント ロードできた');
-
 				this._sendMessage({
-					eventName: 'loadLibraryComp'
+					type: 'loadLibraryComp'
 				});
 			}));
 		},
