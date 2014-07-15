@@ -76,6 +76,8 @@
 
 		_applyTarget: null,// テンプレート適用先
 
+		_hasJQM: null,// jQuery Mobile 1.3.0が読み込まれているとtrue
+
 		__ready: function() {
 			this._applyTarget = $('.templateApplicationRoot')[0];
 
@@ -96,6 +98,7 @@
 
 			if (ev.origin === myOrigin) {
 
+				// TODO:eventNameはデバッグでのみ使用している。後で消すこと
 				this.log.debug('result.jsで「' + ev.data.eventName + '」イベントをトリガする');
 
 				var type = $.type(ev.data.data);
@@ -122,10 +125,14 @@
 		 */
 		_preview: function(data) {
 			this._applyTarget.innerHTML = data;
-			var data = {
+
+			if (this._hasJQM) {
+				$('body').trigger('create');
+			}
+
+			this._sendMessage({
 				eventName: 'applyTemplateComp'
-			};
-			this._sendMessage(data);
+			});
 		},
 
 
@@ -139,6 +146,15 @@
 			if ($.type(path) !== 'array') {
 				path = [path];
 			}
+
+			this._hasJQM = false;
+			for (var i = 0, len = path.length; i < len; i++) {
+				if (path[i].name === 'jQuery Mobile 1.3.0') {
+					this._hasJQM = true;
+					break;
+				}
+			}
+
 
 			var jsPaths = [];
 			var cssPaths = [];
@@ -160,10 +176,10 @@
 			// js,cssをロードします
 			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(this.own(function() {
 				this.log.debug('result.jsで「beginLoadLibrary」イベント ロードできた');
-				var data = {
+
+				this._sendMessage({
 					eventName: 'loadLibraryComp'
-				};
-				this._sendMessage(data);
+				});
 			}));
 		},
 
