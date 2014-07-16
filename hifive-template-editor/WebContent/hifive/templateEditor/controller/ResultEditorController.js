@@ -79,7 +79,7 @@
 		_hasJQM: null,// jQuery Mobile 1.3.0が読み込まれているとtrue
 
 		__ready: function() {
-			this._applyTarget = $('.templateApplicationRoot')[0];
+			this._applyTarget = $('.preview')[0];
 
 			this._sendMessage({
 				type: 'applyLibrary'

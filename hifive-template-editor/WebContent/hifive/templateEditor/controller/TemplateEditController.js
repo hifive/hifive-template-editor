@@ -78,17 +78,17 @@
 			},
 			_sourceEditorController: {
 				rootElement: '.sourceText'
-			},
-			_cssEditorController: {
-				rootElement: '#editCSSPanel'
 			}
+		/*
+		 * _cssEditorController: { rootElement: '#editCSSPanel' }
+		 */
 		},
 
 		_previewController: hifive.templateEditor.controller.PreviewController,
 
 		_sourceEditorController: hifive.templateEditor.controller.SourceEditorController,
 
-		_cssEditorController: hifive.templateEditor.controller.CSSEditorController,
+		/* _cssEditorController: hifive.templateEditor.controller.CSSEditorController, */
 
 		_targetWaitDeferred: null,
 
@@ -320,7 +320,9 @@
 		 * ライブラリのロードが終わったときのイベントハンドラです
 		 */
 		_loadLibraryComp: function() {
-			this._indicator.message('テンプレートのプレビューを再生成しています');
+			if (this._indicator) {
+				this._indicator.message('テンプレートのプレビューを再生成しています');
+			}
 
 			// テンプレートを適用します。
 			this._applyTemplate();
@@ -388,20 +390,6 @@
 			catch (e) {
 				this._setMessage(e.message);
 			}
-		},
-
-		_setCloseConfirmation: function() {
-			if (this._isCloseConfirmationSet) {
-				return;
-			}
-			this._isCloseConfirmationSet = true;
-
-			window.addEventListener('beforeunload', function(ev) {
-				var msg = '※※注意※※\n' + 'ページ遷移しようとしています。内容をコピーしていない場合はキャンセルしてください。';
-
-				ev.returnValue = msg;
-				return msg;
-			});
 		},
 
 		_clearMessage: function() {

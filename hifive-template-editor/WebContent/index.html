@@ -108,9 +108,6 @@
 			h5.core.controller(this, h5.ui.container.DividedBox);
 		});
 	});
-</script>
-
-<script>
 	$(window).bind('resize', function() {
 		var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {
 			name: 'h5.ui.container.DividedBox',
@@ -144,82 +141,77 @@
 <body class='bg-carbon'>
 	<div class="rootBox">
 
-		<div id="ejsEditorRoot" class="dividedBox vertical container">
+		<div id="ejsEditorRoot" class="container">
 
-			<div class="tabPanels">
+			<!-- タブ -->
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#template" data-toggle="tab">テンプレート</a></li>
+				<li><a href="#data" data-toggle="tab">データオブジェクト</a></li>
+				<!-- <li><a href="#css" data-toggle="tab">カスタムCSS</a></li> -->
+				<li><a href="#setting" data-toggle="tab">設定</a></li>
+			</ul>
 
-				<!-- タブ -->
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#template" data-toggle="tab">テンプレート</a></li>
-					<li><a href="#data" data-toggle="tab">データオブジェクト</a></li>
-					<li><a href="#css" data-toggle="tab">カスタムCSS</a></li>
-					<li><a href="#setting" data-toggle="tab">設定</a></li>
-				</ul>
+			<div class="wrapper dividedBox vertical">
 
 				<!-- タブコンテント -->
-				<div class="tab-content">
+				<div class="tab-content fill">
+
+					<span class="statusMessage"></span>
 
 					<!-- 【テンプレート】 -->
 					<div class="tab-pane active" id="template">
 						<div class="row inputArea">
-							<div class="col-xs-12">
-								<h3>テンプレート</h3>
-								<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-								<div class="sourceText pageWrapper col-xs-9">
-									<!-- contentEditable="true" -->
-								</div>
-								<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
+							<h3>テンプレート</h3>
+							<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
+							<div class="sourceText pageWrapper col-xs-9">
+								<!-- contentEditable="true" -->
 							</div>
+							<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
 						</div>
 					</div>
 
 					<!-- 【データオブジェクト】 -->
-					<div class="tab-pane" id="data">
-						<div class="row col-xs-12">
-							<h3>データオブジェクト</h3>
-							<textarea class="col-xs-12 dataText"></textarea>
-						</div>
+					<div class="tab-pane row" id="data" style="margin: 0px;">
+						<h3>データオブジェクト</h3>
+						<textarea class="col-xs-12 dataText"></textarea>
 					</div>
 
 					<!-- 【カスタムCSS】 -->
-					<div class="tab-pane" id="css">
-						<div id="editPanel" class="bg-carbon vertical">
-							<div class="editorRoot autoSize"></div>
-							<div class="tagEdit autoSize" data-h5-controller="c:TagEditController"></div>
-							<div id="editCSSPanel" class="pane pane-full bg-carbon autoSize">
-								<div class="styleDef-wrapper">
-									<h3>
+					<!--
+						<div class="tab-pane" id="css">
+							<div id="editPanel" class="bg-carbon vertical">
+								<div class="editorRoot autoSize"></div>
+								<div class="tagEdit autoSize" data-h5-controller="c:TagEditController"></div>
+								<div id="editCSSPanel" class="pane pane-full bg-carbon autoSize">
+									<div class="styleDef-wrapper">
 										<button type="button" class="applyBtn btn-mini apply">適用</button>
-									</h3>
-									<textarea id="styleDef" class="col-xs-6"></textarea>
-									<div id="cssErrorMessage"></div>
+										<textarea id="styleDef" class="col-xs-6"></textarea>
+										<div id="cssErrorMessage"></div>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+						-->
 
 					<!-- 【設定】 -->
 					<div class="tab-pane" id="setting">
 						<h3>ライブラリ</h3>
+						<div class="control-group">
+							<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
+								Bootstrap3.2
+							</label>
+						</div>
 
-						<div class="checkbox row">
-							<div class="col-md-4 col-xs-6">
-								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2"> Bootstrap3.2
-								</label>
-							</div>
+						<div class="control-group">
+							<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery
+								Mobile 1.3.0
+							</label>
+						</div>
 
-							<div class="col-md-4 col-xs-6">
-								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery
-									Mobile 1.3.0
-								</label>
-							</div>
-
-							<div class="col-md-4 col-xs-6">
-								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery
-									Mobile 1.4.2
-								</label>
-							</div>
-
+						<div class="control-group">
+							<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery
+								Mobile 1.4.2
+							</label>
 						</div>
 
 						<div>
@@ -228,16 +220,16 @@
 					</div>
 
 				</div>
-			</div>
 
-
-			<div class="applyTemplate col-xs-12">
-				<div class="row">
+				<!-- プレビュー -->
+				<div class="applyTemplate fill row">
 					<h3 class="col-md-2 col-xs-8">プレビュー</h3>
 					<button class="btn btn-primary applyTemplateBtn col-md-3 col-xs-6">再適用</button>
+					<iframe class="frame col-xs-12" src="hifive/templateEditor/preview.html"></iframe>
 				</div>
-				<iframe class="frame col-xs-12" src="hifive/templateEditor/preview.html"></iframe>
+
 			</div>
+
 		</div>
 
 	</div>

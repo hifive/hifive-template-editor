@@ -16,41 +16,10 @@
  */
 @charset "UTF-8";
 
-/* editor.html(=index.html)のstyleを外部化 */
 html,body {
 	width: 100%;
 	height: 100%;
 	color: white;
-}
-
-.container {
-	width: 100%;
-}
-
-.sourceText {
-	height: 270px;
-	margin: 5px 0;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
-	overflow: auto;
-	color: black;
-	background-color: white;
-}
-
-.dataText {
-	width: 100%;
-	height: 270px;
-	color: black; /* データオブジェクトタブで文字が白になってるため応急処置 */
-}
-
-textarea {
-	color: black;
-}
-
-.templateApplicationRoot {
-	/* border: 1px solid blue; */
-	background-color: white;
-	color: black;
 }
 
 .rootBox {
@@ -64,11 +33,50 @@ textarea {
 	overflow: auto;
 }
 
-.componentPalette {
-	height: 270px;
+.wrapper {
+	height: 100%;
+}
+
+.tab-content {
+	height: 50%;
+}
+
+.tab-pane {
+	height: 100%;
+}
+
+.inputArea {
+	height: 100%;
+	margin: 0px;
+}
+
+.sourceText {
+	height: 75%;
+	margin: 0px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
 	overflow: auto;
-	margin-top: 5px;
-	margin-bottom: 5px;
+	color: black;
+	background-color: white;
+}
+
+.componentPalette {
+	height: 75%;
+	overflow: auto;
+	margin: 0px;
+}
+
+.dataText {
+	width: 100%;
+	height: 75%;
+}
+
+textarea {
+	color: black;
+}
+
+.applyTemplate {
+	height: 50%;
 }
 
 .applyTemplateBtn {
@@ -80,17 +88,8 @@ textarea {
 	background-color: silver;
 }
 
-.tabPanels {
-	height: 50%;
-	padding: 0 15px;
-}
-
-.applyTemplate {
-	height: 50%;
-}
-
-.frame {
-	height: 66%;
+iframe {
+	height: 75%;
 	padding: 0;
 	background-color: white;
 }
@@ -104,7 +103,7 @@ textarea {
 }
 
 .applyLibBtn {
-	color: black
+	margin-top: 15px;
 }
 
 .row label {
