@@ -135,7 +135,7 @@
 				}
 			});
 
-			this._target = $('iframe')[0];
+			this._target = $('iframe')[0];// postMessageの送信先を設定
 
 		},
 
@@ -191,11 +191,6 @@
 		},
 
 
-		// setTemplateId: function(templateId) {
-		// this.$find('.templateIdText').text('テンプレートID:' + templateId);
-		// },
-
-
 		/**
 		 * メッセージを受け取った時のイベントハンドラ。
 		 */
@@ -234,6 +229,9 @@
 		},
 
 
+		/**
+		 * 再適用ボタンをクリックしたときのイベントハンドラ。テンプレートを反映させます
+		 */
 		'.applyTemplateBtn click': function() {
 			this._applyTemplate();
 		},

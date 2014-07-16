@@ -131,6 +131,7 @@
 		_preview: function(data) {
 			this._applyTarget.innerHTML = data.template;
 
+			// jqmを読み込んでいる場合、要素追加後に初期化処理を促します
 			if (this._hasJQM) {
 				$('body').trigger('create');
 			}
@@ -155,7 +156,7 @@
 
 			this._hasJQM = false;
 			for (var i = 0, len = path.length; i < len; i++) {
-				if (path[i].name === 'jQuery Mobile 1.3.0') {
+				if (/jqm/.test(path[i].name)) {
 					this._hasJQM = true;
 					break;
 				}

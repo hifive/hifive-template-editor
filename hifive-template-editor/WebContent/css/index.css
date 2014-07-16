@@ -29,6 +29,12 @@ html,body {
 
 .sourceText {
 	height: 270px;
+	margin: 5px 0;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	overflow: auto;
+	color: black;
+	background-color: white;
 }
 
 .dataText {
@@ -39,15 +45,6 @@ html,body {
 
 textarea {
 	color: black;
-}
-
-.sourceText {
-	margin: 5px 0;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
-	overflow: auto;
-	color: black;
-	background-color: white;
 }
 
 .templateApplicationRoot {
@@ -106,10 +103,10 @@ textarea {
 	color: blue;
 }
 
-.lib-list label input {
-	font-size: 20px;
-}
-
 .applyLibBtn {
 	color: black
+}
+
+.row label {
+	font-size: 16px;
 }

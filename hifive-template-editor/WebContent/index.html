@@ -148,9 +148,6 @@
 
 			<div class="tabPanels">
 
-				<!-- 適用しているテンプレートIDを表示 -->
-				<!-- <span class="templateIdText"></span> <span class="statusMessage"></span> -->
-
 				<!-- タブ -->
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#template" data-toggle="tab">テンプレート</a></li>
@@ -204,19 +201,27 @@
 					<!-- 【設定】 -->
 					<div class="tab-pane" id="setting">
 						<h3>ライブラリ</h3>
-						<div class="lib-list">
 
-							<div class="checkbox">
-								<label class="checkbox-inline col-xs-4"> <input type="checkbox" value="bs3.2"> Bootstrap3.2
-								</label> <label class="checkbox-inline col-xs-4"> <input type="checkbox" value="jqm1.3.0"> jQuery Mobile
-									1.3.0
+						<div class="checkbox row">
+							<div class="col-md-4 col-xs-6">
+								<label class="checkbox-inline"> <input type="checkbox" value="bs3.2"> Bootstrap3.2
+								</label>
+							</div>
+
+							<div class="col-md-4 col-xs-6">
+								<label class="checkbox-inline"> <input type="checkbox" value="jqm1.3.0"> jQuery Mobile 1.3.0
+								</label>
+							</div>
+
+							<div class="col-md-4 col-xs-6">
+								<label class="checkbox-inline"> <input type="checkbox" value="jqm1.4.2"> jQuery Mobile 1.4.2
 								</label>
 							</div>
 
 						</div>
 
 						<div>
-							<input class="applyLibBtn btn btn-default" type="button" name="ok" value="適用">
+							<input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用">
 						</div>
 					</div>
 
@@ -225,9 +230,9 @@
 
 
 			<div class="applyTemplate col-xs-12">
-				<div>
-					<h3 class="col-xs-2">プレビュー</h3>
-					<button class="btn btn-primary applyTemplateBtn col-xs-2">再適用</button>
+				<div class="row">
+					<h3 class="col-md-2 col-xs-8">プレビュー</h3>
+					<button class="btn btn-primary applyTemplateBtn col-md-3 col-xs-6">再適用</button>
 				</div>
 				<iframe class="frame col-xs-12" src="hifive/templateEditor/preview.html"></iframe>
 			</div>
