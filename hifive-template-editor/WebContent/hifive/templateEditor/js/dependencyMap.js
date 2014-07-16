@@ -11,11 +11,19 @@
 			},
 
 			'jqm1.3.0': {
-				'js': ['../../res/lib/jquery.mobile/jquery.mobile-1.3.0.js'],
-				'css': ['../../res/lib/jquery.mobile/jquery.mobile-1.3.0.css',
-						'../../res/lib/jquery.mobile/jquery.mobile.structure-1.3.0.css',
-						'../../res/lib/jquery.mobile/jquery.mobile.theme-1.3.0.css'],
+				'js': ['../../res/lib/jqm/1.3.0/jquery.mobile-1.3.0.js'],
+				'css': ['../../res/lib/jqm/1.3.0/jquery.mobile-1.3.0.css',
+						'../../res/lib/jqm/1.3.0/jquery.mobile.structure-1.3.0.css',
+						'../../res/lib/jqm/1.3.0/jquery.mobile.theme-1.3.0.css'],
 				'name': 'jQuery Mobile 1.3.0'
+			},
+
+			'jqm1.4.2': {
+				'js': ['../../res/lib/jqm/1.4.2/jquery.mobile-1.4.2.js'],
+				'css': ['../../res/lib/jqm/1.4.2/jquery.mobile-1.4.2.css',
+						'../../res/lib/jqm/1.4.2/jquery.mobile.structure-1.4.2.css',
+						'../../res/lib/jqm/1.4.2/jquery.mobile.theme-1.4.2.css'],
+				'name': 'jQuery Mobile 1.4.2'
 			}
 
 		}
