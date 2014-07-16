@@ -156,17 +156,19 @@
 				<!-- タブコンテント -->
 				<div class="tab-content fill">
 
-					<span class="statusMessage"></span>
+					<!-- <span class="statusMessage"></span> -->
 
 					<!-- 【テンプレート】 -->
 					<div class="tab-pane active" id="template">
-						<div class="row inputArea">
+						<div class="inputArea">
 							<h3>テンプレート</h3>
-							<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-							<div class="sourceText pageWrapper col-xs-9">
-								<!-- contentEditable="true" -->
+							<div class="wrapper dividedBox horizontal row">
+								<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
+								<div class="sourceText pageWrapper col-xs-9">
+									<!-- contentEditable="true" -->
+								</div>
+								<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
 							</div>
-							<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
 						</div>
 					</div>
 
