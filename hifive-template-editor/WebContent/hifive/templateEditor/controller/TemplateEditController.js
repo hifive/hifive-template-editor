@@ -192,7 +192,7 @@
 
 
 		/**
-		 * メッセージを受け取った時のイベントハンドラ。
+		 * メッセージのtypeプロパティからメソッドを呼び出します。
 		 */
 		'{window} message': function(context) {
 			var ev = context.event.originalEvent;
@@ -288,7 +288,7 @@
 
 			// チェックされたライブラリを選別
 			var applyLibs = [];
-			this.$find('.lib-list input').each(function() {
+			this.$find('.lib').each(function() {
 				if ($(this).prop('checked')) {
 					applyLibs.push($(this).val());
 				}
