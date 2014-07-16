@@ -33,17 +33,18 @@ html,body {
 	overflow: auto;
 }
 
-
 .wrapper {
-	height: 90%;
+	height: 100%;
 }
 
 .tab-content {
 	height: 50%;
+	width: 100%;
 }
 
 .tab-pane {
 	height: 100%;
+	width: 100%;
 }
 
 .inputArea {
@@ -51,11 +52,12 @@ html,body {
 	margin: 0px;
 }
 
-.sourceText {
+.template-wrapper {
 	height: 75%;
-	margin: 0px;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
+}
+
+.sourceText {
+	height: 100%;
 	overflow: auto;
 	color: black;
 	background-color: white;
@@ -67,7 +69,7 @@ html,body {
 }
 
 .componentPalette {
-	height: 75%;
+	height: 100%;
 	overflow: auto;
 	margin: 0px;
 }
