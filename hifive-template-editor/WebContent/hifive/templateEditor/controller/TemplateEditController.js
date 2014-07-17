@@ -274,6 +274,47 @@
 			this._target.contentDocument.location.reload(true);
 		},
 
+		/**
+		 * .previewAreaとeditAreaを区切るdividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
+		 *
+		 * @param context
+		 * @param $el
+		 */
+		'.divider h5trackstart': function(context, $el) {
+			if ($el.next()[0] !== this.$find('.previewArea')[0]) {
+				// 別のdividerなら何もしない
+				return;
+			}
+			this._addIFrameCover();
+		},
+
+		/**
+		 * .previewAreaとeditAreaを区切るdividerを操作し終えたときに、iframeの上のdivを取り除く
+		 *
+		 * @param context
+		 * @param $el
+		 */
+		'.divider h5trackend': function(context, $el) {
+			if ($el.next()[0] !== this.$find('.previewArea')[0]) {
+				// 別のdividerなら何もしない
+				return;
+			}
+			this._removeIFrameCover();
+		},
+
+		/**
+		 * iframeを覆う要素を追加
+		 */
+		_addIFrameCover: function() {
+			this.$find('.iframeWrapper').append('<div class="iframeCover"></div>');
+		},
+
+		/**
+		 * iframeを覆う要素を削除
+		 */
+		_removeIFrameCover: function() {
+			this.$find('.iframeCover').remove();
+		},
 
 		/**
 		 * 画面にインジケータを表示します

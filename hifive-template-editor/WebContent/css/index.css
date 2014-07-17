@@ -116,6 +116,11 @@ textarea {
 	background-color: silver;
 }
 
+.iframeWrapper {
+	height: 100%;
+	width: 100%;
+}
+
 iframe {
 	height: 100%;
 	width: 100%;
@@ -123,6 +128,14 @@ iframe {
 	margin: 0;
 	border: 0;
 	background-color: white;
+}
+
+.iframeCover {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 #styleDef {
