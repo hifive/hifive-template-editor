@@ -80,6 +80,12 @@
 			this._view = h5.core.view.createView();
 		},
 
+
+		'{rootElement} keyup': function() {
+			this.trigger('textChange');
+
+		},
+
 		/**
 		 * テンプレートに適用するデータ（パラメータオブジェクト）をセットします。
 		 *

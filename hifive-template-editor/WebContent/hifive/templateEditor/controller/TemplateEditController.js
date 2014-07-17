@@ -102,6 +102,10 @@
 
 		_target: null,// postMessageの送信先
 
+		// __construct: function() {
+		// this._structHeight();
+		// },
+
 		__ready: function() {
 
 			h5.u.obj.expose('hifive.editor', {
@@ -136,6 +140,7 @@
 			});
 
 			this._target = $('iframe')[0];// postMessageの送信先を設定
+
 
 		},
 
@@ -226,6 +231,19 @@
 			} else {
 				this.log.debug('originが一致していません');
 			}
+		},
+
+		'{window} resize': function(context) {
+			var dividedBoxes = h5.core.controllerManager.getControllers($('body'), {
+				name: 'h5.ui.container.DividedBox',
+				deep: true
+			});
+
+			for (var i = 0, len = dividedBoxes.length; i < len; i++) {
+				dividedBoxes[i].refresh();
+			}
+
+			// this._structHeight();
 		},
 
 
@@ -403,7 +421,35 @@
 		_getData: function() {
 			var data = this.$find('.dataText').val();
 			return data;
-		}
+		},
+
+	// _structHeight: function() {
+	// var bodyHeight = $('body').height();
+	// var tabMenuHeight = $('.nav-tabs').outerHeight();
+	//
+	// var editorRootHeight = bodyHeight - tabMenuHeight;
+	//
+	// $('#ejsEditorRoot').css('height', editorRootHeight);
+	//
+	// var editorAreaHeight = editorRootHeight * 0.5;
+	// // エディタエリアの高さを設定します。
+	// $('.editArea').css('height', editorAreaHeight);
+	//
+	// // プレビューエリアの高さを設定します。
+	// $('.previewArea').css('height', editorRootHeight * 0.5);
+	//
+	// // タブコンテンツの高さを設定します
+	// $('.tab-content').height(editorAreaHeight);
+	//
+	// // テンプレート編集部の高さを設定します
+	// var caption = $('.tab-pane.active>h3').height();
+	// if (!caption) {
+	// caption = 0;
+	// }
+	//
+	// var inputAreaHeight = editorAreaHeight - caption;
+	// $('.inputArea').height(inputAreaHeight);
+	// }
 
 	};
 

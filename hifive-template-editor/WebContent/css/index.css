@@ -22,23 +22,28 @@ html,body {
 	color: white;
 }
 
-.rootBox {
-	width: 100%;
-	height: 100%;
+.nav-tabs {
+	height: 5%;
 }
 
 #ejsEditorRoot {
+	height: 95%;
 	width: 100%;
-	height: 100%;
 	overflow: auto;
 }
 
-.wrapper {
-	height: 100%;
+.editArea {
+	height: 50%;
+	width: 100%;
+}
+
+.previewArea {
+	height: 50%;
+	width: 100%;
 }
 
 .tab-content {
-	height: 50%;
+	height: 100%;
 	width: 100%;
 }
 
@@ -47,13 +52,22 @@ html,body {
 	width: 100%;
 }
 
+.dividedBox.horizontal {
+	height: 100%;
+}
+
 .inputArea {
 	height: 100%;
+	width: 100%;
 	margin: 0px;
 }
 
-.template-wrapper {
-	height: 75%;
+.inputArea>h3 {
+	height: 5%;
+}
+
+.inputArea>row {
+	height: 95%;
 }
 
 .sourceText {
@@ -75,8 +89,8 @@ html,body {
 }
 
 .dataText {
+	height: 100%;
 	width: 100%;
-	height: 75%;
 }
 
 textarea {
