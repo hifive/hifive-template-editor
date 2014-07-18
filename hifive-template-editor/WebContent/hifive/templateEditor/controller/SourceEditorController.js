@@ -76,7 +76,7 @@
 
 			$(this.rootElement).text('').focus();
 
-			document.execCommand('insertText', false, converted);
+			hifive.editor.u.execInsertTextCommand(converted);
 		},
 
 		getText: function() {
@@ -110,7 +110,7 @@
 			case 9:
 				// Chromeの場合、連続する空白文字は強制的に"&nbsp;\x20"の組で表現される。
 				// そのため、getText()時に&nbsp;を通常のスペースに置換して返している
-				document.execCommand('insertText', false, '    ');
+				hifive.editor.u.execInsertTextCommand('    ');
 				needsPreventDefault = true;
 				break;
 			}
@@ -133,7 +133,7 @@
 
 			var text = raw.replace(/\x09/g, '    ').replace(/\x0D/g, '');
 
-			document.execCommand('insertText', false, text);
+			hifive.editor.u.execInsertTextCommand(text);
 			context.event.preventDefault();
 		}
 

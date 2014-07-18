@@ -129,7 +129,7 @@
 
 					$(this._sourceEditorController.rootElement).focus();
 
-					document.execCommand('insertText', false, html);
+					hifive.editor.u.execInsertTextCommand(html);
 
 					this._applyTemplate();
 				}

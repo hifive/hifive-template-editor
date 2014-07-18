@@ -855,6 +855,15 @@
 		controller.applyTemplate(text);
 	}
 
+	/**
+	 * document.execCommand('insertText', uiBool, args)を実行します
+	 */
+	function execInsertTextCommand(args){
+		if(document.queryCommandSupported('insertText')){
+			return document.execCommand('insertText', false, args);
+		}
+	}
+
 	h5.u.obj.expose('hifive.editor.u', {
 		getDocumentScrollPos: getDocumentScrollPos,
 		moveElementBy: moveElementBy,
@@ -874,6 +883,7 @@
 		addCssText: addCssText,
 		replaceModuleResourcePath: replaceModuleResourcePath,
 		openChildWindow: openChildWindow,
-		applyTemplate: applyTemplate
+		applyTemplate: applyTemplate,
+		execInsertTextCommand: execInsertTextCommand
 	});
 })();
