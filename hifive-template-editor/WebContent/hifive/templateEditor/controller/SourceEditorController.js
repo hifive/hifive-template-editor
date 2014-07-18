@@ -80,9 +80,22 @@
 		},
 
 		getText: function() {
-			// TODO textContent, text()だと改行コードがなくなる。
-			var raw = $(this.rootElement)[0].innerText; // .text();
+			// 改行を考慮するinnerTextを使用
+			var raw = this.rootElement.innerText;
+			if (raw === undefined) {
+				// innerTextのない場合(Firefox)、textNodeのtextContentを取得し、<br>を改行にする
+				raw = '';
+				$(this.rootElement).contents().each(function() {
+					if (this.nodeType === 3) {
+						raw += this.textContent;
+						return;
+					} else if (this.nodeName === 'BR') {
+						raw += '\n';
+					}
+				});
+			}
 
+			// ノード中の空白(&nbsp;)を空白文字に変更
 			var text = raw.replace(/\xA0/g, ' ');
 			return text;
 		},
