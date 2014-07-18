@@ -275,30 +275,22 @@
 		},
 
 		/**
-		 * .previewAreaとeditAreaを区切るdividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
+		 * dividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
 		 *
 		 * @param context
 		 * @param $el
 		 */
 		'.divider h5trackstart': function(context, $el) {
-			if ($el.next()[0] !== this.$find('.previewArea')[0]) {
-				// 別のdividerなら何もしない
-				return;
-			}
 			this._addIFrameCover();
 		},
 
 		/**
-		 * .previewAreaとeditAreaを区切るdividerを操作し終えたときに、iframeの上のdivを取り除く
+		 * dividerを操作し終えたときに、iframeの上のdivを取り除く
 		 *
 		 * @param context
 		 * @param $el
 		 */
 		'.divider h5trackend': function(context, $el) {
-			if ($el.next()[0] !== this.$find('.previewArea')[0]) {
-				// 別のdividerなら何もしない
-				return;
-			}
 			this._removeIFrameCover();
 		},
 
