@@ -410,7 +410,7 @@
 			label: 'タイプ',
 			selector: '',
 			type: 'enum',
-			enumValue: [['デフォルト', ''], ['マークなし', 'unstyled'], ['インライン', 'inline'], ],
+			enumValue: [['デフォルト', ''], ['マークなし', 'unstyled'], ['インライン', 'inline']],
 			target: 'class'
 		}, {
 			label: '各項目',

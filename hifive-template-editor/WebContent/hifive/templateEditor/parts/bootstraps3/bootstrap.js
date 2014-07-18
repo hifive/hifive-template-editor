@@ -34,7 +34,7 @@
 		schema: getButtonSchema('', {
 			notBlock: true
 		})
-	}, ];
+	}];
 
 	var BUTTON_DROPDOWN_SCHEMA = getButtonSchema(['> button:first span:first', '> button']).concat(
 			[{
@@ -674,7 +674,7 @@
 			palette: 'bootstrap3.layout.row',
 			label: label,
 			createView: createView,
-			createEditor: editSchema,
+			createEditor: editSchema
 		};
 		hifive.editor.addCreator(creator);
 	})();
@@ -697,7 +697,7 @@
 			palette: 'bootstrap3.layout.div',
 			label: label,
 			createView: createView,
-			createEditor: editSchema,
+			createEditor: editSchema
 		};
 		hifive.editor.addCreator(creator);
 	})();
@@ -953,17 +953,17 @@
 			label: 'ACTION属性',
 			selector: '',
 			type: 'string',
-			target: 'attr(action)',
+			target: 'attr(action)'
 		}, {
 			label: 'NAME属性',
 			selector: '',
 			type: 'string',
-			target: 'attr(name)',
+			target: 'attr(name)'
 		}, {
 			label: 'TARGET属性',
 			selector: '',
 			type: 'string',
-			target: 'attr(target)',
+			target: 'attr(target)'
 		}, {
 			label: 'ボタンラベル',
 			selector: '> button',

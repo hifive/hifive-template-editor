@@ -135,7 +135,7 @@
 
 			document.execCommand('insertText', false, text);
 			context.event.preventDefault();
-		},
+		}
 
 	// コピー時にSpace -> Tab変換する、等
 	// '{rootElement} copy': function(context) {

@@ -53,6 +53,7 @@
 			<format property="timestamp" pattern="yyyy/MM/dd HH:mm:ss.SSS (Z)" />
 		</tstamp>
 
+
 		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
 		<jscomp compilationLevel="simple" debug="false" output="${build.tmp.dir}/${build.min.filename}">
 			<sources dir="${src.dir}">
@@ -92,7 +93,7 @@
 
 		<!-- 必要なファイルをbuildにコピー -->
 		<copy todir="${build.dir}">
-			<fileset dir="${webcontent}">
+			<fileset dir="${webcontent.dir}">
 				<!-- buildしたファイル,webinf,index.html(index.release.html)は除く -->
 				<exclude name="hfiive/templateEditor/**/*.js" />
 				<exclude name="${webinf.dir}" />
