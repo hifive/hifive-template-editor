@@ -862,7 +862,24 @@
 		if (document.queryCommandSupported('insertText')) {
 			return document.execCommand('insertText', false, args);
 		}
-		document.selection.createRange().text = args;
+		if (document.selection) {
+			// IE10-
+			document.selection.createRange().text = args;
+		} else {
+			// IE11
+			document.execCommand("ms-beginUndoUnit");
+			var range = document.getSelection().getRangeAt(0);
+			// 改行で分割して、改行箇所に<br>を挿入
+			var splitArgs = args.split('\n');
+			for (var i = splitArgs.length - 1; i >= 0; i--) {
+				// IEの場合createTextNodeで空白文字が無視されるのでユニコードに変換
+				document.getSelection().getRangeAt(0).insertNode(document.createElement('br'));
+				document.getSelection().getRangeAt(0).insertNode(
+						document.createTextNode(splitArgs[i].replace(/ /g, '\u00a0')));
+			}
+
+			document.execCommand("ms-endUndoUnit");
+		}
 	}
 
 	h5.u.obj.expose('hifive.editor.u', {
