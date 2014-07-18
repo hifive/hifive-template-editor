@@ -858,10 +858,11 @@
 	/**
 	 * document.execCommand('insertText', uiBool, args)を実行します
 	 */
-	function execInsertTextCommand(args){
-		if(document.queryCommandSupported('insertText')){
+	function execInsertTextCommand(args) {
+		if (document.queryCommandSupported('insertText')) {
 			return document.execCommand('insertText', false, args);
 		}
+		document.selection.createRange().text = args;
 	}
 
 	h5.u.obj.expose('hifive.editor.u', {
