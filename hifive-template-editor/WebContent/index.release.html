@@ -102,16 +102,6 @@
 			h5.core.controller(this, h5.ui.container.DividedBox);
 		});
 	});
-	/* $(window).bind('resize', function() {
-		var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {
-			name: 'h5.ui.container.DividedBox',
-			deep: true
-		});
-
-		for (var i = 0, len = dividedBoxes.length; i < len; i++) {
-			dividedBoxes[i].refresh();
-		}
-	}); */
 </script>
 
 <script id="tagEdit-table" type="text/ejs">
@@ -155,13 +145,15 @@
 				<div class="tab-pane active" id="template">
 					<div class="inputArea">
 						<h3>テンプレート</h3>
-						<div class="dividedBox horizontal row">
-							<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-							<div class="sourceText pageWrapper col-xs-9">
-								<!-- contentEditable="true" -->
-							</div>
-							<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
+						<!-- <div class="dividedBox horizontal row"> -->
+						<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
+
+						<div class="sourceText pageWrapper col-xs-12">
+							<!-- contentEditable="true" -->
 						</div>
+
+						<!-- <div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div> -->
+						<!-- </div> -->
 					</div>
 				</div>
 
@@ -175,20 +167,20 @@
 
 				<!-- 【カスタムCSS】 -->
 				<!--
-						<div class="tab-pane" id="css">
-							<div id="editPanel" class="bg-carbon vertical">
-								<div class="editorRoot autoSize"></div>
-								<div class="tagEdit autoSize" data-h5-controller="c:TagEditController"></div>
-								<div id="editCSSPanel" class="pane pane-full bg-carbon autoSize">
-									<div class="styleDef-wrapper">
-										<button type="button" class="applyBtn btn-mini apply">適用</button>
-										<textarea id="styleDef" class="col-xs-6"></textarea>
-										<div id="cssErrorMessage"></div>
-									</div>
+					<div class="tab-pane" id="css">
+						<div id="editPanel" class="bg-carbon vertical">
+							<div class="editorRoot autoSize"></div>
+							<div class="tagEdit autoSize" data-h5-controller="c:TagEditController"></div>
+							<div id="editCSSPanel" class="pane pane-full bg-carbon autoSize">
+								<div class="styleDef-wrapper">
+									<button type="button" class="applyBtn btn-mini apply">適用</button>
+									<textarea id="styleDef" class="col-xs-6"></textarea>
+									<div id="cssErrorMessage"></div>
 								</div>
 							</div>
 						</div>
-						-->
+					</div>
+				-->
 
 				<!-- 【設定】 -->
 				<div class="tab-pane" id="setting">
