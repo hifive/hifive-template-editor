@@ -218,7 +218,7 @@
 		_sendMessage: function(data) {
 			var myOrigin = location.protocol + '//' + location.host;
 
-			parent.postMessage(data, myOrigin);
+			parent.postMessage(h5.u.obj.serialize(data), myOrigin);
 		}
 
 	};
