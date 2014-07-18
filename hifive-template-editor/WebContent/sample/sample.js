@@ -22,13 +22,13 @@
 
 		loadJsonData: function() {
 			return h5.ajax({
-				url: JSON_DATA_URL,
+				url: JSON_DATA_URL
 			});
 		},
 
 		loadTemplateData: function() {
 			return h5.ajax({
-				url: TEMPLATE_DATA_URL,
+				url: TEMPLATE_DATA_URL
 			});
 		}
 
