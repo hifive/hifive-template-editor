@@ -107,16 +107,6 @@
 			h5.core.controller(this, h5.ui.container.DividedBox);
 		});
 	});
-	/* $(window).bind('resize', function() {
-		var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {
-			name: 'h5.ui.container.DividedBox',
-			deep: true
-		});
-
-		for (var i = 0, len = dividedBoxes.length; i < len; i++) {
-			dividedBoxes[i].refresh();
-		}
-	}); */
 </script>
 
 <script id="tagEdit-table" type="text/ejs">
@@ -160,15 +150,20 @@
 				<div class="tab-pane active" id="template">
 					<div class="inputArea">
 						<h3>テンプレート</h3>
-						<div class="dividedBox horizontal row">
-							<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-							<div class="sourceText pageWrapper col-xs-9">
-								<!-- contentEditable="true" -->
-							</div>
-							<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
+						<!-- <div class="dividedBox horizontal row"> -->
+						<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
+
+						<!-- ツリーを表示する場合はcol-xs-*を変える -->
+						<div class="sourceText pageWrapper col-xs-12">
+							<!-- contentEditable="true" -->
 						</div>
+
+
+						<!-- <div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div> -->
+						<!-- </div> -->
 					</div>
 				</div>
+
 
 				<!-- 【データオブジェクト】 -->
 				<div class="tab-pane" id="data" style="margin: 0px;">
@@ -177,6 +172,7 @@
 						<textarea class="col-xs-12 dataText"></textarea>
 					</div>
 				</div>
+
 
 				<!-- 【カスタムCSS】 -->
 				<!--
@@ -193,7 +189,8 @@
 								</div>
 							</div>
 						</div>
-						-->
+				-->
+
 
 				<!-- 【設定】 -->
 				<div class="tab-pane" id="setting">

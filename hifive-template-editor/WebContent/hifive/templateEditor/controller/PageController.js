@@ -94,37 +94,40 @@
 
 				this._refreshDividedBox();
 
+
 				// dividerの位置を修正する
 				var dividerPos = this.$find('.inputArea .divider').offset();
-				var dividerTop = dividerPos.top;
+				if (dividerPos) {
+					var dividerTop = dividerPos.top;
 
-				var inputAreaSize = this.$find('.inputArea .dividedBox').outerWidth();// テンプレートタブのエディタ部分の幅
-				var dividerLeft = inputAreaSize * 0.75;// dividerのleftの位置
+					var inputAreaSize = this.$find('.inputArea .dividedBox').outerWidth();// テンプレートタブのエディタ部分の幅
+					var dividerLeft = inputAreaSize * 0.75;// dividerのleftの位置
 
-				this.$find('.inputArea .divider').offset({
-					top: dividerTop,
-					left: dividerLeft
-				});
+					this.$find('.inputArea .divider').offset({
+						top: dividerTop,
+						left: dividerLeft
+					});
 
-				// ツリー部分の位置を修正する
-				var palettePos = this.$find('.inputArea .componentPalette').offset();
-				var dividerWidth = this.$find('.inputArea .divider').outerWidth();
+					// ツリー部分の位置を修正する
+					var palettePos = this.$find('.inputArea .componentPalette').offset();
+					var dividerWidth = this.$find('.inputArea .divider').outerWidth();
 
-				var paletteTop = palettePos.top;
-				var paletteLeft = dividerLeft + dividerWidth;
+					var paletteTop = palettePos.top;
+					var paletteLeft = dividerLeft + dividerWidth;
 
-				this.$find('.componentPalette').offset({
-					top: paletteTop,
-					left: paletteLeft
-				});
-
-
-				// テンプレート編集部分の位置を修正する
-				this.$find('.sourceText').outerWidth(dividerLeft);
+					this.$find('.componentPalette').offset({
+						top: paletteTop,
+						left: paletteLeft
+					});
 
 
-				this._refreshDividedBox();
+					// テンプレート編集部分の位置を修正する
+					this.$find('.sourceText').outerWidth(dividerLeft);
 
+
+					this._refreshDividedBox();
+
+				}
 				return;
 			}
 			// テンプレートタブ以外が選択された場合、リスナーの実行を禁止する
