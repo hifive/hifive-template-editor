@@ -872,10 +872,9 @@
 			// 改行で分割して、改行箇所に<br>を挿入
 			var splitArgs = args.split('\n');
 			for (var i = splitArgs.length - 1; i >= 0; i--) {
+				range.insertNode(document.createElement('br'));
 				// IEの場合createTextNodeで空白文字が無視されるのでユニコードに変換
-				document.getSelection().getRangeAt(0).insertNode(document.createElement('br'));
-				document.getSelection().getRangeAt(0).insertNode(
-						document.createTextNode(splitArgs[i].replace(/ /g, '\u00a0')));
+				range.insertNode(document.createTextNode(splitArgs[i].replace(/ /g, '\u00a0')));
 			}
 
 			document.execCommand("ms-endUndoUnit");
