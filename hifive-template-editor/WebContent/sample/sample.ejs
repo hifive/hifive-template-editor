@@ -1,83 +1,102 @@
 <script type="text/ejs" id="sapmleEjs">
-			<h3>グリッド A</h3>
-			<div class="ui-grid-a ui-responsive row">
-    			<div class="ui-block-a col-md-6 col-xs-8"><div class="ui-body ui-body-d">Block A</div></div>
-    			<div class="ui-block-b col-md-6 col-xs-8"><div class="ui-body ui-body-d">Block B</div></div>
-			</div>
-
-			<h3>グリッド B</h3>
-			<div class="ui-grid-b ui-responsive row">
-				<div class="ui-block-a col-md-4 col-xs-6"><div class="ui-body ui-body-d">Block A</div></div>
-				<div class="ui-block-b col-md-4 col-xs-6"><div class="ui-body ui-body-d">Block B</div></div>
-				<div class="ui-block-c col-md-4 col-xs-6"><div class="ui-body ui-body-d">Block C</div></div>
-			</div>
-
-			<h3>グリッド C</h3>
-			<div class="ui-grid-c ui-responsive row">
-				<div class="ui-block-a col-md-3 col-xs-6"><div class="ui-body ui-body-d">Block A</div></div>
-				<div class="ui-block-b col-md-3 col-xs-6"><div class="ui-body ui-body-d">Block B</div></div>
-				<div class="ui-block-c col-md-3 col-xs-6"><div class="ui-body ui-body-d">Block C</div></div>
-				<div class="ui-block-d col-md-3 col-xs-6"><div class="ui-body ui-body-d">Block D</div></div>
-			</div>
-
-			<h3>テーブル</h3>
-			<table id="tbl" data-role="table" data-mode="columntoggle" class="table table-striped ui-responsive">
-				<thead>
-					<tr>
-						<th data-priority="2">得点</th>
-						<th data-priority="1">ユーザ名</th>
-					</tr>
-				</thead>
-				<tbody>
-					[% for (var i=0, len=list.length; i<len; i++) {
-						var row = list[i];
-					%]
-					<tr id="[%= name %]_[%= row.userId %]">
-						<td>[%= row.marks %]</td>
-						<td>[%= row.userName %]</td>
-					</tr>
-					[% } %]
+<div class="container">
+	<div class="ui-grid-a ui-responsive row">
+		<div class="ui-block-a col-md-12 col-xs-12">
+			<div class="ui-body ui-body-d">
+				<h3>テーブル</h3>
+				<table id="tbl" data-role="table" data-mode="columntoggle" class="table table-striped ui-responsive">
+					<thead>
+						<tr>
+							<th data-priority="1">ユーザ名</th>
+							<th data-priority="2">得点</th>
+						</tr>
+					</thead>
+					<tbody>
+						[% for(var i = 0, l=list.length; i <l ; i++) {
+							var row=list[i];%]
+							<tr id="[%= name %]_[%= row.userId %]">
+								<td>[%= row.userName %]</td>
+								<td>[%= row.marks %]</td>
+							</tr>
+						[% } %]
 				</tbody>
-			</table>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row ui-grid-a ui-responsive ">
+		<div class="ui-block-b col-md-12 col-xs-12">
+			<div class="ui-body ui-body-d">
+				<h3>フォーム</h3>
 
-			<h3>フォーム</h3>
-			<form class="form-horizontal">
-				<div class="form-group">
-					<label class="col-sm-2 control-label" for="Email">Eメール</label>
-					<div class="col-sm-10">
-						<input type="email" class="form-control" id="Email" placeholder="Eメール">
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-sm-2 control-label" for="Password">パスワード</label>
-					<div class="col-sm-10">
-						<input type="password" class="form-control" id="Password" placeholder="パスワード">
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox"> 記憶する
-							</label>
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="Email">Eメール</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control" id="Email" placeholder="Eメール">
 						</div>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">サインイン</button>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="Password">パスワード</label>
+						<div class="col-sm-10">
+							<input type="password" class="form-control" id="Password" placeholder="パスワード">
+						</div>
 					</div>
-				</div>
-			</form>
 
-			<a href="index.html" data-role="button">Link button</a>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="checkbox">
+								<label> <input type="checkbox"> 記憶する
+								</label>
+							</div>
+						</div>
+					</div>
 
-			<div data-role="collapsible">
-				<h3>開閉パネル(jQuery Mobile 1.3.0用)</h3>
-				<p>コンテンツです</p>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-default">サインイン</button>
+						</div>
+					</div>
+				</form>
+
 			</div>
+		</div>
+	</div>
 
+	<h3>ナビゲーションリスト</h3>
+	<div class="row">
+	<div class="well  col-md-3">
+		<ul class="nav nav-pills nav-stacked">
+			[% for(var i = 0, l = navList.length; i < l; i++) {
+				var nav = navList[i]; %]
+				<li class="nav-header">[%= nav.header %]</li>
+				[% for(var j = 0, len = nav.links.length; j < len; j++) {
+				var link = nav.links[j]; %]
+				<li class="[%= link.isActive ? 'active' : '' %]" data-toggle="pill">
+<a href="#">
+				[%= link.text %]
+				</a>
+				</li>
+			[% } %][% } %]
+		</ul>
+	</div>
+	</div>
+
+	<h3>リンクボタン(jQuery Mobile)</h3>
+	<a href="index.html" data-role="button">Link button(jQuery Mobile)</a>
+
+	<div data-role="collapsible">
+		<h3>開閉パネル(jQuery Mobile)</h3>
+		<p>jQuery Moblieの開閉パネルです。</p>
+		<p>(jQuery Mobileがライブラリで適用されていると、この箇所は開閉パネルとして動作します)。</p>
+	</div>
+
+	<h3>リストビュー(jQuery Mobile)</h3>
+	<ul data-role="listview" class="ui-listview">
+		[% for(var i = 0, l = list.length; i < l; i++){ %]
+		<li class="ui-li ui-li-static ui-body-c">[%= list[i].userName %]</li>
+		[% } %]
+	</ul>
+</div>
 </script>
