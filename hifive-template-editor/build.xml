@@ -5,6 +5,7 @@
 	<property name="index.release" value="index.release.html" />
 	<property name="src.dir" value="${webcontent.dir}/hifive/templateEditor" />
 	<property name="build.dir" value="build" />
+	<property name="min.src.dir" value="${build.dir}/hifive/templateEditor" />
 	<property name="build.tmp.dir" value="build/tmp" />
 	<property name="build.min.filename" value="templateEditor.min.js" />
 	<property name="config.dir" value="config" />
@@ -53,7 +54,6 @@
 			<format property="timestamp" pattern="yyyy/MM/dd HH:mm:ss.SSS (Z)" />
 		</tstamp>
 
-
 		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
 		<jscomp compilationLevel="simple" debug="false" output="${build.tmp.dir}/${build.min.filename}">
 			<sources dir="${src.dir}">
@@ -66,6 +66,9 @@
 				<file name="controller/PreviewController.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/CSSEditorController.js" />
+				<file name="controller/ComponentPaletteController.js" />
+				<file name="controller/TemplateEditController.js" />
+				<file name="controller/PageController.js" />
 				<file name="parts/ui/ui.common.js" />
 				<file name="parts/ui/base/base.js" />
 				<file name="parts/ui/layout/layout.js" />
@@ -80,26 +83,35 @@
 			<replacefilter token="{gitCommitId}" value="${gitCommitId}" />
 		</replace>
 		<!-- ヘッダとソースを結合してbuildに出力 -->
-		<concat destfile="${build.dir}/${build.min.filename}">
+		<concat destfile="${min.src.dir}/${build.min.filename}">
 			<header file="${build.tmp.dir}/${min.header.filename}" />
 			<filelist dir="${build.tmp.dir}" files="${build.min.filename}" />
 		</concat>
+
+		<!-- 必要なファイルをbuildにコピー -->
+		<copy todir="${build.dir}">
+			<fileset dir="${webcontent.dir}">
+				<!-- buildしたファイル,webinf,index.html(index.release.html)は除く -->
+				<exclude name="hifive" />
+				<exclude name="hifive/**/*" />
+				<exclude name="${webinf.dir}" />
+				<exclude name="${webinf.dir}/**/*" />
+				<exclude name="index.*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<!-- previewで使用するものでhifive/以下のものをコピー -->
+			<fileset dir="${webcontent.dir}">
+				<include name="hifive/**/*.html" />
+				<include name="hifive/**/ResultEditorController.js" />
+			</fileset>
+		</copy>
 
 		<!-- htmlファイルをbuildに出力 -->
 		<copy file="${webcontent.dir}/${index.release}" tofile="${build.dir}/index.html" />
 
 		<!-- tmpフォルダの削除 -->
 		<delete dir="${build.tmp.dir}" />
-
-		<!-- 必要なファイルをbuildにコピー -->
-		<copy todir="${build.dir}">
-			<fileset dir="${webcontent.dir}">
-				<!-- buildしたファイル,webinf,index.html(index.release.html)は除く -->
-				<exclude name="hfiive/templateEditor/**/*.js" />
-				<exclude name="${webinf.dir}" />
-				<exclude name="index.*" />
-			</fileset>
-		</copy>
 
 		<property name="output.dir" location="${build.dir}" />
 		<echo message="ビルドしたファイルを${output.dir}に出力しました。" />
