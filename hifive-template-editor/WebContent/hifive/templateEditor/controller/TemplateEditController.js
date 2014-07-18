@@ -179,10 +179,8 @@
 		 */
 		'{window} message': function(context) {
 			var ev = context.event.originalEvent;
-			var data = ev.data;
-			if ($.type(data) === 'string') {
-				data = h5.u.obj.deserialize(data);
-			}
+			// シリアライズした文字列が渡されるので、デシリアライズする
+			var data = h5.u.obj.deserialize(ev.data);
 
 			var myOrigin = location.protocol + '//' + location.host;
 
