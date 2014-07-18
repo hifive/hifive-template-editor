@@ -1,18 +1,12 @@
 /*
- * Copyright (C) 2013-2014 NS Solutions Corporation
+ * Copyright (c) 2007 Edward Benson
+ * Copyright (C) 2012-2014 NS Solutions Corporation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * version 1.0.h5mod
+ * gitCommitId : 77423d67d2e34680e128be6d9e1fe616c45a9cc4
  */
 (function(){var h=function(a,b){for(var c=b.exec(a),d=[],e;null!=c;)e=c.index,0!=e&&(a.substring(0,e),d.push(a.substring(0,e)),a=a.slice(e)),d.push(c[0]),a=a.slice(c[0].length),c=b.exec(a);""==!a&&d.push(a);return d},i=function(a,b){for(var c in b)b.hasOwnProperty(c)&&(a[c]=b[c])};EJS=function(a){a="string"==typeof a?{view:a}:a;this.set_options(a);if(a.precompiled)this.template={},this.template.process=a.precompiled,EJS.update(this.name,this);else{if(a.element){if("string"==typeof a.element){var b=
 a.element;a.element=document.getElementById(a.element);if(null==a.element)throw b+"does not exist!";}this.text=a.element.value?a.element.value:a.element.innerHTML;this.name=a.element.id;this.type="["}else if(a.url){a.url=EJS.endExt(a.url,this.extMatch);this.name=this.name?this.name:a.url;var b=a.url,c=EJS.get(this.name,this.cache);if(c)return c;if(c==EJS.INVALID_PATH)return null;try{this.text=EJS.request(b+(this.cache?"":"?"+Math.random()))}catch(d){}if(null==this.text)throw{type:"EJS",message:"There is no template at "+
