@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="h5devtool-builder" basedir="." default="build">
+	<property name="webcontent.dir" value="WebContent" />
+	<property name="webinf.dir" value="WEB-INF" />
+	<property name="index.release" value="index.release.html" />
+	<property name="src.dir" value="${webcontent.dir}/hifive/templateEditor" />
+	<property name="build.dir" value="build" />
+	<property name="min.src.dir" value="${build.dir}/hifive/templateEditor" />
+	<property name="build.tmp.dir" value="build/tmp" />
+	<property name="build.min.filename" value="templateEditor.min.js" />
+	<property name="config.dir" value="config" />
+	<property name="min.header.filename" value="min-build-header.txt" />
+	<property name="lib.project.dir" value="lib" />
+
+	<path id="base.path">
+		<fileset dir="${lib.project.dir}" includes="**/*.jar" />
+	</path>
+
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpathref="base.path" />
+
+	<target name="clean">
+		<delete>
+			<fileset dir="${build.dir}/">
+				<include name="**" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="getVersion" unless="versionNumber">
+		<input message="バージョン番号を入力してください。(ex. 1.0.1)" addproperty="versionNumber" />
+		<condition property="isCorrectNumber">
+			<matches pattern="[0-9]+\.[0-9]+\.[0-9]+" string="${versionNumber}" />
+		</condition>
+		<fail unless="isCorrectNumber" message="正しいバージョン番号を入力してください。" />
+	</target>
+
+	<target name="getGitHash">
+		<property name="git.dir" value="../.git/logs/HEAD" />
+		<available file="${git.dir}" property="git.exists" />
+		<fail unless="git.exists" message="${git.dir}が存在しません" />
+		<loadfile srcfile="${git.dir}" property="gitCommitId">
+			<filterchain>
+				<tailfilter lines="1" />
+				<striplinebreaks />
+				<replaceregex pattern="[A-z0-9]+ ([A-z0-9]+) .*" replace="\1" />
+			</filterchain>
+		</loadfile>
+		<echo message="gitCommitId: ${gitCommitId}" />
+	</target>
+
+	<target name="build" depends="clean,getVersion,getGitHash">
+		<!-- タイムスタンプを取得 -->
+		<tstamp>
+			<format property="timestamp" pattern="yyyy/MM/dd HH:mm:ss.SSS (Z)" />
+		</tstamp>
+
+		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
+		<jscomp compilationLevel="simple" debug="false" output="${build.tmp.dir}/${build.min.filename}">
+			<sources dir="${src.dir}">
+				<file name="js/h5.ext.js" />
+				<file name="js/constants.js" />
+				<file name="js/u.js" />
+				<file name="js/_.js" />
+				<file name="js/dependencyMap.js" />
+				<file name="controller/GenericParameterEditController.js" />
+				<file name="controller/PreviewController.js" />
+				<file name="controller/SourceEditorController.js" />
+				<file name="controller/CSSEditorController.js" />
+				<file name="controller/ComponentPaletteController.js" />
+				<file name="controller/TemplateEditController.js" />
+				<file name="controller/PageController.js" />
+				<file name="parts/ui/ui.common.js" />
+				<file name="parts/ui/base/base.js" />
+				<file name="parts/ui/layout/layout.js" />
+				<file name="parts/bootstraps3/bootstrap.js" />
+			</sources>
+		</jscomp>
+		<!-- min版のヘッダ挿入 -->
+		<!-- ヘッダにversion, gitCommitIdのセット -->
+		<copy file="${config.dir}/${min.header.filename}" todir="${build.tmp.dir}" />
+		<replace file="${build.tmp.dir}/${min.header.filename}">
+			<replacefilter token="{version}" value="${versionNumber}" />
+			<replacefilter token="{gitCommitId}" value="${gitCommitId}" />
+		</replace>
+		<!-- ヘッダとソースを結合してbuildに出力 -->
+		<concat destfile="${min.src.dir}/${build.min.filename}">
+			<header file="${build.tmp.dir}/${min.header.filename}" />
+			<filelist dir="${build.tmp.dir}" files="${build.min.filename}" />
+		</concat>
+
+		<!-- 必要なファイルをbuildにコピー -->
+		<copy todir="${build.dir}">
+			<fileset dir="${webcontent.dir}">
+				<!-- buildしたファイル,webinf,index.html(index.release.html)は除く -->
+				<exclude name="hifive" />
+				<exclude name="hifive/**/*" />
+				<exclude name="${webinf.dir}" />
+				<exclude name="${webinf.dir}/**/*" />
+				<exclude name="index.*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<!-- previewで使用するものでhifive/以下のものをコピー -->
+			<fileset dir="${webcontent.dir}">
+				<include name="hifive/**/*.html" />
+				<include name="hifive/**/ResultEditorController.js" />
+			</fileset>
+		</copy>
+
+		<!-- htmlファイルをbuildに出力 -->
+		<copy file="${webcontent.dir}/${index.release}" tofile="${build.dir}/index.html" />
+
+		<!-- tmpフォルダの削除 -->
+		<delete dir="${build.tmp.dir}" />
+
+		<property name="output.dir" location="${build.dir}" />
+		<echo message="ビルドしたファイルを${output.dir}に出力しました。" />
+	</target>
+
+	<target name="setHeadVersion">
+		<property name="versionNumber" value="0.0.0" />
+	</target>
+
+	<target name="build-head" depends="setHeadVersion, build">
+
+	</target>
+</project>

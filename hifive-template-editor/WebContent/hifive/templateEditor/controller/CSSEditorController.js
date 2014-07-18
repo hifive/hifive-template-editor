@@ -94,7 +94,7 @@
 			}
 
 			this._triggerPageViewChange();
-		},
+		}
 
 
 	};
