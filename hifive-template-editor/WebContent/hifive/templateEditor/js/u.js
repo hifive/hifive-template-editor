@@ -867,7 +867,6 @@
 			document.selection.createRange().text = args;
 		} else {
 			// IE11
-			document.execCommand("ms-beginUndoUnit");
 			var range = document.getSelection().getRangeAt(0);
 			// 改行で分割して、改行箇所に<br>を挿入
 			var splitArgs = args.split('\n');
@@ -876,8 +875,6 @@
 				// IEの場合createTextNodeで空白文字が無視されるのでユニコードに変換
 				range.insertNode(document.createTextNode(splitArgs[i].replace(/ /g, '\u00a0')));
 			}
-
-			document.execCommand("ms-endUndoUnit");
 		}
 	}
 
