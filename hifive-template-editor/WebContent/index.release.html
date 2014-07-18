@@ -1,0 +1,232 @@
+<!doctype html>
+<!--
+/*
+ * Copyright (C) 2013-2014 NS Solutions Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+ -->
+
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EJS Template Editor</title>
+
+<link rel="stylesheet" href="res/lib/jstree/jstree.custom.css">
+
+<link rel="stylesheet" href="res/lib/bootstrap3.2/css/bootstrap.css" media="screen">
+<link rel="stylesheet" href="res/lib/hifive/h5.css">
+
+<link rel="stylesheet" href="/hifive-ui-library/components/dividedBox/src/DividedBox.css">
+
+<link rel="stylesheet" href="res/lib/editor-external.css">
+
+<link rel="stylesheet" href="css/index.css">
+
+
+<script src="res/lib/jquery/jquery-2.0.3.js"></script>
+
+<script src="res/lib/bootstrap3.2/js/bootstrap.js"></script>
+
+<script src="res/lib/jstree/jquery.jstree.js"></script>
+
+
+<script src="res/lib/hifive/ejs-h5mod.js"></script>
+<script src="res/lib/hifive/h5.js"></script>
+<script src="res/lib/hifive/h5.dev.js"></script>
+
+<script src="hifive/templateEditor/templateEditor.min.js"></script>
+<script src="hifive/templateEditor/js/h5.ext.js"></script>
+<script src="hifive/templateEditor/js/constants.js"></script>
+<script src="hifive/templateEditor/js/u.js"></script>
+<script src="hifive/templateEditor/js/_.js"></script>
+<script src="hifive/templateEditor/js/dependencyMap.js"></script>
+<script src="hifive/templateEditor/controller/GenericParameterEditController.js"></script>
+<script src="hifive/templateEditor/controller/PreviewController.js"></script>
+<script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
+<script src="hifive/templateEditor/controller/CSSEditorController.js"></script>
+<script src="hifive/templateEditor/controller/TemplateEditController.js"></script>
+<script src="hifive/templateEditor/parts/ui/ui.common.js"></script>
+<script src="hifive/templateEditor/parts/ui/base/base.js"></script>
+<script src="hifive/templateEditor/parts/ui/layout/layout.js"></script>
+<script src="hifive/templateEditor/parts/bootstraps3/bootstrap.js"></script>
+
+<script src="/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
+
+<!-- u.jsが必要 -->
+
+<script>
+	// 環境変数の設定
+	hifive.editor.u.setEnv('SYSTEM_LIB', '/hifive-template-editor/WebContent/res/lib');
+</script>
+
+<script>
+	h5.u.obj.ns('hifive.templateEditor.settings').srcBase = '/hifive-template-editor/WebContent/hifive';
+
+	h5.u.obj.ns('hifive.templateEditor.settings').fileStoreBase = '/hifive-template-editor/WebContent/hifive/templateEditor/storage/files/';
+	h5.u.obj.ns('hifive.templateEditor.settings').pathHandwritingController = '/hifive-template-editor/WebContent/hifive/templateEditor/controller/HandwritingController.js';
+
+	h5.u.obj.ns('hifive.templateEditor.settings').savePathBase = '/hifive-template-editor/WebContent/hifive/templateEditor/storage/files/';
+
+	//JsBaseとCssBaseは同一でもよい
+	h5.u.obj.ns('hifive.templateEditor.settings').libraryJsBase = '/hifive-template-editor/WebContent/res/lib';
+	h5.u.obj.ns('hifive.templateEditor.settings').libraryCssBase = '/hifive-template-editor/WebContent/res/lib';
+
+	h5.ext.basePath = './';
+	h5.core.controller.registerAlias('c', 'hifive.templateEditor.controller');
+</script>
+
+<script id="tmp-cssErrorMessage" type="text/ejs">
+<p>[%= message %]</p>
+</script>
+
+<script>
+	$(function() {
+		$('.dividedBox').each(function() {
+			h5.core.controller(this, h5.ui.container.DividedBox);
+		});
+	});
+	/* $(window).bind('resize', function() {
+		var dividedBoxes = h5.core.controllerManager.getControllers(document.body, {
+			name: 'h5.ui.container.DividedBox',
+			deep: true
+		});
+
+		for (var i = 0, len = dividedBoxes.length; i < len; i++) {
+			dividedBoxes[i].refresh();
+		}
+	}); */
+</script>
+
+<script id="tagEdit-table" type="text/ejs">
+[%# TODO タイトルは不要か
+<h3 >タグ属性編集<button type="button" class="btn-small apply">適用</button></h3>
+%]
+<h3 class="tagName">(ダブルクリックで選択)</h3>
+<table>
+<thead>
+<tr><th>属性名</th><th>属性値</th></tr>
+</thead>
+<tbody>
+</tbody>
+</tbody></table>
+</script>
+
+<script src="sample/sample.js"></script>
+
+
+</head>
+<body class='bg-carbon'>
+
+	<!-- タブ -->
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#template" data-toggle="tab">テンプレート</a></li>
+		<li><a href="#data" data-toggle="tab">データオブジェクト</a></li>
+		<!-- <li><a href="#css" data-toggle="tab">カスタムCSS</a></li> -->
+		<li><a href="#setting" data-toggle="tab">設定</a></li>
+	</ul>
+
+
+	<div id="ejsEditorRoot" class="dividedBox vertical container">
+
+		<div class="editArea">
+
+			<!-- タブコンテント -->
+			<div class="tab-content">
+
+
+				<!-- 【テンプレート】 -->
+				<div class="tab-pane active" id="template">
+					<div class="inputArea">
+						<h3>テンプレート</h3>
+						<div class="dividedBox horizontal row">
+							<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
+							<div class="sourceText pageWrapper col-xs-9">
+								<!-- contentEditable="true" -->
+							</div>
+							<div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 【データオブジェクト】 -->
+				<div class="tab-pane" id="data" style="margin: 0px;">
+					<h3>データオブジェクト</h3>
+					<div class="row" style="height: 100%;">
+						<textarea class="col-xs-12 dataText"></textarea>
+					</div>
+				</div>
+
+				<!-- 【カスタムCSS】 -->
+				<!--
+						<div class="tab-pane" id="css">
+							<div id="editPanel" class="bg-carbon vertical">
+								<div class="editorRoot autoSize"></div>
+								<div class="tagEdit autoSize" data-h5-controller="c:TagEditController"></div>
+								<div id="editCSSPanel" class="pane pane-full bg-carbon autoSize">
+									<div class="styleDef-wrapper">
+										<button type="button" class="applyBtn btn-mini apply">適用</button>
+										<textarea id="styleDef" class="col-xs-6"></textarea>
+										<div id="cssErrorMessage"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						-->
+
+				<!-- 【設定】 -->
+				<div class="tab-pane" id="setting">
+					<h3>ライブラリ</h3>
+					<div class="control-group">
+						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
+							Bootstrap3.2
+						</label>
+					</div>
+
+					<div class="control-group">
+						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery Mobile
+							1.3.0
+						</label>
+					</div>
+
+					<div class="control-group">
+						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery Mobile
+							1.4.2
+						</label>
+					</div>
+
+					<div>
+						<input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用">
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- プレビュー -->
+		<div class="previewArea row">
+			<h3 class="col-md-2 col-xs-8">プレビュー</h3>
+			<button class="btn btn-primary applyTemplateBtn col-md-3 col-xs-6">再適用</button>
+			<div class="iframeWrapper">
+				<iframe class="frame" src="hifive/templateEditor/preview.html"></iframe>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>
