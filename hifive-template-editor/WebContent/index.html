@@ -82,6 +82,7 @@
 <script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
 <script src="hifive/templateEditor/controller/CSSEditorController.js"></script>
 <script src="hifive/templateEditor/controller/TemplateEditController.js"></script>
+<script src="hifive/templateEditor/controller/PageController.js"></script>
 
 <script src="/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
 
@@ -227,9 +228,11 @@
 
 		<!-- プレビュー -->
 		<div class="previewArea row">
-			<h3 class="col-md-2 col-xs-8">プレビュー</h3>
-			<button class="btn btn-primary applyTemplateBtn col-md-3 col-xs-6">再適用</button>
-			<iframe class="frame col-xs-12" src="hifive/templateEditor/preview.html"></iframe>
+			<h3 class="col-xs-4">プレビュー</h3>
+			<button class="btn btn-primary applyTemplateBtn col-xs-6">再適用</button>
+			<div class="iframeWrapper">
+				<iframe class="frame" src="hifive/templateEditor/preview.html"></iframe>
+			</div>
 		</div>
 
 	</div>

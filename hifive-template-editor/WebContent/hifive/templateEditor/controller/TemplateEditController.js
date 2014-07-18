@@ -24,7 +24,7 @@
 	// TODO 別ファイルで定義されている定数・変数・関数等を別の名前で使用する場合にここに記述します。
 	// 例：var getDeferred = h5.async.deferred;
 
-	var getComponentCreator = hifive.editor.u.getComponentCreator;
+	// var getComponentCreator = hifive.editor.u.getComponentCreator;
 
 	// =========================================================================
 	//
@@ -102,10 +102,6 @@
 
 		_target: null,// postMessageの送信先
 
-		// __construct: function() {
-		// this._structHeight();
-		// },
-
 		__ready: function() {
 
 			h5.u.obj.expose('hifive.editor', {
@@ -140,24 +136,6 @@
 			});
 
 			this._target = $('iframe')[0];// postMessageの送信先を設定
-
-
-		},
-
-
-		/**
-		 * テンプレートとデータオブジェクトをキャッシュします
-		 *
-		 * @param template
-		 * @param json
-		 */
-		init: function(template, json) {
-
-			template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
-
-			this.setDataText(JSON.stringify(json));
-
-			this.setTemplateText(template);
 
 		},
 
@@ -243,7 +221,6 @@
 				dividedBoxes[i].refresh();
 			}
 
-			// this._structHeight();
 		},
 
 
@@ -274,6 +251,47 @@
 			this._target.contentDocument.location.reload(true);
 		},
 
+		/**
+		 * .previewAreaとeditAreaを区切るdividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
+		 *
+		 * @param context
+		 * @param $el
+		 */
+		'.divider h5trackstart': function(context, $el) {
+			if ($el.next()[0] !== this.$find('.previewArea')[0]) {
+				// 別のdividerなら何もしない
+				return;
+			}
+			this._addIFrameCover();
+		},
+
+		/**
+		 * .previewAreaとeditAreaを区切るdividerを操作し終えたときに、iframeの上のdivを取り除く
+		 *
+		 * @param context
+		 * @param $el
+		 */
+		'.divider h5trackend': function(context, $el) {
+			if ($el.next()[0] !== this.$find('.previewArea')[0]) {
+				// 別のdividerなら何もしない
+				return;
+			}
+			this._removeIFrameCover();
+		},
+
+		/**
+		 * iframeを覆う要素を追加
+		 */
+		_addIFrameCover: function() {
+			this.$find('.iframeWrapper').append('<div class="iframeCover"></div>');
+		},
+
+		/**
+		 * iframeを覆う要素を削除
+		 */
+		_removeIFrameCover: function() {
+			this.$find('.iframeCover').remove();
+		},
 
 		/**
 		 * 画面にインジケータを表示します
@@ -421,35 +439,7 @@
 		_getData: function() {
 			var data = this.$find('.dataText').val();
 			return data;
-		},
-
-	// _structHeight: function() {
-	// var bodyHeight = $('body').height();
-	// var tabMenuHeight = $('.nav-tabs').outerHeight();
-	//
-	// var editorRootHeight = bodyHeight - tabMenuHeight;
-	//
-	// $('#ejsEditorRoot').css('height', editorRootHeight);
-	//
-	// var editorAreaHeight = editorRootHeight * 0.5;
-	// // エディタエリアの高さを設定します。
-	// $('.editArea').css('height', editorAreaHeight);
-	//
-	// // プレビューエリアの高さを設定します。
-	// $('.previewArea').css('height', editorRootHeight * 0.5);
-	//
-	// // タブコンテンツの高さを設定します
-	// $('.tab-content').height(editorAreaHeight);
-	//
-	// // テンプレート編集部の高さを設定します
-	// var caption = $('.tab-pane.active>h3').height();
-	// if (!caption) {
-	// caption = 0;
-	// }
-	//
-	// var inputAreaHeight = editorAreaHeight - caption;
-	// $('.inputArea').height(inputAreaHeight);
-	// }
+		}
 
 	};
 

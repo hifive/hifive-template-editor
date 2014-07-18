@@ -17,7 +17,7 @@
 	var JSON_DATA_URL = 'sample/sample.json';
 	var TEMPLATE_DATA_URL = 'sample/sample.ejs';
 
-	var templateEditorLogic = {
+	var editorLogic = {
 		__name: 'hifive.templateEditor.sample.editorSampleLogic',
 
 		loadJsonData: function() {
@@ -33,7 +33,7 @@
 		}
 
 	};
-	h5.core.expose(templateEditorLogic);
+	h5.core.expose(editorLogic);
 })(jQuery);
 
 (function($) {
@@ -42,28 +42,26 @@
 
 		__name: 'hifive.templateEditor.sample.editorSampleController',
 
-		_templateEditorController: hifive.templateEditor.controller.TemplateEditorController,
-
-		_trimTemplate: null,
+		_pageController: hifive.templateEditor.controller.PageController,
 
 		_json: null,
 
 		__meta: {
-			_templateEditorController: {
-				rootElement: '#ejsEditorRoot'
+			_pageController: {
+				rootElement: document.body
 			}
 		},
 
-		_templateEditorLogic: hifive.templateEditor.sample.editorSampleLogic,
+		_editorLogic: hifive.templateEditor.sample.editorSampleLogic,
 
 		__ready: function() {
 
-			this._templateEditorLogic.loadJsonData().done(this.own(function(json) {
+			this._editorLogic.loadJsonData().done(this.own(function(json) {
 				this._json = json;
 
-				this._templateEditorLogic.loadTemplateData().done(this.own(function(template) {
+				this._editorLogic.loadTemplateData().done(this.own(function(template) {
 
-					this._templateEditorController.init(template, json);
+					this._pageController.init(template, json);
 				}));
 
 			})).fail(
