@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="css/index.css">
 
 
-<script src="res/lib/jquery/jquery-2.0.3.min.js"></script>
+<script src="res/lib/jquery/jquery-1.9.1.min.js"></script>
 
 <script src="res/lib/bootstrap3.2/js/bootstrap.js"></script>
 
@@ -153,11 +153,9 @@
 						<!-- <div class="dividedBox horizontal row"> -->
 						<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 
-						<!-- ツリーを表示する場合はcol-xs-*を変える -->
 						<div class="sourceText pageWrapper col-xs-12">
 							<!-- contentEditable="true" -->
 						</div>
-
 
 						<!-- <div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div> -->
 						<!-- </div> -->
@@ -193,38 +191,42 @@
 
 
 				<!-- 【設定】 -->
-				<div class="tab-pane" id="setting">
+				<div class="tab-pane container" id="setting">
+
 					<h3>ライブラリ</h3>
-					<div class="control-group">
-						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
-							Bootstrap3.2
-						</label>
-					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="control-group">
+								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
+									Bootstrap3.2
+								</label>
+							</div>
 
-					<div class="control-group">
-						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery Mobile
-							1.3.0
-						</label>
-					</div>
+							<div class="control-group">
+								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery
+									Mobile 1.3.0
+								</label>
+							</div>
 
-					<div class="control-group">
-						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery Mobile
-							1.4.2
-						</label>
-					</div>
+							<div class="control-group">
+								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery
+									Mobile 1.4.2
+								</label>
+							</div>
 
-					<div>
-						<input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用">
+							<div>
+								<input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用">
+							</div>
+						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 
 		<!-- プレビュー -->
 		<div class="previewArea row">
 			<h3 class="col-xs-4">プレビュー</h3>
-			<button class="btn btn-primary applyTemplateBtn col-xs-4">再適用</button>
+			<button class="btn btn-primary applyTemplateBtn col-xs-4 col-xs-offset-4">再適用</button>
 			<div class="iframeWrapper">
 				<iframe class="frame" src="hifive/templateEditor/preview.html"></iframe>
 			</div>
