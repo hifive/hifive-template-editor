@@ -19,6 +19,8 @@
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpathref="base.path" />
 
 	<target name="clean">
+		<!-- ビルドフォルダが無かったら作る -->
+		<mkdir dir="${build.dir}" />
 		<delete>
 			<fileset dir="${build.dir}/">
 				<include name="**" />
