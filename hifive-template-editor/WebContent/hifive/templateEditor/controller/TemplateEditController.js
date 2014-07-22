@@ -240,10 +240,10 @@
 
 
 		/**
-		 * テスト urlボタン
+		 * 入力されたページ(url)をiframeで読み込みます
 		 */
-		'.test-url-button click': function() {
-			var url = this.$find('.test-url').val();
+		'.url-button click': function() {
+			var url = this.$find('.input-url').val();
 			this._target.contentDocument.location.replace(url);
 		},
 
@@ -252,12 +252,12 @@
 		 * <p>
 		 * ここで指定されるセレクタはiframeが読み込むhtml上の要素
 		 */
-		'.test-selector-button click': function() {
-			var str = this.$find('.test-selector').val();
+		'.selector-button click': function() {
+			var selector = this.$find('.input-selector').val();
 
 			var data = {
 				type: 'changeTarget',
-				selector: str
+				selector: selector
 			};
 
 			this._sendMessage(data);

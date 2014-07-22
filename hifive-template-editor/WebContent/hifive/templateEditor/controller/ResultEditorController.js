@@ -133,6 +133,13 @@
 		 * @param data
 		 */
 		_preview: function(data) {
+
+			if (!this._applyTarget) {
+				// TODO: エラーメッセージ
+				this.log.debug('error');
+				return;
+			}
+
 			this._applyTarget.innerHTML = data.template;
 
 			// jqmを読み込んでいる場合、要素追加後に初期化処理を促します
@@ -216,15 +223,23 @@
 
 		/**
 		 * テンプレートの適用先を変更し、再描画します
+		 *
+		 * @param
 		 */
 		_changeTarget: function(data) {
 			var el = $(data.selector)[0];
 
 			if (!el) {
+				// TODO: エラーメッセージ
+				this.log.debug('error');
 				return;
 			}
 
-			this._applyTarget.innerHTML = '';
+			// 変更前のテンプレートを除去
+			if (this._applyTarget) {
+				this._applyTarget.innerHTML = '';
+			}
+
 			this._applyTarget = el;
 
 			var data = {
