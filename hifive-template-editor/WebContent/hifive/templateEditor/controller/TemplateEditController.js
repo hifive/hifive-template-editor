@@ -188,6 +188,10 @@
 
 				switch (data.type) {
 
+				case 'applyTemplate':
+					this._applyTemplate();
+					break;
+
 				case 'applyLibrary':
 					this._applyLibrary();
 					break;
@@ -232,6 +236,31 @@
 
 		'{rootElement} textChange': function() {
 			this._applyTemplate();
+		},
+
+
+		/**
+		 * テスト urlボタン
+		 */
+		'.test-url-button click': function() {
+			var url = this.$find('.test-url').val();
+			this._target.contentDocument.location.replace(url);
+		},
+
+		/**
+		 * テンプレートを反映させるセレクタ文字列をプレビューに送る
+		 * <p>
+		 * ここで指定されるセレクタはiframeが読み込むhtml上の要素
+		 */
+		'.test-selector-button click': function() {
+			var str = this.$find('.test-selector').val();
+
+			var data = {
+				type: 'changeTarget',
+				selector: str
+			};
+
+			this._sendMessage(data);
 		},
 
 

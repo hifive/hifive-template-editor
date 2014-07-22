@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="res/lib/bootstrap3.2/css/bootstrap.css" media="screen">
 <link rel="stylesheet" href="res/lib/hifive/h5.css">
 
-<link rel="stylesheet" href="/hifive-ui-library/components/dividedBox/src/DividedBox.css">
+<link rel="stylesheet" href="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.css">
 
 <link rel="stylesheet" href="res/lib/editor-external.css">
 
@@ -82,7 +82,7 @@
 <script src="hifive/templateEditor/controller/TemplateEditController.js"></script>
 <script src="hifive/templateEditor/controller/PageController.js"></script>
 
-<script src="/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
+<script src="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
 
 
 <!-- u.jsが必要 -->
@@ -144,7 +144,6 @@
 
 			<!-- タブコンテント -->
 			<div class="tab-content">
-
 
 				<!-- 【テンプレート】 -->
 				<div class="tab-pane active" id="template">
@@ -225,8 +224,26 @@
 
 		<!-- プレビュー -->
 		<div class="previewArea row">
-			<h3 class="col-xs-4">プレビュー</h3>
-			<button class="btn btn-primary applyTemplateBtn col-xs-4 col-xs-offset-4">再適用</button>
+			<div class="col-xs-12">
+				<h3 class="col-xs-6">プレビュー</h3>
+
+				<div class="col-xs-2"></div>
+
+				<button class="btn btn-primary applyTemplateBtn col-xs-4">再適用</button>
+			</div>
+
+			<div class="col-xs-12">
+				<div class="form-group col-md-4 col-xs-6" style="color: black; padding-top: 10px;">
+					<input type="text" class="test-url" placeholder="URL">
+					<button type="button" class="test-url-button">表示</button>
+				</div>
+
+				<div class="form-group col-md-4 col-xs-6" style="color: black; padding-top: 10px;">
+					<input type="text" class="test-selector" placeholder="セレクタ">
+					<button type="button" class="test-selector-button">selector</button>
+				</div>
+			</div>
+
 			<div class="iframeWrapper">
 				<iframe class="frame" src="hifive/templateEditor/preview.html"></iframe>
 			</div>

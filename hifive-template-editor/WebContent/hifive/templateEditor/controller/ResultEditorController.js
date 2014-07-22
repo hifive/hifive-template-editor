@@ -113,6 +113,10 @@
 					this._beginLoadLibrary(data);
 					break;
 
+				case 'changeTarget':
+					this._changeTarget(data);
+					break;
+
 				default:
 					this.log.warn('messageが不正です');
 				}
@@ -207,6 +211,27 @@
 				def.resolve();
 			}
 			return def;
+		},
+
+
+		/**
+		 * テンプレートの適用先を変更し、再描画します
+		 */
+		_changeTarget: function(data) {
+			var el = $(data.selector)[0];
+
+			if (!el) {
+				return;
+			}
+
+			this._applyTarget.innerHTML = '';
+			this._applyTarget = el;
+
+			var data = {
+				type: 'applyTemplate'
+			};
+
+			this._sendMessage(data);
 		},
 
 
