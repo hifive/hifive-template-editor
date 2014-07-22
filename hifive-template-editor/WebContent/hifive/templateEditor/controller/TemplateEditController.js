@@ -70,7 +70,7 @@
 		/**
 		 * @memberOf hifive.templateEditor.controller.TemplateEditorController
 		 */
-		__name: 'hifive.templateEditor.controller.TemplateEditorController',
+		__name: 'hifive.templateEditor.controller.TemplateEditController',
 
 		__meta: {
 			_previewController: {
@@ -89,6 +89,8 @@
 		_sourceEditorController: hifive.templateEditor.controller.SourceEditorController,
 
 		/* _cssEditorController: hifive.templateEditor.controller.CSSEditorController, */
+
+		_templateEditorLogic: hifive.templateEditor.logic.TemplateEditLogic,
 
 		_targetWaitDeferred: null,
 
@@ -171,6 +173,18 @@
 		 */
 		setDataText: function(json) {
 			this.$find('.dataText').val(json);
+		},
+
+
+		/**
+		 * データオブジェクトを再設定します。
+		 *
+		 * @param url 新しく設定するデータのurl
+		 */
+		refreshData: function(url) {
+			this._templateEditorLogic.loadData(url).done(this.own(function(data) {
+				this.setDataText(JSON.stringify(data[0]));
+			}));
 		},
 
 

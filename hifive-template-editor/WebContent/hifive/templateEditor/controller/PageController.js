@@ -75,7 +75,7 @@
 			_templateEditorController: '#ejsEditorRoot'
 		},
 
-		_templateEditorController: hifive.templateEditor.controller.TemplateEditorController,
+		_templateEditorController: hifive.templateEditor.controller.TemplateEditController,
 
 
 		/**
@@ -139,13 +139,30 @@
 		/**
 		 * テンプレートとデータオブジェクトをキャッシュします
 		 */
-		init: function(template, json) {
+		init: function(data_url, template_url) {
 
-			template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
+			var logic = this._templateEditorController._templateEditorLogic;
 
-			this._templateEditorController.setDataText(JSON.stringify(json));
+			var dataDef = logic.loadData(data_url);// データオブジェクトを取得
+			var templateDef = logic.loadTemplate(template_url);// テンプレートを取得
 
-			this._templateEditorController.setTemplateText(template);
+			var promises = [dataDef.promise(), templateDef.promise()];
+
+			var indicator = this.indicator({
+				promises: promises,
+				target: document.body,
+				message: 'データをロードしています'
+			}).show();
+
+			h5.async.when(dataDef, templateDef).done(this.own(function(data, template) {
+
+				template = template[0].replace(/<script.*>/, '').replace(/<\/script>/, '');
+
+				this._templateEditorController.setDataText(JSON.stringify(data[0]));
+
+				this._templateEditorController.setTemplateText(template);
+
+			}));
 		},
 
 

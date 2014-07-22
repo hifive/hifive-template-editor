@@ -14,33 +14,13 @@
  */
 
 (function($) {
-	var JSON_DATA_URL = 'sample/sample.json';
-	var TEMPLATE_DATA_URL = 'sample/sample.ejs';
 
-	var editorLogic = {
-		__name: 'hifive.templateEditor.sample.editorSampleLogic',
+	var DATA_URL = 'sample/sample.json';
+	var TEMPLATE_URL = 'sample/sample.ejs';
 
-		loadJsonData: function() {
-			return h5.ajax({
-				url: JSON_DATA_URL
-			});
-		},
+	var sampleEditController = {
 
-		loadTemplateData: function() {
-			return h5.ajax({
-				url: TEMPLATE_DATA_URL
-			});
-		}
-
-	};
-	h5.core.expose(editorLogic);
-})(jQuery);
-
-(function($) {
-
-	var editorSampleController = {
-
-		__name: 'hifive.templateEditor.sample.editorSampleController',
+		__name: 'hifive.templateEditor.controller.SampleEditController',
 
 		_pageController: hifive.templateEditor.controller.PageController,
 
@@ -52,35 +32,20 @@
 			}
 		},
 
-		_editorLogic: hifive.templateEditor.sample.editorSampleLogic,
+		_templateEditLogic: hifive.templateEditor.logic.TemplateEditLogic,
 
 		__ready: function() {
-
-			this._editorLogic.loadJsonData().done(this.own(function(json) {
-				this._json = json;
-
-				this._editorLogic.loadTemplateData().done(this.own(function(template) {
-
-					this._pageController.init(template, json);
-				}));
-
-			})).fail(
-					function(XMLHttpRequest, textStatus, errorThrown) {
-						alert("XMLHttpRequest : " + XMLHttpRequest.status + " textStatus : "
-								+ textStatus + " errorThrown : " + errorThrown.message);
-					});
-
+			this._pageController.init(DATA_URL, TEMPLATE_URL);
 		}
-
 
 	};
 
-	h5.core.expose(editorSampleController);
+	h5.core.expose(sampleEditController);
 
 })(jQuery);
 
 
 // ---- Init ---- //
 $(function() {
-	h5.core.controller('body', hifive.templateEditor.sample.editorSampleController);
+	h5.core.controller('body', hifive.templateEditor.controller.SampleEditController);
 });
