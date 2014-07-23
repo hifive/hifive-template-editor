@@ -40,9 +40,6 @@
 	// スコープ内静的変数
 	// =============================
 
-	// TODO このスコープで共有される変数（クラス変数）を記述します。
-	// 例：var globalCounter = 0;
-
 	// =============================
 	// スコープ内静的関数
 	// =============================
@@ -69,7 +66,15 @@
 
 		__init: function() {
 			$(this.rootElement).attr('contentEditable', true);
+
+			this._strUndo = [];
+			this._strRedo = [];
 		},
+
+		_strUndo: null,
+
+		_strRedo: null,
+
 
 		setText: function(text) {
 			var converted = text.replace(/\x09/g, '    ').replace(/\x0D/g, '');
@@ -118,6 +123,10 @@
 			if (needsPreventDefault) {
 				context.event.preventDefault();
 			}
+
+			// 入力される度、内容を保存
+			//TODO: 上限が必要?
+			this._strUndo.push(this.getText());
 
 		},
 

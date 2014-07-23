@@ -149,11 +149,19 @@
 				<!-- 【テンプレート】 -->
 				<div class="tab-pane active" id="template">
 					<div class="inputArea row">
-						<h3 class="col-md-3 col-xs-3">テンプレート</h3>
 
-						<div class="form-group col-md-4 col-xs-6" style="color: black;">
-							<input type="text" class="input-selector" placeholder="selector">
-							<button type="button" class="selector-button">セレクタ</button>
+						<h3 class="col-sm-3 hidden-xs">テンプレート</h3>
+
+						<!-- 適用先を指定するセレクタ -->
+						<div class="form-group col-sm-5 col-xs-5" style="color: black;">
+							<input type="text" class="input-selector col-xs-8" placeholder="selector">
+							<button type="button" class="selector-button col-xs-4">セレクタ</button>
+						</div>
+
+						<!-- UNDO,REDO -->
+						<div class="col-sm-4 col-xs-5" style="color: black;">
+							<button class="undo col-xs-6">もどす</button>
+							<button class="redo col-xs-6">進める</button>
 						</div>
 
 						<!-- <div class="dividedBox horizontal row"> -->
@@ -171,7 +179,7 @@
 
 				<!-- 【データオブジェクト】 -->
 				<div class="tab-pane row" id="data" style="margin: 0px;">
-					<h3 class="col-sm-4 col-xs-7">データオブジェクト</h3>
+					<h3 class="col-sm-4 hidden-xs">データオブジェクト</h3>
 					<div class="col-sm-4 col-sm-offset-4 col-xs-5" style="color: black; padding-top: 10px;">
 						<input type="text" class="input-data-url col-xs-7" placeholder="URL or Path">
 						<button class="data-button col-xs-5">変更</button>

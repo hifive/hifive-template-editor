@@ -309,6 +309,37 @@
 			this._target.contentDocument.location.reload(true);
 		},
 
+
+		'.undo click': function() {
+			var srcCtrl = this._sourceEditorController;
+
+			if (srcCtrl._strUndo.length != 0) {
+				var temp = srcCtrl._strUndo.pop();
+
+				srcCtrl._strRedo.push(srcCtrl.getText());
+
+				this.setTemplateText(temp);
+
+				this._applyTemplate();
+			}
+		},
+
+
+		'.redo click': function() {
+			var srcCtrl = this._sourceEditorController;
+
+			if (srcCtrl._strRedo.length != 0) {
+				var temp = srcCtrl._strRedo.pop();
+
+				srcCtrl._strUndo.push(srcCtrl.getText());
+
+				this.setTemplateText(temp);
+
+				this._applyTemplate();
+			}
+		},
+
+
 		/**
 		 * dividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
 		 *
@@ -318,6 +349,7 @@
 		'.divider h5trackstart': function(context, $el) {
 			this._addIFrameCover();
 		},
+
 
 		/**
 		 * dividerを操作し終えたときに、iframeの上のdivを取り除く
@@ -329,6 +361,7 @@
 			this._removeIFrameCover();
 		},
 
+
 		/**
 		 * iframeを覆う要素を追加
 		 */
@@ -336,12 +369,14 @@
 			this.$find('.iframeWrapper').append('<div class="iframeCover"></div>');
 		},
 
+
 		/**
 		 * iframeを覆う要素を削除
 		 */
 		_removeIFrameCover: function() {
 			this.$find('.iframeCover').remove();
 		},
+
 
 		/**
 		 * 画面にインジケータを表示します
