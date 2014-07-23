@@ -340,6 +340,13 @@
 		},
 
 
+		'.format-button click': function() {
+			var data = this._getData();
+
+			this.setDataText(JSON.stringify(data, null, '	'));
+		},
+
+
 		/**
 		 * dividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
 		 *

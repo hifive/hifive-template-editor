@@ -146,13 +146,14 @@
 			<!-- タブコンテント -->
 			<div class="tab-content">
 
+
 				<!-- 【テンプレート】 -->
 				<div class="tab-pane active" id="template">
 					<div class="inputArea row">
 
 						<h3 class="col-sm-3 hidden-xs">テンプレート</h3>
 
-						<!-- 適用先を指定するセレクタ -->
+						<!-- セレクタ入力ボックス(テンプレート適用先の指定) -->
 						<div class="form-group col-sm-5 col-xs-5" style="color: black;">
 							<input type="text" class="input-selector col-xs-8" placeholder="selector">
 							<button type="button" class="selector-button col-xs-4">セレクタ</button>
@@ -167,6 +168,7 @@
 						<!-- <div class="dividedBox horizontal row"> -->
 						<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 
+						<!-- テンプレート文字列表示エリア -->
 						<div class="sourceText pageWrapper col-xs-12">
 							<!-- contentEditable="true" -->
 						</div>
@@ -179,11 +181,19 @@
 
 				<!-- 【データオブジェクト】 -->
 				<div class="tab-pane row" id="data" style="margin: 0px;">
+
 					<h3 class="col-sm-4 hidden-xs">データオブジェクト</h3>
+
+					<!-- フォーマットボタン -->
+					<button class="format-button">フォーマット</button>
+
+					<!-- URL or Path入力ボックス(データオブジェクト取得用) -->
 					<div class="col-sm-4 col-sm-offset-4 col-xs-5" style="color: black; padding-top: 10px;">
 						<input type="text" class="input-data-url col-xs-7" placeholder="URL or Path">
 						<button class="data-button col-xs-5">変更</button>
 					</div>
+
+					<!-- データオブジェクト表示エリア -->
 					<textarea class="col-xs-12 dataText"></textarea>
 				</div>
 
@@ -253,7 +263,6 @@
 
 				<button class="btn btn-primary applyTemplateBtn col-xs-4">再適用</button>
 			</div>
-
 
 
 			<div class="iframeWrapper">

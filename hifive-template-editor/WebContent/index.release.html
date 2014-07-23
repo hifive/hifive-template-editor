@@ -144,10 +144,25 @@
 				<!-- 【テンプレート】 -->
 				<div class="tab-pane active" id="template">
 					<div class="inputArea">
+
 						<h3>テンプレート</h3>
+
+						<!-- セレクタ入力ボックス(テンプレート適用先の指定) -->
+						<div class="form-group col-sm-5 col-xs-5" style="color: black;">
+							<input type="text" class="input-selector col-xs-8" placeholder="selector">
+							<button type="button" class="selector-button col-xs-4">セレクタ</button>
+						</div>
+
+						<!-- UNDO,REDO -->
+						<div class="col-sm-4 col-xs-5" style="color: black;">
+							<button class="undo col-xs-6">もどす</button>
+							<button class="redo col-xs-6">進める</button>
+						</div>
+
 						<!-- <div class="dividedBox horizontal row"> -->
 						<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 
+						<!-- テンプレート文字列表示エリア -->
 						<div class="sourceText pageWrapper col-xs-12">
 							<!-- contentEditable="true" -->
 						</div>
@@ -159,11 +174,22 @@
 
 				<!-- 【データオブジェクト】 -->
 				<div class="tab-pane" id="data" style="margin: 0px;">
-					<h3>データオブジェクト</h3>
-					<div class="row" style="height: 100%;">
-						<textarea class="col-xs-12 dataText"></textarea>
+
+					<h3 class="col-sm-4 hidden-xs">データオブジェクト</h3>
+
+					<!-- フォーマットボタン -->
+					<button class="format-button">フォーマット</button>
+
+
+					<!-- URL or Path入力ボックス(データオブジェクト取得用) -->
+					<div class="col-sm-4 col-sm-offset-4 col-xs-5" style="color: black; padding-top: 10px;">
+						<input type="text" class="input-data-url col-xs-7" placeholder="URL or Path">
+						<button class="data-button col-xs-5">変更</button>
 					</div>
+
+					<textarea class="col-xs-12 dataText"></textarea>
 				</div>
+
 
 				<!-- 【カスタムCSS】 -->
 				<!--
@@ -182,29 +208,36 @@
 					</div>
 				-->
 
+
 				<!-- 【設定】 -->
-				<div class="tab-pane" id="setting">
+				<div class="tab-pane container" id="setting">
+
 					<h3>ライブラリ</h3>
-					<div class="control-group">
-						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
-							Bootstrap3.2
-						</label>
-					</div>
 
-					<div class="control-group">
-						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery Mobile
-							1.3.0
-						</label>
-					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="control-group">
+								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
+									Bootstrap3.2
+								</label>
+							</div>
 
-					<div class="control-group">
-						<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery Mobile
-							1.4.2
-						</label>
-					</div>
+							<div class="control-group">
+								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery
+									Mobile 1.3.0
+								</label>
+							</div>
 
-					<div>
-						<input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用">
+							<div class="control-group">
+								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery
+									Mobile 1.4.2
+								</label>
+							</div>
+
+							<div>
+								<input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用">
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -213,10 +246,22 @@
 
 		<!-- プレビュー -->
 		<div class="previewArea row">
-			<h3 class="col-md-2 col-xs-8">プレビュー</h3>
-			<button class="btn btn-primary applyTemplateBtn col-md-3 col-xs-6">再適用</button>
+			<div class="col-xs-12">
+				<h3 class="col-xs-3">プレビュー</h3>
+
+				<div class="col-xs-5">
+					<div class="form-group" style="color: black; padding-top: 10px;">
+						<input type="text" class="input-url" placeholder="URL or Path">
+						<button type="button" class="url-button">ページ</button>
+					</div>
+				</div>
+
+				<button class="btn btn-primary applyTemplateBtn col-xs-4">再適用</button>
+			</div>
+
+
 			<div class="iframeWrapper">
-				<iframe class="frame" src="hifive/templateEditor/preview.html"></iframe>
+				<iframe class="frame" src="sample/sample-preview.html"></iframe>
 			</div>
 		</div>
 
