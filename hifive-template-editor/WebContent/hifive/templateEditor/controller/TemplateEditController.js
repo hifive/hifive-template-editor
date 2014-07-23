@@ -279,6 +279,23 @@
 
 
 		/**
+		 * 指定されたurlでデータオブジェクトを取得します
+		 */
+		'.data-button click': function() {
+			var url = this.$find('.input-data-url').val();
+
+			if (url === '') {
+				// TODO: エラーメッセージ
+				return;
+			}
+
+			this._templateEditorLogic.loadData(url).done(this.own(function(data) {
+				this.setDataText(JSON.stringify(data));
+			}));
+		},
+
+
+		/**
 		 * 設定タブの適用ボタンをクリックしたときのイベントハンドラ。
 		 * <p>
 		 * iframeをリロードします。

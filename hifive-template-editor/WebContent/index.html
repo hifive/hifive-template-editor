@@ -24,7 +24,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>hifiveテンプレートエディタ</title>
+<title>hifive テンプレートエディタ</title>
 
 <link rel="stylesheet" href="res/lib/jstree/jstree.custom.css">
 
@@ -148,8 +148,14 @@
 
 				<!-- 【テンプレート】 -->
 				<div class="tab-pane active" id="template">
-					<div class="inputArea">
-						<h3>テンプレート</h3>
+					<div class="inputArea row">
+						<h3 class="col-md-3 col-xs-3">テンプレート</h3>
+
+						<div class="form-group col-md-4 col-xs-6" style="color: black;">
+							<input type="text" class="input-selector" placeholder="selector">
+							<button type="button" class="selector-button">セレクタ</button>
+						</div>
+
 						<!-- <div class="dividedBox horizontal row"> -->
 						<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 
@@ -164,11 +170,13 @@
 
 
 				<!-- 【データオブジェクト】 -->
-				<div class="tab-pane" id="data" style="margin: 0px;">
-					<h3>データオブジェクト</h3>
-					<div class="row" style="height: 100%;">
-						<textarea class="col-xs-12 dataText"></textarea>
+				<div class="tab-pane row" id="data" style="margin: 0px;">
+					<h3 class="col-sm-4 col-xs-7">データオブジェクト</h3>
+					<div class="col-sm-4 col-sm-offset-4 col-xs-5" style="color: black; padding-top: 10px;">
+						<input type="text" class="input-data-url col-xs-7" placeholder="URL or Path">
+						<button class="data-button col-xs-5">変更</button>
 					</div>
+					<textarea class="col-xs-12 dataText"></textarea>
 				</div>
 
 
@@ -226,24 +234,19 @@
 		<!-- プレビュー -->
 		<div class="previewArea row">
 			<div class="col-xs-12">
-				<h3 class="col-xs-6">プレビュー</h3>
+				<h3 class="col-xs-3">プレビュー</h3>
 
-				<div class="col-xs-2"></div>
+				<div class="col-xs-5">
+					<div class="form-group" style="color: black; padding-top: 10px;">
+						<input type="text" class="input-url" placeholder="URL or Path">
+						<button type="button" class="url-button">ページ</button>
+					</div>
+				</div>
 
 				<button class="btn btn-primary applyTemplateBtn col-xs-4">再適用</button>
 			</div>
 
-			<div class="col-xs-12">
-				<div class="form-group col-md-4 col-xs-6" style="color: black; padding-top: 10px;">
-					<input type="text" class="input-url" placeholder="URL or Path">
-					<button type="button" class="url-button">ページ</button>
-				</div>
 
-				<div class="form-group col-md-4 col-xs-6" style="color: black; padding-top: 10px;">
-					<input type="text" class="input-selector" placeholder="selector">
-					<button type="button" class="selector-button">セレクタ</button>
-				</div>
-			</div>
 
 			<div class="iframeWrapper">
 				<iframe class="frame" src="sample/sample-preview.html"></iframe>

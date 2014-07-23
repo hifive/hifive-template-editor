@@ -24,7 +24,11 @@ html,body {
 
 body {
 	/* ヘッダ分だけpadding-bottomを取る。ヘッダの高さはbootstrapの.nav-tabsの高さ */
-	padding-bottom: 42px;
+	padding-bottom: 35px;
+}
+
+.nav-tabs,.nav-tabs a{
+	height:35px;
 }
 
 h3 {
