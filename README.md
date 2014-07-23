@@ -1,7 +1,7 @@
 hifive-view-template-editor
 ===========================
 
-This is the EJS template editor tool for the hifive framework.
+This is the template editor tool for the hifive framework.
 
 - [hifive / hifive-template-editor](https://github.com/hifive/hifive-template-editor/) is provided for release purposes.
 
