@@ -19,13 +19,8 @@
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpathref="base.path" />
 
 	<target name="clean">
-		<!-- ビルドフォルダが無かったら作る -->
+		<delete dir="${build.dir}" />
 		<mkdir dir="${build.dir}" />
-		<delete>
-			<fileset dir="${build.dir}/">
-				<include name="**" />
-			</fileset>
-		</delete>
 	</target>
 
 	<target name="getVersion" unless="versionNumber">
@@ -93,19 +88,12 @@
 		<!-- 必要なファイルをbuildにコピー -->
 		<copy todir="${build.dir}">
 			<fileset dir="${webcontent.dir}">
-				<!-- buildしたファイル,webinf,index.html(index.release.html)は除く -->
-				<exclude name="hifive" />
-				<exclude name="hifive/**/*" />
-				<exclude name="${webinf.dir}" />
-				<exclude name="${webinf.dir}/**/*" />
-				<exclude name="index.*" />
-			</fileset>
-		</copy>
-		<copy todir="${build.dir}">
-			<!-- previewで使用するものでhifive/以下のものをコピー -->
-			<fileset dir="${webcontent.dir}">
 				<include name="hifive/**/*.html" />
 				<include name="hifive/**/ResultEditorController.js" />
+				<include name="images/**/*"/>
+				<include name="res/**/*" />
+				<include name="sample/**/*" />
+				<include name="css/**/*" />
 			</fileset>
 		</copy>
 
