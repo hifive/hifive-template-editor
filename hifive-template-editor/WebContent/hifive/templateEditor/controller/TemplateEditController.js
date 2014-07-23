@@ -183,7 +183,7 @@
 		 */
 		refreshData: function(url) {
 			this._templateEditorLogic.loadData(url).done(this.own(function(data) {
-				this.setDataText(JSON.stringify(data[0]));
+				this.setDataText(JSON.stringify(data, null, '	'));
 			}));
 		},
 
@@ -290,7 +290,7 @@
 			}
 
 			this._templateEditorLogic.loadData(url).done(this.own(function(data) {
-				this.setDataText(JSON.stringify(data));
+				this.setDataText(JSON.stringify(data, null, '	'));
 			}));
 		},
 
