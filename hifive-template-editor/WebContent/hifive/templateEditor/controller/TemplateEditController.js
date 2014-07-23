@@ -343,6 +343,8 @@
 		'.format-button click': function() {
 			var data = this._getData();
 
+			data = JSON.parse(data);
+
 			this.setDataText(JSON.stringify(data, null, '	'));
 		},
 
