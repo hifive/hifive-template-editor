@@ -158,7 +158,7 @@
 
 				template = template[0].replace(/<script.*>/, '').replace(/<\/script>/, '');
 
-				this._templateEditorController.setDataText(JSON.stringify(data[0], null, '	'));
+				this._templateEditorController.setDataText(JSON.stringify(data[0]));
 
 				this._templateEditorController.setTemplateText(template);
 
