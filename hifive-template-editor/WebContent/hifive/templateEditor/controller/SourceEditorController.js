@@ -67,13 +67,13 @@
 		__init: function() {
 			$(this.rootElement).attr('contentEditable', true);
 
-			this._strUndo = [];
-			this._strRedo = [];
+			this._undoBuffer = [];
+			this._redoBuffer = [];
 		},
 
-		_strUndo: null,
+		_undoBuffer: null,
 
-		_strRedo: null,
+		_redoBuffer: null,
 
 
 		setText: function(text) {
@@ -105,6 +105,16 @@
 			return text;
 		},
 
+		getUndoBuffer: function() {
+			return this._undoBuffer;
+		},
+
+
+		getRedoBuffer: function() {
+			return this._redoBuffer;
+		},
+
+
 		'{rootElement} keydown': function(context) {
 			var ev = context.event.originalEvent;
 			var keyCode = ev.keyCode;
@@ -125,8 +135,8 @@
 			}
 
 			// 入力される度、内容を保存
-			//TODO: 上限が必要?
-			this._strUndo.push(this.getText());
+			// TODO: 簡易版なので後の作りこむ
+			this._undoBuffer.push(this.getText());
 
 		},
 

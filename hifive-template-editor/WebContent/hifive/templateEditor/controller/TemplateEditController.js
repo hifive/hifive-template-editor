@@ -311,12 +311,13 @@
 
 
 		'.undo click': function() {
-			var srcCtrl = this._sourceEditorController;
+			var undoBuffer = this._getUndoBuffer();
+			var redoBuffer = this._getRedoBuffer();
 
-			if (srcCtrl._strUndo.length != 0) {
-				var temp = srcCtrl._strUndo.pop();
+			if (undoBuffer.length != 0) {
+				var temp = undoBuffer.pop();
 
-				srcCtrl._strRedo.push(srcCtrl.getText());
+				redoBuffer.push(this._sourceEditorController.getText());
 
 				this.setTemplateText(temp);
 
@@ -326,12 +327,13 @@
 
 
 		'.redo click': function() {
-			var srcCtrl = this._sourceEditorController;
+			var undoBuffer = this._getUndoBuffer();
+			var redoBuffer = this._getRedoBuffer();
 
-			if (srcCtrl._strRedo.length != 0) {
-				var temp = srcCtrl._strRedo.pop();
+			if (redoBuffer.length != 0) {
+				var temp = redoBuffer.pop();
 
-				srcCtrl._strUndo.push(srcCtrl.getText());
+				undoBuffer.push(this._sourceEditorController.getText());
 
 				this.setTemplateText(temp);
 
@@ -533,7 +535,16 @@
 		_getData: function() {
 			var data = this.$find('.dataText').val();
 			return data;
+		},
+
+		_getUndoBuffer: function() {
+			return this._sourceEditorController.getUndoBuffer();
+		},
+
+		_getRedoBuffer: function() {
+			return this._sourceEditorController.getRedoBuffer();
 		}
+
 
 	};
 
