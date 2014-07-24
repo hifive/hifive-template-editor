@@ -31,7 +31,7 @@
 	// スコープ内定数
 	//
 	// =========================================================================
-
+	var DEFAULT_PAGE = 'sample/sample-preview.html';// デフォルトページ
 
 
 	// =========================================================================
@@ -259,6 +259,14 @@
 		'.url-button click': function() {
 			var url = this.$find('.input-url').val();
 			this._target.contentDocument.location.replace(url);
+
+			if (url !== DEFAULT_PAGE) {
+				this._disableLibrary();
+
+			} else {
+				this._enableLibrary();
+
+			}
 		},
 
 		/**
@@ -342,12 +350,25 @@
 		},
 
 
+		/**
+		 * データオブジェクトをフォーマットします
+		 */
 		'.format-button click': function() {
 			var data = this._getData();
 
 			data = JSON.parse(data);
 
 			this.setDataText(JSON.stringify(data, null, '	'));
+		},
+
+
+		/**
+		 * プレビューにデフォルトページを表示します。
+		 */
+		'.blank-button click': function() {
+			this._target.contentDocument.location.replace(DEFAULT_PAGE);
+
+			this._enableLibrary();
 		},
 
 
@@ -543,6 +564,22 @@
 
 		_getRedoBuffer: function() {
 			return this._sourceEditorController.getRedoBuffer();
+		},
+
+		_disableLibrary: function() {
+			this.$find('.libraries input').each(function() {
+				$(this).prop('disabled', 'disabled');
+			});
+
+			this.$find('.libraryMessage').show();
+		},
+
+		_enableLibrary: function() {
+			this.$find('.libraries input').each(function() {
+				$(this).prop('disabled', '');
+			});
+
+			this.$find('.libraryMessage').hide();
 		}
 
 

@@ -186,6 +186,7 @@
 						<button class="data-button col-xs-5">変更</button>
 					</div>
 
+					<!-- データオブジェクト表示エリア -->
 					<textarea class="col-xs-12 dataText"></textarea>
 				</div>
 
@@ -213,7 +214,7 @@
 
 					<h3>ライブラリ</h3>
 					<div class="row">
-						<div class="col-xs-4">
+						<div class="libraries col-xs-4">
 							<div class="control-group">
 								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
 									Bootstrap3.2
@@ -235,6 +236,8 @@
 							<div>
 								<input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用">
 							</div>
+
+							<span class="libraryMessage">外部ページを読み込んでいるため、ライブラリは適用されません。</span>
 						</div>
 
 						<div class="col-xs-4">
@@ -265,7 +268,7 @@
 
 
 			<div class="iframeWrapper">
-				<iframe class="frame" src="sample/sample-preview.html"></iframe>
+				<iframe src="sample/sample-preview.html"></iframe>
 			</div>
 		</div>
 
