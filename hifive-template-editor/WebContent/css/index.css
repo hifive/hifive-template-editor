@@ -52,14 +52,14 @@ h3 {
 	height: 50%;
 	width: 100%;
 	/** h3及び再適用ボタンが占める高さ分底上げ */
-	padding-bottom: 44px;
+	padding-bottom: 59px;
 }
 
 .tab-content {
 	height: 100%;
 	width: 100%;
 	/* タブコンテントでh3で表示しているタイトルの高さ分底上げ */
-	padding-bottom: 40px;
+	padding-bottom: 50px;
 }
 
 .tab-pane {
@@ -152,4 +152,8 @@ iframe {
 
 .libraryMessage {
 	display: none;
+}
+
+.editAreaBar {
+	padding: 7px 0px;
 }
