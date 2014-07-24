@@ -175,13 +175,30 @@
 				<!-- 【データオブジェクト】 -->
 				<div class="tab-pane" id="data" style="margin: 0px;">
 
-					<h3 class="col-sm-4 hidden-xs">データオブジェクト</h3>
+					<h3 class="col-sm-3 hidden-xs">データオブジェクト</h3>
 
 					<!-- フォーマットボタン -->
-					<button class="format-button col-sm-4 col-xs-4" style="color: black;">フォーマット</button>
+					<button class="format-button col-sm-2 col-xs-3" style="color: black;">フォーマット</button>
+
+					<!-- get,post指定用ラジオボタン -->
+					<div class="col-sm-4 col-xs-4">
+						<div class="form-group">
+
+							<div class="radio col-xs-6">
+								<label> <input type="radio" name="sendType" id="tpyeGET" value="GET" checked>GET
+								</label>
+							</div>
+
+							<div class="radio col-xs-6">
+								<label> <input type="radio" name="sendType" id="typePOST" value="POST">POST
+								</label>
+							</div>
+
+						</div>
+					</div>
 
 					<!-- URL or Path入力ボックス(データオブジェクト取得用) -->
-					<div class="col-sm-4  col-xs-4" style="color: black; padding-top: 10px;">
+					<div class="col-sm-3  col-xs-3" style="color: black; padding-top: 10px;">
 						<input type="text" class="input-data-url col-xs-7" placeholder="URL or Path">
 						<button class="data-button col-xs-5">変更</button>
 					</div>

@@ -177,18 +177,6 @@
 
 
 		/**
-		 * データオブジェクトを再設定します。
-		 *
-		 * @param url 新しく設定するデータのurl
-		 */
-		refreshData: function(url) {
-			this._templateEditorLogic.loadData(url).done(this.own(function(data) {
-				this.setDataText(JSON.stringify(data, null, '	'));
-			}));
-		},
-
-
-		/**
 		 * メッセージのtypeプロパティからメソッドを呼び出します。
 		 */
 		'{window} message': function(context) {
@@ -297,8 +285,16 @@
 				return;
 			}
 
-			this._templateEditorLogic.loadData(url).done(this.own(function(data) {
+			var type = null;
+			$('[name="sendType"]').each(function() {
+				if ($(this).prop('checked')) {
+					type = $(this).context.value;
+				}
+			});
+
+			this._templateEditorLogic.loadData(url, type).done(this.own(function(data) {
 				this.setDataText(JSON.stringify(data, null, '	'));
+				this._applyTemplate();
 			}));
 		},
 

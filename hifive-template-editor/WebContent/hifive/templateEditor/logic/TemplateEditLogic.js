@@ -25,10 +25,18 @@
 		/**
 		 * 指定されたurlからデータオブジェクトを取得します（戻り値はJSONと仮定）
 		 */
-		loadData: function(url) {
-			return h5.ajax({
-				url: url
-			});
+		loadData: function(url, type) {
+			var data = {
+				url: url,
+				dataType: 'json',
+				type: 'GET'
+			};
+
+			if (type) {
+				data.type = type;
+			}
+
+			return h5.ajax(data);
 		},
 
 		/**
@@ -39,10 +47,6 @@
 				url: url
 			});
 		}
-
-
-
-
 
 	};
 
