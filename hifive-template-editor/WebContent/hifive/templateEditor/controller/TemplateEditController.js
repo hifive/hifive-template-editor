@@ -277,7 +277,8 @@
 		/**
 		 * 指定されたurlでデータオブジェクトを取得します
 		 */
-		'.data-button click': function() {
+		'.data-button click': function(context) {
+
 			var url = this.$find('.input-data-url').val();
 
 			if (url === '') {
