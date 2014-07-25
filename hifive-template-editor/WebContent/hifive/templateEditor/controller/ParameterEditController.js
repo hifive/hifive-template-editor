@@ -84,13 +84,13 @@
 				}
 				existParam = true;
 				// 同じnameの値については配列、そうでなければvalueをそのまま格納する
-				if (!parameterObj.name) {
-					parameterObj.name = val
+				if (!parameterObj[name]) {
+					parameterObj[name] = val;
 				} else {
-					if (!$.isArray(parameterObj.name)) {
-						parameterObj.name = [parameterObj.name];
+					if (!$.isArray(parameterObj[name])) {
+						parameterObj[name] = [parameterObj[name]];
 					}
-					parameterObj.name.push(val);
+					parameterObj[name].push(val);
 				}
 			});
 			// パラメータが何も指定されていなければnullを返す
