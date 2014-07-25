@@ -96,38 +96,38 @@
 
 
 				// dividerの位置を修正する
-				var dividerPos = this.$find('.inputArea .divider').offset();
-				if (dividerPos) {
-					var dividerTop = dividerPos.top;
-
-					var inputAreaSize = this.$find('.inputArea .dividedBox').outerWidth();// テンプレートタブのエディタ部分の幅
-					var dividerLeft = inputAreaSize * 0.75;// dividerのleftの位置
-
-					this.$find('.inputArea .divider').offset({
-						top: dividerTop,
-						left: dividerLeft
-					});
-
-					// ツリー部分の位置を修正する
-					var palettePos = this.$find('.inputArea .componentPalette').offset();
-					var dividerWidth = this.$find('.inputArea .divider').outerWidth();
-
-					var paletteTop = palettePos.top;
-					var paletteLeft = dividerLeft + dividerWidth;
-
-					this.$find('.componentPalette').offset({
-						top: paletteTop,
-						left: paletteLeft
-					});
-
-
-					// テンプレート編集部分の位置を修正する
-					this.$find('.sourceText').outerWidth(dividerLeft);
-
-
-					this._refreshDividedBox();
-
-				}
+				// var dividerPos = this.$find('.divider').offset();
+				// if (dividerPos) {
+				// var dividerTop = dividerPos.top;
+				//
+				// var inputAreaSize = this.$find('.dividedBox').outerWidth();// テンプレートタブのエディタ部分の幅
+				// var dividerLeft = inputAreaSize * 0.75;// dividerのleftの位置
+				//
+				// this.$find('.divider').offset({
+				// top: dividerTop,
+				// left: dividerLeft
+				// });
+				//
+				// // ツリー部分の位置を修正する
+				// var palettePos = this.$find('.componentPalette').offset();
+				// var dividerWidth = this.$find('.divider').outerWidth();
+				//
+				// var paletteTop = palettePos.top;
+				// var paletteLeft = dividerLeft + dividerWidth;
+				//
+				// this.$find('.componentPalette').offset({
+				// top: paletteTop,
+				// left: paletteLeft
+				// });
+				//
+				//
+				// // テンプレート編集部分の位置を修正する
+				// this.$find('.sourceText').outerWidth(dividerLeft);
+				//
+				//
+				// this._refreshDividedBox();
+				//
+				// }
 				return;
 			}
 			// テンプレートタブ以外が選択された場合、リスナーの実行を禁止する

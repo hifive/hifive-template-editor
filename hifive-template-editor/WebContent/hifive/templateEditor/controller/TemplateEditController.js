@@ -262,7 +262,7 @@
 		/**
 		 * 入力されたページ(url)をiframeで読み込みます
 		 */
-		'.url-button click': function() {
+		'.load-button click': function() {
 			var url = this.$find('.input-url').val();
 			this._target.contentDocument.location.replace(url);
 
@@ -342,7 +342,7 @@
 		},
 
 
-		'.undo click': function() {
+		'.undo-button click': function() {
 			var undoBuffer = this._getUndoBuffer();
 			var redoBuffer = this._getRedoBuffer();
 
@@ -358,7 +358,7 @@
 		},
 
 
-		'.redo click': function() {
+		'.redo-button click': function() {
 			var undoBuffer = this._getUndoBuffer();
 			var redoBuffer = this._getRedoBuffer();
 

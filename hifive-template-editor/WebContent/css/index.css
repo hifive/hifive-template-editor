@@ -31,6 +31,10 @@ input[type="text"] {
 	color: #000;
 }
 
+h3 {
+	margin-top: 10px;
+}
+
 .nav-tabs,.nav-tabs a {
 	height: 35px;
 }
@@ -55,41 +59,40 @@ input[type="text"] {
 	height: 50%;
 	width: 100%;
 	/** h3及び再適用ボタンが占める高さ分底上げ */
-	padding-bottom: 40px;
+	padding-bottom: 45px;
+}
+
+.previewAreaBar {
+	height: 45px;
 }
 
 .tab-content {
 	height: 100%;
 	width: 100%;
 	/* タブコンテントでh3で表示しているタイトルの高さ分底上げ */
-	padding-bottom: 50px;
+	padding-bottom: 48px;
 }
 
 .tab-pane {
 	height: 100%;
 	width: 100%;
+	margin: 0px;
 }
 
 .dividedBox.horizontal {
 	height: 100%;
 }
 
-.inputArea {
-	height: 100%;
-	width: 100%;
-	margin: 0px;
-}
-
 .editButton {
 	position: relative;
 }
 
-.undo {
+.undo-button {
 	position: absolute;
 	top: 50%;
 }
 
-.redo {
+.redo-button {
 	position: absolute;
 	top: 50%;
 	left: 52px;
