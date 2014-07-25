@@ -48,6 +48,20 @@ jsTree
 URL:http://jstree.com/
 License:MIT licenses.
   http://www.opensource.org/licenses/mit-license.php
+Local Modifications: None.
+
+-----
+Files:
+WebContent/images/load_32.png
+WebContent/images/reload_32.png
+WebContent/images/undo_32.png
+WebContent/images/redo_32.png
+
+Font Awesome by Dave Gandy
+URL: http://fontawesome.io
+License: SIL OFL 1.1
+  http://scripts.sil.org/OFL
+Local Modifications: Yes
 
 -----
 Code under:
