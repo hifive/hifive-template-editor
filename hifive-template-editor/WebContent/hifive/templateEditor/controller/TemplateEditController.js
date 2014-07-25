@@ -291,6 +291,7 @@
 		'.data-button click': function(context) {
 
 			var url = this.$find('.input-data-url').val();
+			var param = this._parameterEditController.getParameter();
 
 			if (url === '') {
 				// TODO: エラーメッセージ
@@ -304,7 +305,7 @@
 				}
 			});
 
-			this._templateEditorLogic.loadData(url, type).done(this.own(function(data) {
+			this._templateEditorLogic.loadData(url, type, param).done(this.own(function(data) {
 				this.setDataText(JSON.stringify(data, null, '	'));
 				this._applyTemplate();
 			}));

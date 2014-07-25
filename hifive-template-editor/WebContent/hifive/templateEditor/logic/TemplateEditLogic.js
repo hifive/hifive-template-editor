@@ -25,10 +25,11 @@
 		/**
 		 * 指定されたurlからデータオブジェクトを取得します（戻り値はJSONと仮定）
 		 */
-		loadData: function(url, type) {
+		loadData: function(url, type, param) {
 			var data = {
 				url: url,
 				dataType: 'json',
+				data: param,
 				type: 'GET'
 			};
 

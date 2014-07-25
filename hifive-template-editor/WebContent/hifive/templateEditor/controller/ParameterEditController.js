@@ -68,6 +68,35 @@
 					.$find('.parameter-input-table tbody tr:first')[0].outerHTML);
 		},
 
+		/**
+		 * 入力されている値からパラメータオブジェクトを作成する
+		 */
+		getParameter: function() {
+			var $tr = $('.parameter-input-table tbody tr');
+			var parameterObj = {};
+			var existParam = false;
+			$tr.each(function() {
+				var $this = $(this);
+				var name = $.trim($this.find('.param-name').val());
+				var val = $.trim($this.find('.param-value').val());
+				if (!name) {
+					return;
+				}
+				existParam = true;
+				// 同じnameの値については配列、そうでなければvalueをそのまま格納する
+				if (!parameterObj.name) {
+					parameterObj.name = val
+				} else {
+					if (!$.isArray(parameterObj.name)) {
+						parameterObj.name = [parameterObj.name];
+					}
+					parameterObj.name.push(val);
+				}
+			});
+			// パラメータが何も指定されていなければnullを返す
+			return existParam ? parameterObj : null;
+		},
+
 		'.close-button click': function() {
 			$(this.rootElement).css('display', 'none');
 		},
