@@ -30,12 +30,8 @@
 				url: url,
 				dataType: 'json',
 				data: param,
-				type: 'GET'
+				type: type || 'GET'
 			};
-
-			if (type) {
-				data.type = type;
-			}
 
 			return h5.ajax(data);
 		},

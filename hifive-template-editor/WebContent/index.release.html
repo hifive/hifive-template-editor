@@ -142,44 +142,38 @@
 			<!-- タブコンテント -->
 			<div class="tab-content">
 
-
 				<!-- 【テンプレート】 -->
-				<div class="tab-pane active" id="template">
-					<div class="inputArea row">
+				<div class="tab-pane active row" id="template">
 
-						<div class="editAreaBar col-xs-12">
+					<div class="editAreaBar col-xs-12">
 
-							<!-- UNDO,REDO -->
-							<div class="col-xs-3" style="color: black;">
-								<input type="image" src="images/undo_32.png" class="undo"> <input type="image" src="images/redo_32.png"
-									class="redo">
-							</div>
-
-							<!-- セレクタ入力ボックス(テンプレート適用先の指定) -->
-							<div class="col-xs-9">
-								<div class="form-group pull-right" style="color: black; margin: 0px;">
-									<label> <input type="text" class="input-selector" placeholder="selector">
-									</label>
-									<button type="button" class="selector-button btn btn-primary">セレクタ</button>
-								</div>
-
-							</div>
-
+						<!-- UNDO,REDO -->
+						<div class="col-xs-3">
+							<input type="image" src="images/undo_32.png" class="undo-button" alt="UNDO" title="UNDO"> <input
+								type="image" src="images/redo_32.png" class="redo-button" alt="REDO" title="REDO">
 						</div>
 
-						<!-- <div class="dividedBox horizontal row"> -->
-						<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-
-						<!-- テンプレート文字列表示エリア -->
-						<div class="sourceText pageWrapper col-xs-12">
-							<!-- contentEditable="true" -->
+						<!-- セレクタ入力ボックス(テンプレート適用先の指定) -->
+						<div class="col-xs-9">
+							<div class="form-group pull-right" style="margin: 0px;">
+								<label><input type="text" class="input-selector" placeholder="selector"> </label>
+								<button type="button" class="selector-button btn btn-primary">適用</button>
+							</div>
 						</div>
 
-						<!-- <div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div> -->
-						<!-- </div> -->
 					</div>
-				</div>
 
+					<!-- <div class="dividedBox horizontal row"> -->
+					<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
+
+					<!-- テンプレート文字列表示エリア -->
+					<div class="sourceText pageWrapper col-xs-12">
+						<!-- contentEditable="true" -->
+					</div>
+
+					<!-- <div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div> -->
+					<!-- </div> -->
+				</div>
 
 				<!-- 【データオブジェクト】 -->
 				<div class="tab-pane row" id="data" style="margin: 0px;">
@@ -203,8 +197,9 @@
 									<label> <input type="radio" name="sendType" value="POST">POST
 									</label>
 								</div>
-								<!-- 入力ボックス -->
+
 								<div class="form-group" style="margin: 0px;">
+									<!-- 入力ボックス -->
 									<label> <input type="text" class="input-data-url" placeholder="URL or Path">
 									</label>
 									<!-- パラメータ入力ボタン、取得ボタン -->
@@ -214,7 +209,6 @@
 							</div>
 						</div>
 					</div>
-
 					<!-- パラメータ入力画面 -->
 					<div class="parameter-input">
 						<i class="close-button">×</i>
@@ -237,6 +231,7 @@
 					<!-- データオブジェクト表示エリア -->
 					<textarea class="col-xs-12 dataText"></textarea>
 				</div>
+
 
 				<!-- 【カスタムCSS】 -->
 				<!--
@@ -281,15 +276,16 @@
 							</div>
 
 							<div>
-								<!-- <input class="btn applyLibBtn btn-default" type="button" name="ok" value="適用"> -->
-								<input type="image" src="images/reload_48.png" class="applylibBtn">
+								<input type="image" src="images/reload_48.png" class="applyLibBtn" alt="リロード" title="リロード">
 							</div>
 
 							<span class="libraryMessage">外部ページを読み込んでいるため、ライブラリは適用されません。</span>
 						</div>
 
 						<div class="col-xs-4">
-							<button class="blank-button btn btn-primary">ブランクページ</button>
+							<button class="blank-button btn btn-primary">
+								<img src="images/file.png"> ブランクページ
+							</button>
 						</div>
 					</div>
 				</div>
@@ -298,33 +294,26 @@
 
 		<!-- プレビュー -->
 		<div class="previewArea row">
-			<div class="col-xs-12">
+			<div class="previewAreaBar col-xs-12">
 
-				<div class="col-xs-3">
+				<div class="col-sm-3 hidden-xs">
 					<h3>プレビュー</h3>
 				</div>
 
-				<div class="col-xs-3">
-					<input type="image" src="images/load_32.png" class="applyTemplateBtn pull-left">
-				</div>
-
-				<div class="col-xs-6">
-					<div class="form-group pull-right" style="color: black; padding-top: 10px;">
-						<label> <input type="text" class="input-url" placeholder="URL or Path">
-						</label>
-						<button type="button" class="url-button btn btn-primary">ページ</button>
+				<div class="col-sm-9 col-xs-12 pull-left">
+					<div class="form-inline ">
+						<div class="form-group pull-right" style="margin: 0px">
+							<label> <input type="text" class="input-url" placeholder="URL or Path">
+							</label><label><input type="image" src="images/load_32.png" class="load-button" alt="ロード" title="ロード"> </label>
+						</div>
 					</div>
 				</div>
-
 			</div>
-
 
 			<div class="iframeWrapper">
 				<iframe src="sample/sample-preview.html"></iframe>
 			</div>
 		</div>
-
 	</div>
-
 </body>
 </html>
