@@ -35,12 +35,6 @@ input[type="text"] {
 	height: 35px;
 }
 
-h3 {
-	height: 40px;
-	margin: 0;
-	padding-top: 10px;
-}
-
 #ejsEditorRoot {
 	height: 100%;
 	width: 100%;
@@ -52,11 +46,16 @@ h3 {
 	width: 100%;
 }
 
+.editAreaBar {
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
 .previewArea {
 	height: 50%;
 	width: 100%;
 	/** h3及び再適用ボタンが占める高さ分底上げ */
-	padding-bottom: 59px;
+	padding-bottom: 40px;
 }
 
 .tab-content {
@@ -79,6 +78,21 @@ h3 {
 	height: 100%;
 	width: 100%;
 	margin: 0px;
+}
+
+.editButton {
+	position: relative;
+}
+
+.undo {
+	position: absolute;
+	top: 50%;
+}
+
+.redo {
+	position: absolute;
+	top: 50%;
+	left: 52px;
 }
 
 .sourceText {
@@ -156,10 +170,6 @@ iframe {
 
 .libraryMessage {
 	display: none;
-}
-
-.editAreaBar {
-	padding: 7px 0px;
 }
 
 /** パラメータ入力 **/

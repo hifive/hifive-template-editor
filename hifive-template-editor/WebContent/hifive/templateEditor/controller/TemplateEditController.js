@@ -109,6 +109,8 @@
 
 		_target: null,// postMessageの送信先
 
+		_editAreaBarHeight: null,
+
 		__ready: function() {
 
 			h5.u.obj.expose('hifive.editor', {
@@ -144,6 +146,7 @@
 
 			this._target = $('iframe')[0];// postMessageの送信先を設定
 
+			this._editAreaBarHeight = $('.active .editAreaBar').outerHeight();
 		},
 
 
@@ -221,6 +224,16 @@
 		},
 
 		'{window} resize': function(context) {
+
+			// .editAreaBarの高さが変化していたら、その高さに合わせる
+			var height = this.$find('.active .editAreaBar').outerHeight();
+
+			if (this._editAreaBarHeight !== height) {
+				this.$find('.tab-content').css('padding-bottom', height);
+				this._editAreaBarHeight = height;
+			}
+
+			// DividedBoxのrefreshを呼ぶ
 			var dividedBoxes = h5.core.controllerManager.getControllers($('body'), {
 				name: 'h5.ui.container.DividedBox',
 				deep: true
@@ -290,6 +303,8 @@
 		 */
 		'.data-button click': function(context) {
 
+			context.event.preventDefault();
+
 			var url = this.$find('.input-data-url').val();
 			var param = this._parameterEditController.getParameter();
 
@@ -299,7 +314,7 @@
 			}
 
 			var type = null;
-			$('[name="sendType"]').each(function() {
+			$('input[name="sendType"]').each(function() {
 				if ($(this).prop('checked')) {
 					type = $(this).context.value;
 				}
