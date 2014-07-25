@@ -59,11 +59,13 @@
 				<file name="js/u.js" />
 				<file name="js/_.js" />
 				<file name="js/dependencyMap.js" />
+				<file name="logic/TemplateEditLogic.js" />
 				<file name="controller/GenericParameterEditController.js" />
 				<file name="controller/PreviewController.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/CSSEditorController.js" />
 				<file name="controller/ComponentPaletteController.js" />
+				<file name="controller/ParameterEditController.js" />
 				<file name="controller/TemplateEditController.js" />
 				<file name="controller/PageController.js" />
 				<file name="parts/ui/ui.common.js" />
@@ -90,7 +92,7 @@
 			<fileset dir="${webcontent.dir}">
 				<include name="hifive/**/*.html" />
 				<include name="hifive/**/ResultEditorController.js" />
-				<include name="images/**/*"/>
+				<include name="images/**/*" />
 				<include name="res/**/*" />
 				<include name="sample/**/*" />
 				<include name="css/**/*" />
