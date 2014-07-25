@@ -78,6 +78,9 @@
 			},
 			_sourceEditorController: {
 				rootElement: '.sourceText'
+			},
+			_parameterEditController: {
+				rootElement: '.parameter-input'
 			}
 		/*
 		 * _cssEditorController: { rootElement: '#editCSSPanel' }
@@ -89,6 +92,8 @@
 		_sourceEditorController: hifive.templateEditor.controller.SourceEditorController,
 
 		/* _cssEditorController: hifive.templateEditor.controller.CSSEditorController, */
+
+		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
 
 		_templateEditorLogic: hifive.templateEditor.logic.TemplateEditLogic,
 
@@ -273,6 +278,12 @@
 			this._sendMessage(data);
 		},
 
+		/**
+		 * パラメータ入力ポップ画面を表示します
+		 */
+		'.data-parameter click': function() {
+			this.$find('.parameter-input').css('display', 'block');
+		},
 
 		/**
 		 * 指定されたurlでデータオブジェクトを取得します

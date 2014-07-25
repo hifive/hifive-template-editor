@@ -80,6 +80,7 @@
 <script src="hifive/templateEditor/controller/PreviewController.js"></script>
 <script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
 <script src="hifive/templateEditor/controller/CSSEditorController.js"></script>
+<script src="hifive/templateEditor/controller/ParameterEditController.js"></script>
 <script src="hifive/templateEditor/controller/TemplateEditController.js"></script>
 <script src="hifive/templateEditor/controller/PageController.js"></script>
 
@@ -194,32 +195,46 @@
 							<button class="format-button btn btn-primary">フォーマット</button>
 						</div>
 
-
-						<div class="col-xs-9">
-							<!-- get,post指定用ラジオボタン -->
-							<div class="col-xs-6">
-								<form class="form-inline pull-right" role="from">
-
-									<div class="radio">
-										<label> <input type="radio" name="sendType" value="GET" checked>GET
-										</label>
-									</div>
-
-									<div class="radio">
-										<label> <input type="radio" name="sendType" value="POST">POST
-										</label>
-									</div>
-								</form>
-							</div>
-							<!-- URL or Path入力ボックス(データオブジェクト取得用) -->
-							<div class="col-xs-6">
+						<!-- URL or Path入力ボックス(データオブジェクト取得用) -->
+						<div class="col-xs-9 ">
+							<div class="form-inline pull-right">
+								<!-- get,post指定用ラジオボタン -->
+								<div class="radio">
+									<label> <input type="radio" name="sendType" value="GET" checked>GET
+									</label>
+								</div>
+								<div class="radio">
+									<label> <input type="radio" name="sendType" value="POST">POST
+									</label>
+								</div>
+								<!-- 入力ボックス -->
 								<div class="form-group" style="margin: 0px;">
 									<label> <input type="text" class="input-data-url" placeholder="URL or Path">
 									</label>
-									<button class="data-button btn btn-primary">変更</button>
+									<!-- パラメータ入力ボタン、取得ボタン -->
+									<button class="data-parameter btn btn-primary">パラメータ</button>
+									<button class="data-button btn btn-primary">取得</button>
 								</div>
 							</div>
 						</div>
+					</div>
+					<!-- パラメータ入力画面 -->
+					<div class="parameter-input">
+						<i class="close-button">×</i>
+						<table class="parameter-input-table">
+							<thead>
+								<tr>
+									<th>name</th>
+									<th>value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="control-group ">
+									<td class="nameCell"><input class="param-name form-control input-sm" type="text" value=""></td>
+									<td class="valueCell"><input class="param-value form-control input-sm" name="" type="text" value=""></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 
 					<!-- データオブジェクト表示エリア -->
