@@ -50,7 +50,7 @@ h3 {
 	width: 100%;
 }
 
-.editAreaBar,.previewAreaBar {
+.editAreaBar {
 	padding-top: 7px;
 	padding-bottom: 7px;
 }
@@ -88,6 +88,12 @@ h3 {
 	position: absolute;
 	top: 50%;
 	left: 52px;
+}
+
+.load-button {
+	position: relative;
+	top: 10px;
+	left: 5px;
 }
 
 .sourceText {
