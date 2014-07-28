@@ -16,6 +16,7 @@
 (function($) {
 
 	var DATA_URL = 'sample/sample.json';
+
 	var TEMPLATE_URL = 'sample/sample.ejs';
 
 	var sampleEditController = {
@@ -23,8 +24,6 @@
 		__name: 'hifive.templateEditor.controller.SampleEditController',
 
 		_pageController: hifive.templateEditor.controller.PageController,
-
-		_json: null,
 
 		__meta: {
 			_pageController: {
