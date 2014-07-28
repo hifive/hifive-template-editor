@@ -309,7 +309,7 @@
 			var param = this._parameterEditController.getParameter();
 
 			if (url === '') {
-				// TODO: エラーメッセージ
+				alert('URLまたはパスを入力してください');
 				return;
 			}
 
@@ -320,9 +320,13 @@
 				}
 			});
 
-			this._templateEditorLogic.loadData(url, type, param).done(this.own(function(data) {
+			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
 				this.setDataText(JSON.stringify(data, null, '	'));
 				this._applyTemplate();
+
+			}), this.own(function(xhr, textStatus) {
+				this._alertError(xhr, textStatus);
+
 			}));
 		},
 
@@ -604,6 +608,15 @@
 			});
 
 			this.$find('.libraryMessage').hide();
+		},
+
+		_alertError: function(xhr, textStatus) {
+			var status = xhr.status;
+			var msg;
+
+			msg = (textStatus === 'parsererror') ? 'データはJSON型を指定してください' : 'データの取得に失敗しました';
+
+			alert('status：' + status + '\ntextStatus：' + textStatus + '\n' + msg);
 		}
 
 
