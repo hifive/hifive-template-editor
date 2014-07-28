@@ -31,10 +31,6 @@ input[type="text"] {
 	color: #000;
 }
 
-h3 {
-	margin-top: 10px;
-}
-
 .nav-tabs,.nav-tabs a {
 	height: 35px;
 }
@@ -79,28 +75,16 @@ h3 {
 	height: 100%;
 }
 
-.undo-button {
-	position: absolute;
-	top: 50%;
-}
-
-.redo-button {
-	position: absolute;
-	top: 50%;
-	left: 52px;
-}
-
-.load-button {
-	position: relative;
-	top: 10px;
-	left: 5px;
-}
-
 .sourceText {
 	height: 100%;
 	overflow: auto;
 	color: black;
 	background-color: white;
+}
+
+.blank-button,.load-group {
+	margin-top: 11px;
+	margin-bottom: 10px;
 }
 
 /* テンプレートタグのtextareaとtreeを分けるdivider */
