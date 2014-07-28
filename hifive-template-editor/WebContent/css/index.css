@@ -201,3 +201,9 @@ iframe {
 	position: absolute;
 	right: 2px;
 }
+
+/* IE9‚Åpadding‚ğİ’è‚µ‚Ä‚¢‚é‚Æ•¶š‚ªŒ‡‚¯‚é */
+.param-name,.param-value {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
