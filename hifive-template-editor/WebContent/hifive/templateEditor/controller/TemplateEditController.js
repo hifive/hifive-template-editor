@@ -179,8 +179,8 @@
 		 *
 		 * @param json
 		 */
-		setDataText: function(json) {
-			this.$find('.dataText').val(json);
+		setDataText: function(data) {
+			this.$find('.dataText').val(JSON.stringify(data, null, '  '));
 		},
 
 
@@ -321,7 +321,7 @@
 			});
 
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
-				this.setDataText(JSON.stringify(data, null, '	'));
+				this.setDataText(data);
 				this._applyTemplate();
 
 			}), this.own(function(xhr, textStatus) {
@@ -386,7 +386,7 @@
 
 			data = JSON.parse(data);
 
-			this.setDataText(JSON.stringify(data, null, '	'));
+			this.setDataText(data);
 		},
 
 
