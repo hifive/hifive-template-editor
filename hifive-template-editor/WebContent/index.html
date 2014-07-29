@@ -154,8 +154,8 @@
 
 						<!-- UNDO,REDO window幅がsm以上のとき表示 -->
 						<div class="col-sm-3 hidden-xs">
-							<input type="image" src="images/undo_32.png" class="undo-button">
-							<input type="image" src="images/redo_32.png" class="redo-button">
+							<input type="image" src="images/undo_32.png" class="undo-button"> <input type="image"
+								src="images/redo_32.png" class="redo-button">
 						</div>
 
 						<!-- UNDO,REDO window幅がxs以下のとき表示 -->
@@ -381,16 +381,23 @@
 					</button>
 				</div>
 
-				<!--  -->
 				<div class="col-sm-6 col-xs-9">
-					<div class="input-group input-group-sm load-group">
-						<label for="input-url" class="input-group-addon">URL</label> <input type="text" id="input-url"
-							class="form-control input-url" placeholder="URL"> <span class="input-group-btn">
-							<button class="btn btn-primary load-button" type="button">
-								<span class="glyphicon glyphicon-arrow-right"></span>
-							</button>
-						</span>
-					</div>
+					<form class="load-page">
+						<div class="input-group input-group-sm load-group">
+							<!-- ラベル -->
+							<label for="input-url" class="input-group-addon">URL</label>
+
+							<!-- URL入力欄 -->
+							<input type="text" id="input-url" class="form-control input-url" placeholder="URL">
+
+							<!-- ページ読み込みボタン -->
+							<span class="input-group-btn">
+								<button class="btn btn-primary" type="submit">
+									<span class="glyphicon glyphicon-arrow-right"></span>
+								</button>
+							</span>
+						</div>
+					</form>
 				</div>
 			</div>
 

@@ -260,9 +260,11 @@
 
 
 		/**
-		 * 入力されたページ(url)をiframeで読み込みます
+		 * 入力されたurlをiframeで読み込みます
 		 */
-		'.load-button click': function() {
+		'.load-page submit': function(context) {
+			context.event.preventDefault();
+
 			var url = this.$find('.input-url').val();
 			this._target.contentDocument.location.replace(url);
 
