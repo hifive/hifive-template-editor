@@ -109,6 +109,8 @@
 
 		_target: null,// postMessageの送信先
 
+		_templateErrorTimer: null,// エラーメッセージ表示用タイマー
+
 		_editAreaBarHeight: null,
 
 		__ready: function() {
@@ -214,6 +216,10 @@
 					this._applyTemplateComp();
 					break;
 
+				case 'notFoundSelector':
+					this._notFoundSelector();
+					break;
+
 				default:
 					this.log.warn('messageが不正です');
 				}
@@ -278,7 +284,7 @@
 		},
 
 		/**
-		 * テンプレートを反映させるセレクタ文字列をプレビューに送る
+		 * テンプレートを反映させるセレクタ(文字列)をプレビューに送る
 		 * <p>
 		 * ここで指定されるセレクタはiframeが読み込むhtml上の要素
 		 */
@@ -292,6 +298,27 @@
 
 			this._sendMessage(data);
 		},
+
+		/**
+		 * テンプレートを反映させるセレクタ(文字列)をプレビューに送る
+		 * <p>
+		 * ここで指定されるセレクタはiframeが読み込むhtml上の要素
+		 *
+		 * @param context
+		 */
+		'.target-selector submit': function(context) {
+			context.event.preventDefault();
+
+			var selector = this.$find('.input-selector').val();
+
+			var data = {
+				type: 'changeTarget',
+				selector: selector
+			};
+
+			this._sendMessage(data);
+		},
+
 
 		/**
 		 * パラメータ入力ポップ画面を表示します
@@ -619,6 +646,27 @@
 			msg = (textStatus === 'parsererror') ? 'データはJSON型を指定してください' : 'データの取得に失敗しました';
 
 			alert('status：' + status + '\ntextStatus：' + textStatus + '\n' + msg);
+		},
+
+		/**
+		 * 指定されたセレクタ(テンプレート適用先)がなかったとき、メッセージを表示します
+		 */
+		_notFoundSelector: function() {
+			var $el = this.$find('.template-alert');
+			var timer = this._templateErrorTimer;
+
+			$el.text('指定された要素が見つかりませんでした。');
+
+			$el.css('display', 'block');
+
+			if (timer) {
+				clearTimeout(timer);
+			}
+
+			// 3000ms後、非表示にします
+			this._templateErrorTimer = setTimeout(function() {
+				$el.css('display', 'none');
+			}, 3000);
 		}
 
 

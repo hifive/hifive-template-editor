@@ -230,8 +230,12 @@
 			var el = $(data.selector)[0];
 
 			if (!el) {
-				// TODO: エラーメッセージ
-				this.log.debug('error');
+				// 指定されたセレクタがない
+				var data = {
+					type: 'notFoundSelector'
+				};
+
+				this._sendMessage(data);
 				return;
 			}
 
