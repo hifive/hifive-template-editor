@@ -206,6 +206,7 @@
 					<!-- </div> -->
 				</div>
 
+
 				<!-- 【データオブジェクト】タブ -->
 				<div class="tab-pane row" id="data" style="margin: 0px;">
 
@@ -215,83 +216,106 @@
 						<div class="col-sm-12 hidden-xs">
 
 							<!-- フォーマットボタン -->
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 								<button class="btn btn-primary btn-sm format-button ">フォーマット</button>
 							</div>
 
 
-							<div class="col-sm-9">
+							<div class="col-sm-10">
+
 								<!-- GET,POST指定 -->
 								<div class="col-sm-4">
-									<label class="radio-inline"> <input type="radio" name="sendType" value="GET" checked>GET
-									</label> <label class="radio-inline"> <input type="radio" name="sendType" value="POST">POST
+									<label class="radio-inline">
+										<input type="radio" name="sendType-sm" class="sendType" value="GET" checked>GET
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="sendType-sm" class="sendType" value="POST">POST
 									</label>
 								</div>
 
 								<div class="col-sm-8">
-									<div class="input-group input-group-sm">
+									<form class="load-data load-data-sm">
+										<div class="input-group input-group-sm">
+											<!-- ラベル -->
+											<label for="input-data-url-sm" class="input-group-addon">URL</label>
 
-										<!-- ラベル -->
-										<label for="input-data-url-sm" class="input-group-addon">URL</label>
+											<!-- URL入力ボックス(データオブジェクト取得用) -->
+											<input type="text" id="input-data-url-sm" class="form-control input-data-url" placeholder="URL">
 
-										<!-- URL入力ボックス(データオブジェクト取得用) -->
-										<input type="text" id="input-data-url-sm" class="form-control input-data-url" placeholder="URL">
-
-										<!-- パラメータ,ロードボタン -->
-										<span class="input-group-btn">
-											<button class="btn btn-primary data-parameter" type="button">パラメータ</button>
-											<button class="btn btn-primary data-button" type="button">
-												<span class="glyphicon glyphicon-arrow-right"></span>
-											</button>
-										</span>
-									</div>
+											<!-- パラメータ,ロードボタン -->
+											<span class="input-group-btn">
+												<button class="btn btn-primary data-parameter" type="button">パラメータ</button>
+												<button class="btn btn-primary data-button" type="submit">
+													<span class="glyphicon glyphicon-arrow-right"></span>
+												</button>
+											</span>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
 
 						<!-- window幅がxs以下になったら表示 -->
 						<div class="visible-xs-block col-xs-12">
+							<div class="col-xs-6">
+								<div class="btn-group">
 
-							<div class="input-group input-group-sm">
-
-								<div class="input-group-btn">
-									<!-- dropdown -->
-									<div class="btn-group btn-group-sm">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<!-- フォーマット、パラメータボタン -->
+									<div class="btn-group">
+										<button class="btn btn-primary dropdown-toggle btn-sm" type="button" data-toggle="dropdown">
 											Setup Parameter <span class="caret"></span>
 										</button>
 
 										<ul class="dropdown-menu" role="menu" style="color: black;">
 											<li><a href="#" class="format-button">フォーマット</a></li>
+
 											<li role="presentation" class="divider"></li>
-											<li><label><input type="radio" name="sendType" value="GET" checked> GET</label></li>
-											<li><label><input type="radio" name="sendType" value="POST"> POST</label></li>
-											<li role="presentation" class="divider"></li>
+
 											<li><a href="#" class="data-parameter">パラメータ</a></li>
 										</ul>
 									</div>
+
+									<!-- GET,POST -->
+									<div class="btn-group">
+										<button class="btn btn-primary dropdown-toggle btn-sm" type="button" data-toggle="dropdown">
+											Method <span class="caret"></span>
+										</button>
+
+										<ul class="dropdown-menu" role="menu" style="color: black;">
+											<li><label> <input type="radio" name="sendType-xs" class="sendType" value="GET" checked>GET
+											</label></li>
+
+											<li role="presentation" class="divider"></li>
+
+											<li><label> <input type="radio" name="sendType-xs" class="sendType" value="POST"> POST
+											</label></li>
+										</ul>
+									</div>
+
 								</div>
-
-								<!-- ラベル -->
-								<label for="input-data-url-xs" class="input-group-addon">URL</label>
-
-								<!-- URL入力ボックス(データオブジェクト取得用) -->
-								<input type="text" id="input-data-url-xs" class="form-control input-data-url" placeholder="URL">
-
-								<!-- パラメータ,ロードボタン -->
-								<span class="input-group-btn">
-									<button class="btn btn-primary data-parameter" type="button">パラメータ</button>
-									<button class="btn btn-primary data-button">
-										<span class="glyphicon glyphicon-arrow-right"></span>
-									</button>
-								</span>
-
 							</div>
 
+							<div class="col-xs-6">
+								<form class="load-data load-data-xs">
+									<div class="input-group input-group-sm">
+										<!-- ラベル -->
+										<label for="input-data-url-xs" class="input-group-addon">URL</label>
+
+										<!-- URL入力ボックス(データオブジェクト取得用) -->
+										<input type="text" id="input-data-url-xs" class="form-control input-data-url" placeholder="URL">
+
+										<!-- パラメータ,ロードボタン -->
+										<span class="input-group-btn">
+											<button class="btn btn-primary" type="submit">
+												<span class="glyphicon glyphicon-arrow-right"></span>
+											</button>
+										</span>
+									</div>
+								</form>
+							</div>
 						</div>
-
-
 					</div>
+
 					<!-- パラメータ入力画面 -->
 					<div class="parameter-input">
 						<i class="close-button">×</i>
@@ -313,6 +337,9 @@
 
 					<!-- データオブジェクト表示エリア -->
 					<textarea class="col-xs-12 dataText"></textarea>
+
+					<!-- エラーメッセージ表示画面 -->
+					<div class="alert alert-danger data-alert" role="alert"></div>
 				</div>
 
 

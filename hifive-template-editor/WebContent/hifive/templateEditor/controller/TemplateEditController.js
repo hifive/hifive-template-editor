@@ -109,7 +109,9 @@
 
 		_target: null,// postMessageの送信先
 
-		_templateErrorTimer: null,// エラーメッセージ表示用タイマー
+		_templateErrorTimer: null,// テンプレートタブのエラーメッセージ表示用タイマー
+
+		_dataErrorTimer: null, // データオブジェクトタブのエラーメッセージ表示用タイマー
 
 		_editAreaBarHeight: null,
 
@@ -327,27 +329,55 @@
 			this.$find('.parameter-input').css('display', 'block');
 		},
 
+
 		/**
-		 * 指定されたurlでデータオブジェクトを取得します
+		 * ラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
+		 *
+		 * @param context
+		 * @param $el
 		 */
-		'.data-button click': function(context) {
+		'.sendType change': function(context, $el) {
+			var type = $el[0].value;
 
-			context.event.preventDefault();
-
-			var url = this.$find('.input-data-url').val();
-			var param = this._parameterEditController.getParameter();
-
-			if (url === '') {
-				alert('URLまたはパスを入力してください');
+			if (type === "GET") {
+				this.$find('.sendType[value="GET"]').each(function() {
+					$(this).prop('checked', 'checked');
+				});
 				return;
 			}
 
-			var type = null;
-			$('input[name="sendType"]').each(function() {
-				if ($(this).prop('checked')) {
-					type = $(this).context.value;
-				}
+			this.$find('.sendType[value="POST"]').each(function() {
+				$(this).prop('checked', 'checked');
 			});
+		},
+
+
+		/**
+		 * 指定されたurlでデータオブジェクトを取得します
+		 */
+		'.load-data submit': function(context, $el) {
+			context.event.preventDefault();
+
+			var url = this.$find('.input-data-url').val();
+
+			if (url === '') {
+				var msg = 'URLを指定してください';
+				this._illeagalData(msg);
+
+				return;
+			}
+
+			var param = this._parameterEditController.getParameter();
+
+			var type = null;
+			var elm = $('.sendType');
+
+			for (var i = 0, len = elm.length; i < len; i++) {
+				if ($(elm[i]).prop('checked')) {
+					type = $(elm[i]).context.value;
+					break;
+				}
+			}
 
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
 				this.setDataText(data);
@@ -667,8 +697,29 @@
 			this._templateErrorTimer = setTimeout(function() {
 				$el.css('display', 'none');
 			}, 3000);
-		}
+		},
 
+		/**
+		 * 指定されたURLからJSONデータが取得できなかったとき、メッセージを表示します
+		 */
+		_illeagalData: function(msg) {
+			var $el = this.$find('.data-alert');
+			var timer = this._dataErrorTimer;
+
+			$el.text(msg);
+
+			$el.css('display', 'block');
+
+			if (timer) {
+				clearTimeout(timer);
+			}
+
+			// 3000ms後、非表示にします
+			this._dataErrorTimer = setTimeout(function() {
+				$el.css('display', 'none');
+			}, 3000);
+			return;
+		}
 
 	};
 

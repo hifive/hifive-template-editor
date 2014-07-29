@@ -217,3 +217,13 @@ iframe {
 	right: 18px;
 	top: 50px;
 }
+
+/* データオブジェクトタブのエラー表示画面 */
+.data-alert {
+	/* デフォルト非表示 */
+	display: none;
+	width: 70%;
+	position: absolute;
+	right: 18px;
+	top: 50px;
+}
