@@ -29,8 +29,8 @@
 <link rel="stylesheet" href="res/lib/jstree/jstree.custom.css">
 
 <link rel="stylesheet" href="res/lib/bootstrap3.2/css/bootstrap.css" media="screen">
-<link rel="stylesheet" href="res/lib/hifive/h5.css">
 
+<link rel="stylesheet" href="res/lib/hifive/h5.css">
 <link rel="stylesheet" href="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.css">
 
 <link rel="stylesheet" href="res/lib/editor-external.css">
@@ -210,23 +210,56 @@
 
 					<div class="editAreaBar col-xs-12">
 
-						<!-- フォーマットボタン -->
-						<div class="col-xs-3">
-							<button class="btn btn-primary btn-md format-button ">フォーマット</button>
-						</div>
+						<!-- window幅がsm以上のときに表示 -->
+						<div class="col-sm-12 hidden-xs">
+							<!-- フォーマットボタン -->
+							<div class="col-sm-3">
+								<button class="btn btn-primary btn-md format-button ">フォーマット</button>
+							</div>
 
-						<!-- URL or Path入力ボックス(データオブジェクト取得用) -->
-						<div class="col-xs-9 ">
-							<div class="input-group">
-								<span class="input-group-addon"> <input type="radio" name="sendType" value="GET" checked>GET <input
-									type="radio" name="sendType" value="POST">POST
-								</span> <input type="text" class="form-control input-data-url" placeholder="URL or Path"> <span
-									class="input-group-btn">
-									<button class="btn btn-primary data-parameter">パラメータ</button>
-									<button class="btn btn-primary data-button">取得</button>
-								</span>
+							<!-- URL or Path入力ボックス(データオブジェクト取得用) -->
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon"> <input type="radio" name="sendType" value="GET" checked>GET <input
+										type="radio" name="sendType" value="POST">POST
+									</span> <span class="input-group-btn">
+										<button class="btn btn-primary data-parameter">パラメータ</button>
+									</span> <input type="text" class="form-control input-data-url" placeholder="URL or Path"> <span
+										class="input-group-btn">
+										<button class="btn btn-primary data-button">取得</button>
+									</span>
+								</div>
 							</div>
 						</div>
+
+						<!-- window幅がxs以下になったら表示 -->
+						<div class="col-sm-12 col-xs-12">
+							<div class="visible-xs-block">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+											Setup Parameter <span class="caret"></span>
+										</button>
+
+										<ul class="dropdown-menu" role="menu" style="color: black;">
+											<li><a href="#" class="format-button">フォーマット</a></li>
+											<li role="presentation" class="divider"></li>
+											<li><label><input type="radio" name="sendType" value="GET" checked> GET</label></li>
+											<li><label><input type="radio" name="sendType" value="POST"> POST</label></li>
+											<li role="presentation" class="divider"></li>
+											<li><a href="#" class="data-parameter">パラメータ</a></li>
+										</ul>
+									</div>
+									<input type="text" class="form-control input-data-url" placeholder="URL or Path"> <span
+										class="input-group-btn">
+										<button class="btn btn-primary data-button">取得</button>
+									</span>
+								</div>
+
+							</div>
+						</div>
+
+
 					</div>
 					<!-- パラメータ入力画面 -->
 					<div class="parameter-input">
@@ -315,11 +348,8 @@
 				</div>
 
 				<div class="col-sm-3 col-xs-3">
-					<!-- <input type="image" src="images/file.png" class="blank-button btn btn-primary" alt="デフォルトページをロード"
-						title="デフォルトページをロード"> -->
 					<button class="btn btn-primary blank-button pull-right" type="button">
 						<img src="images/file.png" alt="デフォルトページをロード" title="デフォルトページをロード">
-
 					</button>
 				</div>
 
