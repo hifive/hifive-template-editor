@@ -83,6 +83,8 @@
 		 */
 		'.nav-tabs shown.bs.tab': function(context) {
 
+			this._templateEditorController.resizeEditAreaBar();
+
 			var controllers = h5.core.controllerManager.getControllers($('body'));
 
 			var sourceEditorController = controllers[0]._pageController._templateEditorController._sourceEditorController;

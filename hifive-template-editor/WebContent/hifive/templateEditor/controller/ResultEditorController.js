@@ -232,7 +232,8 @@
 			if (!el) {
 				// 指定されたセレクタがない
 				var data = {
-					type: 'notFoundSelector'
+					type: 'notFoundSelector',
+					msg: '指定された要素が見つかりません'
 				};
 
 				this._sendMessage(data);

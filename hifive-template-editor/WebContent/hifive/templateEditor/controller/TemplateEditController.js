@@ -189,6 +189,19 @@
 
 
 		/**
+		 * editAreaBarの高さが変わっていたらeditAreaの高さを修正します
+		 */
+		resizeEditAreaBar: function() {
+			var height = this.$find('.active .editAreaBar').outerHeight();
+
+			if (this._editAreaBarHeight !== height) {
+				this.$find('.tab-content').css('padding-bottom', height);
+				this._editAreaBarHeight = height;
+			}
+		},
+
+
+		/**
 		 * メッセージのtypeプロパティからメソッドを呼び出します。
 		 */
 		'{window} message': function(context) {
@@ -219,7 +232,7 @@
 					break;
 
 				case 'notFoundSelector':
-					this._notFoundSelector();
+					this._alertError(data.msg, this.$find('.template-alert'));
 					break;
 
 				default:
@@ -233,13 +246,7 @@
 
 		'{window} resize': function(context) {
 
-			// .editAreaBarの高さが変化していたら、その高さに合わせる
-			var height = this.$find('.active .editAreaBar').outerHeight();
-
-			if (this._editAreaBarHeight !== height) {
-				this.$find('.tab-content').css('padding-bottom', height);
-				this._editAreaBarHeight = height;
-			}
+			this.resizeEditAreaBar();
 
 			// DividedBoxのrefreshを呼ぶ
 			var dividedBoxes = h5.core.controllerManager.getControllers($('body'), {
@@ -313,6 +320,13 @@
 
 			var selector = this.$find('.input-selector').val();
 
+			if (selector === '') {
+				var msg = 'セレクタを指定してください';
+				this._alertError(msg, this.$find('.template-alert'));
+
+				return;
+			}
+
 			var data = {
 				type: 'changeTarget',
 				selector: selector
@@ -362,7 +376,7 @@
 
 			if (url === '') {
 				var msg = 'URLを指定してください';
-				this._illeagalData(msg);
+				this._alertError(msg, this.$find('.data-alert'));
 
 				return;
 			}
@@ -384,8 +398,7 @@
 				this._applyTemplate();
 
 			}), this.own(function(xhr, textStatus) {
-				this._alertError(xhr, textStatus);
-
+				this._notFoundData(xhr, textStatus, this.$find('.data-alert'));
 			}));
 		},
 
@@ -443,9 +456,14 @@
 		'.format-button click': function() {
 			var data = this._getData();
 
-			data = JSON.parse(data);
-
-			this.setDataText(data);
+			try {
+				data = JSON.parse(data);
+				this.setDataText(data);
+			}
+			catch (e) {
+				var msg = 'JSONパースに失敗しました。JSON文字列にしてください。';
+				this._alertError(msg, this.$find('.data-alert'));
+			}
 		},
 
 
@@ -669,56 +687,63 @@
 			this.$find('.libraryMessage').hide();
 		},
 
-		_alertError: function(xhr, textStatus) {
-			var status = xhr.status;
-			var msg;
-
-			msg = (textStatus === 'parsererror') ? 'データはJSON型を指定してください' : 'データの取得に失敗しました';
-
-			alert('status：' + status + '\ntextStatus：' + textStatus + '\n' + msg);
-		},
 
 		/**
-		 * 指定されたセレクタ(テンプレート適用先)がなかったとき、メッセージを表示します
+		 * エラーメッセージを表示します
+		 *
+		 * @param msg 表示するメッセージ
+		 * @param $el メッセージを表示する要素
 		 */
-		_notFoundSelector: function() {
-			var $el = this.$find('.template-alert');
-			var timer = this._templateErrorTimer;
-
-			$el.text('指定された要素が見つかりませんでした。');
-
-			$el.css('display', 'block');
-
-			if (timer) {
-				clearTimeout(timer);
-			}
-
-			// 3000ms後、非表示にします
-			this._templateErrorTimer = setTimeout(function() {
-				$el.css('display', 'none');
-			}, 3000);
-		},
-
-		/**
-		 * 指定されたURLからJSONデータが取得できなかったとき、メッセージを表示します
-		 */
-		_illeagalData: function(msg) {
-			var $el = this.$find('.data-alert');
-			var timer = this._dataErrorTimer;
+		_alertError: function(msg, $el) {
 
 			$el.text(msg);
-
 			$el.css('display', 'block');
 
-			if (timer) {
-				clearTimeout(timer);
+			switch ($el.parent().attr('id')) {
+
+			case 'template':
+				if (this._templateErrorTimer) {
+					clearTimeout(this._templateErrorTimer);
+				}
+
+				this._templateErrorTimer = setTimeout(function() {
+					$el.css('display', 'none');
+				}, 3000);
+
+				break;
+
+			case 'data':
+				if (this._dataErrorTimer) {
+					clearTimeout(this._dataErrorTimer);
+				}
+
+				this._dataErrorTimer = setTimeout(function() {
+					$el.css('display', 'none');
+				}, 3000);
+
+				break;
+
+			default:
+				break;
+			}
+		},
+
+
+		/**
+		 * 指定されたURLがなかったとき、メッセージを表示します
+		 */
+		_notFoundData: function(xhr, textStatus, $el) {
+			var status = xhr.status;
+
+			var msg;
+			if (textStatus === 'parsererror') {
+				msg = 'データはJSON型を指定してください';
+				this._alertError(msg, $el);
+				return;
 			}
 
-			// 3000ms後、非表示にします
-			this._dataErrorTimer = setTimeout(function() {
-				$el.css('display', 'none');
-			}, 3000);
-			return;
+			msg = 'データの取得に失敗しました';
+			alert('status:' + status + '\ntextStatus:' + textStatus + '\n' + msg);
 		}
 
 	};
