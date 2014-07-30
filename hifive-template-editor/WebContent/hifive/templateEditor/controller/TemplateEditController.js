@@ -209,13 +209,31 @@
 		},
 
 
-		getTemplate:function(url){
+		getTemplate: function(url) {
 			return this._templateEditorLogic.loadTemplate(url);
 		},
 
 
-		getData:function(url){
+		getData: function(url) {
 			return this._templateEditorLogic.loadData(url);
+		},
+
+
+		/**
+		 * 指定されたURLがなかったとき、メッセージを表示します
+		 */
+		notFoundData: function(xhr, textStatus, $el) {
+			var status = xhr.status;
+
+			var msg;
+			if (textStatus === 'parsererror') {
+				msg = 'データはJSON型を指定してください';
+				this._alertMessage(msg, $el);
+				return;
+			}
+
+			msg = 'status:' + status + '\nデータの取得に失敗しました';
+			this._alertMessage(msg, $el);
 		},
 
 
@@ -300,27 +318,17 @@
 
 			var url = this.$find('.input-url').val();
 
-			// TODO: 別オリジンのページのロードの対応
-			if (/https?:/.test(url)) {
-				var myOrigin = location.protocol + '//' + location.host;
-
-				if (!url.match(myOrigin)) {
-					var msg = 'ページのロードに失敗しました。オリジンが異なります';
-					this._alertMessage(msg, this.$find('.preview-alert'));
-					return
-				}
-			}
-
-
-			this._target.contentDocument.location.replace(url);
+			// this._target.contentDocument.location.replace(url);
+			this._target.src = url;
 
 			if (url !== DEFAULT_PAGE) {
 				this._disableLibrary();
 
 			} else {
 				this._enableLibrary();
-
 			}
+
+
 		},
 
 		/**
@@ -503,7 +511,8 @@
 		 * プレビューにデフォルトページを表示します。
 		 */
 		'.blank-button click': function() {
-			this._target.contentDocument.location.replace(DEFAULT_PAGE);
+			// this._target.contentDocument.location.replace(DEFAULT_PAGE);
+			this._target.src = DEFAULT_PAGE;
 
 			this._enableLibrary();
 
@@ -781,7 +790,7 @@
 
 				break;
 
-			case 'preview-alert':
+			case '.preview-alert':
 				if (this._previewTimer) {
 					clearTimeout(this._previewTimer);
 				}
@@ -792,7 +801,7 @@
 
 				break;
 
-			case 'preview-msg':
+			case '.preview-msg':
 				if (this._previewErrorTimer) {
 					clearTimeout(this._previewErrorTimer);
 				}
@@ -806,24 +815,6 @@
 			default:
 				break;
 			}
-		},
-
-
-		/**
-		 * 指定されたURLがなかったとき、メッセージを表示します
-		 */
-		notFoundData: function(xhr, textStatus, $el) {
-			var status = xhr.status;
-
-			var msg;
-			if (textStatus === 'parsererror') {
-				msg = 'データはJSON型を指定してください';
-				this._alertMessage(msg, $el);
-				return;
-			}
-
-			msg = 'status:' + status + '\nデータの取得に失敗しました';
-			this._alertMessage(msg, $el);
 		}
 
 	};
