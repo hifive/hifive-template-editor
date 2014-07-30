@@ -208,9 +208,8 @@ iframe {
 	padding-bottom: 0px;
 }
 
-/* テンプレートタグのエラーメッセージ表示画面 */
+/* テンプレートタブのエラーメッセージ表示画面 */
 .template-alert {
-	/* デフォルト非表示 */
 	display: none;
 	width: 70%;
 	position: absolute;
@@ -218,19 +217,37 @@ iframe {
 	top: 50px;
 }
 
-/* データオブジェクトタブのエラーメッセージ表示画面 */
+/* 〃のエラーメッセージ表示画面 */
+.template-msg {
+	display: none;
+	width: 25%;
+	position: absolute;
+	right: 18px;
+	top: 50px;
+}
+
+/* データタブのエラーメッセージ表示画面 */
 .data-alert {
-	/* デフォルト非表示 */
 	display: none;
 	width: 70%;
 	position: absolute;
 	right: 18px;
 	top: 50px;
 }
+
+/* 〃のエラーメッセージ表示画面 */
+.data-msg {
+	display: none;
+	width: 25%;
+	position: absolute;
+	right: 18px;
+	top: 50px;
+}
+
+
 
 /* プレビューのエラーメッセージ表示画面 */
 .preview-alert {
-	/* デフォルト非表示 */
 	display: none;
 	width: 70%;
 	position: absolute;
@@ -240,7 +257,6 @@ iframe {
 
 /* プレビューのメッセージ表示画面 */
 .preview-msg {
-	/* デフォルト非表示 */
 	display: none;
 	width: 25%;
 	position: absolute;

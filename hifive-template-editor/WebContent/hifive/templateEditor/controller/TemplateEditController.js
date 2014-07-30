@@ -411,6 +411,7 @@
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
 				this.setDataText(data);
 				this._applyTemplate();
+				this._alertError('データの取得が完了しました', this.$find('.data-msg'));
 
 			}), this.own(function(xhr, textStatus) {
 				this._notFoundData(xhr, textStatus, this.$find('.data-alert'));
@@ -613,6 +614,7 @@
 			if (this._indicator) {
 				this._indicatorDeferred.resolve();
 			}
+
 		},
 
 
@@ -771,8 +773,8 @@
 				return;
 			}
 
-			msg = 'データの取得に失敗しました';
-			alert('status:' + status + '\ntextStatus:' + textStatus + '\n' + msg);
+			msg = 'status:' + status + '\nデータの取得に失敗しました';
+			this._alertError(msg, $el);
 		}
 
 	};

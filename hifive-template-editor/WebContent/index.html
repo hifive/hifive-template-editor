@@ -134,7 +134,7 @@
 	<!-- タブ -->
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#template" data-toggle="tab">テンプレート</a></li>
-		<li><a href="#data" data-toggle="tab">データオブジェクト</a></li>
+		<li><a href="#data" data-toggle="tab">データ</a></li>
 		<!-- <li><a href="#css" data-toggle="tab">カスタムCSS</a></li> -->
 		<li><a href="#setting" data-toggle="tab">設定</a></li>
 	</ul>
@@ -199,6 +199,9 @@
 					<div class="sourceText pageWrapper col-xs-12">
 						<!-- contentEditable="true" -->
 					</div>
+
+					<!-- メッセージ表示画面 -->
+					<div class="alert alert-success template-msg" role="alert"></div>
 					<!-- エラーメッセージ表示画面 -->
 					<div class="alert alert-danger template-alert" role="alert"></div>
 
@@ -207,7 +210,7 @@
 				</div>
 
 
-				<!-- 【データオブジェクト】タブ -->
+				<!-- 【データ】タブ -->
 				<div class="tab-pane row" id="data" style="margin: 0px;">
 
 					<div class="editAreaBar col-xs-12">
@@ -237,7 +240,7 @@
 											<!-- ラベル -->
 											<label for="input-data-url-sm" class="input-group-addon">URL</label>
 
-											<!-- URL入力ボックス(データオブジェクト取得用) -->
+											<!-- URL入力ボックス(データ取得用) -->
 											<input type="text" id="input-data-url-sm" class="form-control input-data-url" placeholder="URL">
 
 											<!-- パラメータ,ロードボタン -->
@@ -299,7 +302,7 @@
 										<!-- ラベル -->
 										<label for="input-data-url-xs" class="input-group-addon">URL</label>
 
-										<!-- URL入力ボックス(データオブジェクト取得用) -->
+										<!-- URL入力ボックス(データ取得用) -->
 										<input type="text" id="input-data-url-xs" class="form-control input-data-url" placeholder="URL">
 
 										<!-- パラメータ,ロードボタン -->
@@ -333,9 +336,11 @@
 						</table>
 					</div>
 
-					<!-- データオブジェクト表示エリア -->
+					<!-- データ表示エリア -->
 					<textarea class="col-xs-12 dataText"></textarea>
 
+					<!-- メッセージ表示画面 -->
+					<div class="alert alert-success data-msg" role="alert"></div>
 					<!-- エラーメッセージ表示画面 -->
 					<div class="alert alert-danger data-alert" role="alert"></div>
 				</div>
