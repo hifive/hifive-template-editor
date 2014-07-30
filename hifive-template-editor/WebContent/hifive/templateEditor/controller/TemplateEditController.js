@@ -111,9 +111,15 @@
 
 		_templateTimer: null,// テンプレートタブのメッセージ表示用タイマー
 
-		_dataTimer: null, // データオブジェクトタブのメッセージ表示用タイマー
+		_templateErrorTimer: null,// テンプレートタブのエラーメッセージ表示用タイマー
+
+		_dataTimer: null, // データタブのメッセージ表示用タイマー
+
+		_dataErrorTimer: null, // データタブのエラーメッセージ表示用タイマー
 
 		_previewTimer: null,// プレビューのメッセージ表示用タイマー
+
+		_previewErrorTimer: null,// プレビューのエラーメッセージ表示用タイマー
 
 		_editAreaBarHeight: null,
 
@@ -234,7 +240,7 @@
 					break;
 
 				case 'notFoundSelector':
-					this._alertError(data.msg, this.$find('.template-alert'));
+					this._alertMessage(data.msg, this.$find('.template-alert'));
 					break;
 
 				default:
@@ -290,7 +296,7 @@
 
 				if (!url.match(myOrigin)) {
 					var msg = 'ページのロードに失敗しました。オリジンが異なります';
-					this._alertError(msg, this.$find('.preview-alert'));
+					this._alertMessage(msg, this.$find('.preview-alert'));
 					return
 				}
 			}
@@ -337,7 +343,7 @@
 
 			if (selector === '') {
 				var msg = 'セレクタを指定してください';
-				this._alertError(msg, this.$find('.template-alert'));
+				this._alertMessage(msg, this.$find('.template-alert'));
 
 				return;
 			}
@@ -391,7 +397,7 @@
 
 			if (url === '') {
 				var msg = 'URLを指定してください';
-				this._alertError(msg, this.$find('.data-alert'));
+				this._alertMessage(msg, this.$find('.data-alert'));
 
 				return;
 			}
@@ -411,7 +417,7 @@
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
 				this.setDataText(data);
 				this._applyTemplate();
-				this._alertError('データの取得が完了しました', this.$find('.data-msg'));
+				this._alertMessage('データの取得が完了しました', this.$find('.data-msg'));
 
 			}), this.own(function(xhr, textStatus) {
 				this._notFoundData(xhr, textStatus, this.$find('.data-alert'));
@@ -478,7 +484,7 @@
 			}
 			catch (e) {
 				var msg = 'JSONパースに失敗しました。JSON文字列にしてください。';
-				this._alertError(msg, this.$find('.data-alert'));
+				this._alertMessage(msg, this.$find('.data-alert'));
 			}
 		},
 
@@ -492,7 +498,7 @@
 			this._enableLibrary();
 
 			var msg = 'ブランクページをロードしました';
-			this._alertError(msg, this.$find('.preview-msg'));
+			this._alertMessage(msg, this.$find('.preview-msg'));
 		},
 
 
@@ -714,14 +720,14 @@
 		 * @param msg 表示するメッセージ
 		 * @param $el メッセージを表示する要素
 		 */
-		_alertError: function(msg, $el) {
+		_alertMessage: function(msg, $el) {
 
 			$el.text(msg);
 			$el.css('display', 'block');
 
-			switch ($el.parent().attr('id')) {
+			switch ($el.selector) {
 
-			case 'template':
+			case '.template-alert':
 				if (this._templateTimer) {
 					clearTimeout(this._templateTimer);
 				}
@@ -732,7 +738,18 @@
 
 				break;
 
-			case 'data':
+			case '.template-msg':
+				if (this._templateErrorTimer) {
+					clearTimeout(this._templateErrorTimer);
+				}
+
+				this._templateErrorTimer = setTimeout(function() {
+					$el.css('display', 'none');
+				}, 3000);
+
+				break;
+
+			case '.data-alert':
 				if (this._dataTimer) {
 					clearTimeout(this._dataTimer);
 				}
@@ -743,14 +760,36 @@
 
 				break;
 
-			case 'preview':
+			case '.data-msg':
+				if (this._dataErrorTimer) {
+					clearTimeout(this._dataErrorTimer);
+				}
+
+				this._dataErrorTimer = setTimeout(function() {
+					$el.css('display', 'none');
+				}, 3000);
+
+				break;
+
+			case 'preview-alert':
 				if (this._previewTimer) {
 					clearTimeout(this._previewTimer);
 				}
 
 				this._previewTimer = setTimeout(function() {
 					$el.css('display', 'none');
-				}, 2000);
+				}, 3000);
+
+				break;
+
+			case 'preview-msg':
+				if (this._previewErrorTimer) {
+					clearTimeout(this._previewErrorTimer);
+				}
+
+				this._previewErrorTimer = setTimeout(function() {
+					$el.css('display', 'none');
+				}, 3000);
 
 				break;
 
@@ -769,12 +808,12 @@
 			var msg;
 			if (textStatus === 'parsererror') {
 				msg = 'データはJSON型を指定してください';
-				this._alertError(msg, $el);
+				this._alertMessage(msg, $el);
 				return;
 			}
 
 			msg = 'status:' + status + '\nデータの取得に失敗しました';
-			this._alertError(msg, $el);
+			this._alertMessage(msg, $el);
 		}
 
 	};
