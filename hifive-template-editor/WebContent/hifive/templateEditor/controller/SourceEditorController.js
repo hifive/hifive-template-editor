@@ -29,6 +29,7 @@
 	// スコープ内定数
 	//
 	// =========================================================================
+	var UNDO_BUFFER_SIZE = 25;
 
 	// =========================================================================
 	//
@@ -136,7 +137,7 @@
 
 			// 入力される度、内容を保存
 			this._undoBuffer.push(this.getText());
-			if (this._undoBuffer.length > 20) {
+			if (this._undoBuffer.length > UNDO_BUFFER_SIZE) {
 				this._undoBuffer.shift();
 			}
 
