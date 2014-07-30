@@ -109,9 +109,11 @@
 
 		_target: null,// postMessageの送信先
 
-		_templateErrorTimer: null,// テンプレートタブのエラーメッセージ表示用タイマー
+		_templateTimer: null,// テンプレートタブのメッセージ表示用タイマー
 
-		_dataErrorTimer: null, // データオブジェクトタブのエラーメッセージ表示用タイマー
+		_dataTimer: null, // データオブジェクトタブのメッセージ表示用タイマー
+
+		_previewTimer: null,// プレビューのメッセージ表示用タイマー
 
 		_editAreaBarHeight: null,
 
@@ -281,6 +283,19 @@
 			context.event.preventDefault();
 
 			var url = this.$find('.input-url').val();
+
+			// TODO: 別オリジンのページのロードの対応
+			if (/https?:/.test(url)) {
+				var myOrigin = location.protocol + '//' + location.host;
+
+				if (!url.match(myOrigin)) {
+					var msg = 'ページのロードに失敗しました。オリジンが異なります';
+					this._alertError(msg, this.$find('.preview-alert'));
+					return
+				}
+			}
+
+
 			this._target.contentDocument.location.replace(url);
 
 			if (url !== DEFAULT_PAGE) {
@@ -474,6 +489,9 @@
 			this._target.contentDocument.location.replace(DEFAULT_PAGE);
 
 			this._enableLibrary();
+
+			var msg = 'ブランクページをロードしました';
+			this._alertError(msg, this.$find('.preview-msg'));
 		},
 
 
@@ -702,24 +720,35 @@
 			switch ($el.parent().attr('id')) {
 
 			case 'template':
-				if (this._templateErrorTimer) {
-					clearTimeout(this._templateErrorTimer);
+				if (this._templateTimer) {
+					clearTimeout(this._templateTimer);
 				}
 
-				this._templateErrorTimer = setTimeout(function() {
+				this._templateTimer = setTimeout(function() {
 					$el.css('display', 'none');
 				}, 3000);
 
 				break;
 
 			case 'data':
-				if (this._dataErrorTimer) {
-					clearTimeout(this._dataErrorTimer);
+				if (this._dataTimer) {
+					clearTimeout(this._dataTimer);
 				}
 
-				this._dataErrorTimer = setTimeout(function() {
+				this._dataTimer = setTimeout(function() {
 					$el.css('display', 'none');
 				}, 3000);
+
+				break;
+
+			case 'preview':
+				if (this._previewTimer) {
+					clearTimeout(this._previewTimer);
+				}
+
+				this._previewTimer = setTimeout(function() {
+					$el.css('display', 'none');
+				}, 2000);
 
 				break;
 

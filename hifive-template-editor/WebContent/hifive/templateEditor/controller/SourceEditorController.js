@@ -135,8 +135,10 @@
 			}
 
 			// 入力される度、内容を保存
-			// TODO: 簡易版なので後の作りこむ
 			this._undoBuffer.push(this.getText());
+			if (this._undoBuffer.length > 20) {
+				this._undoBuffer.shift();
+			}
 
 		},
 

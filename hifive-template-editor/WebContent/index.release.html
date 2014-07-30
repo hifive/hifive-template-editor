@@ -220,11 +220,9 @@
 
 								<!-- GET,POST指定 -->
 								<div class="col-sm-4">
-									<label class="radio-inline">
-										<input type="radio" name="sendType-sm" class="sendType" value="GET" checked>GET
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="sendType-sm" class="sendType" value="POST">POST
+									<label class="radio-inline"> <input type="radio" name="sendType-sm" class="sendType" value="GET"
+										checked>GET
+									</label> <label class="radio-inline"> <input type="radio" name="sendType-sm" class="sendType" value="POST">POST
 									</label>
 								</div>
 
@@ -393,7 +391,7 @@
 		</div>
 
 		<!-- プレビュー -->
-		<div class="previewArea row">
+		<div id="preview" class="previewArea row">
 			<div class="previewAreaBar col-xs-12">
 
 				<div class="col-sm-3 hidden-xs">
@@ -430,6 +428,10 @@
 			<div class="iframeWrapper">
 				<iframe src="sample/sample-preview.html"></iframe>
 			</div>
+			<!-- エラーメッセージ表示画面 -->
+			<div class="alert alert-danger preview-alert" role="alert"></div>
+			<!-- メッセージ表示画面 -->
+			<div class="alert alert-success preview-msg" role="alert"></div>
 		</div>
 	</div>
 </body>

@@ -227,8 +227,13 @@
 		 * @param
 		 */
 		_changeTarget: function(data) {
-			var el = $(data.selector)[0];
 
+			// 変更前のテンプレートを除去
+			if (this._applyTarget) {
+				this._applyTarget.innerHTML = '';
+			}
+
+			var el = $(data.selector)[0];
 			if (!el) {
 				// 指定されたセレクタがない
 				var data = {
@@ -240,11 +245,7 @@
 				return;
 			}
 
-			// 変更前のテンプレートを除去
-			if (this._applyTarget) {
-				this._applyTarget.innerHTML = '';
-			}
-
+			// テンプレートの適用先を更新
 			this._applyTarget = el;
 
 			var data = {
