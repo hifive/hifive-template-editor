@@ -152,7 +152,7 @@
 
 					hifive.editor.u.execInsertTextCommand(html);
 
-					this._applyTemplate();
+					this.applyTemplate();
 				}
 			});
 
@@ -209,6 +209,16 @@
 		},
 
 
+		getTemplate:function(url){
+			return this._templateEditorLogic.loadTemplate(url);
+		},
+
+
+		getData:function(url){
+			return this._templateEditorLogic.loadData(url);
+		},
+
+
 		/**
 		 * メッセージのtypeプロパティからメソッドを呼び出します。
 		 */
@@ -224,7 +234,7 @@
 				switch (data.type) {
 
 				case 'applyTemplate':
-					this._applyTemplate();
+					this.applyTemplate();
 					break;
 
 				case 'applyLibrary':
@@ -273,12 +283,12 @@
 		 * 再適用ボタンをクリックしたときのイベントハンドラ。テンプレートを反映させます
 		 */
 		'.applyTemplateBtn click': function() {
-			this._applyTemplate();
+			this.applyTemplate();
 		},
 
 
 		'{rootElement} textChange': function() {
-			this._applyTemplate();
+			this.applyTemplate();
 		},
 
 
@@ -416,11 +426,11 @@
 
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
 				this.setDataText(data);
-				this._applyTemplate();
+				this.applyTemplate();
 				this._alertMessage('データの取得が完了しました', this.$find('.data-msg'));
 
 			}), this.own(function(xhr, textStatus) {
-				this._notFoundData(xhr, textStatus, this.$find('.data-alert'));
+				this.notFoundData(xhr, textStatus, this.$find('.data-alert'));
 			}));
 		},
 
@@ -451,7 +461,7 @@
 
 				this.setTemplateText(temp);
 
-				this._applyTemplate();
+				this.applyTemplate();
 			}
 		},
 
@@ -467,7 +477,7 @@
 
 				this.setTemplateText(temp);
 
-				this._applyTemplate();
+				this.applyTemplate();
 			}
 		},
 
@@ -579,7 +589,7 @@
 
 			// チェックされたライブラリがない場合、テンプレートを適用します。
 			if (applyLibs.length === 0) {
-				this._applyTemplate();
+				this.applyTemplate();
 				return;
 			}
 
@@ -608,7 +618,7 @@
 			}
 
 			// テンプレートを適用します。
-			this._applyTemplate();
+			this.applyTemplate();
 		},
 
 
@@ -639,7 +649,7 @@
 		/**
 		 * テンプレートを生成してpostMessageで送ります。
 		 */
-		_applyTemplate: function() {
+		applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
 
 			var json;
@@ -802,7 +812,7 @@
 		/**
 		 * 指定されたURLがなかったとき、メッセージを表示します
 		 */
-		_notFoundData: function(xhr, textStatus, $el) {
+		notFoundData: function(xhr, textStatus, $el) {
 			var status = xhr.status;
 
 			var msg;

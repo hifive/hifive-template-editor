@@ -77,6 +77,10 @@
 
 		_templateEditorController: hifive.templateEditor.controller.TemplateEditController,
 
+		_queryTemplateUrl: null,
+
+		_queryDataUrl: null,
+
 
 		/**
 		 * タブが切り替わり、対応するコンテントが表示されたときのイベントハンドラ
@@ -138,33 +142,62 @@
 		},
 
 
-		/**
-		 * テンプレートとデータオブジェクトをキャッシュします
-		 */
-		init: function(data_url, template_url) {
+		init: function() {
 
-			var logic = this._templateEditorController._templateEditorLogic;
+			// クエリパラメータを取得
+			var query = location.search;
 
-			var dataDef = logic.loadData(data_url);// データオブジェクトを取得
-			var templateDef = logic.loadTemplate(template_url);// テンプレートを取得
+			var url = null;
 
-			var promises = [dataDef.promise(), templateDef.promise()];
+			if (query) {
+				// パラメータにtemplate,dataがあるかチェックします
+				url = this._disbandQuery(query);
+				this._queryDataUrl = url.data;
+				this._queryTemplateUrl = url.template;
 
-			var indicator = this.indicator({
-				promises: promises,
-				target: document.body,
-				message: 'データをロードしています'
-			}).show();
 
-			h5.async.when(dataDef, templateDef).done(this.own(function(data, template) {
+				// データを取得し、セットします
+				if (url.data) {
+					// urlを入力欄に入れます
+					this.$find('.input-data-url').each(function() {
+						$(this).val(url.data);
+					});
 
-				template = template[0].replace(/<script.*>/, '').replace(/<\/script>/, '');
+					// データを取得し、テキストエリアに表示します
+					var dataDef = this._templateEditorController.getData(url.data).then(
+							this.own(function(data) {
+								this._templateEditorController.setDataText(data);
 
-				this._templateEditorController.setDataText(data[0]);
+							}),
+							this.own(function(xhr, textStatus) {
+								this._templateEditorController.notFoundData(xhr, textStatus, this
+										.$find('.template-alert'));
+							}));
+				}
 
-				this._templateEditorController.setTemplateText(template);
 
-			}));
+				// テンプレートを取得し、セットします
+				if (url.template) {
+					var templateDef = this._templateEditorController.getTemplate(url.template)
+							.then(
+									this.own(function(template) {
+										template = template.replace(/<script.*>/, '').replace(
+												/<\/script>/, '');
+										this._templateEditorController.setTemplateText(template);
+
+									}),
+									this.own(function(xhr, textStatus) {
+										this._templateEditorController.notFoundData(xhr,
+												textStatus, this.$find('.template-alert'));
+									}));
+				}
+
+				var def = [dataDef, templateDef];
+
+				h5.async.when(def).done(this.own(function() {
+					this._templateEditorController.applyTemplate();
+				}));
+			}
 		},
 
 
@@ -180,7 +213,29 @@
 			for (var i = 0, len = dividedBoxes.length; i < len; i++) {
 				dividedBoxes[i].refresh();
 			}
+		},
+
+
+		_disbandQuery: function(query) {
+
+			// template=xxxを取得します
+			var template = query.match(/template=[a-zA-Z0-9-./]*/);
+			if (template) {
+				template = template[0].replace('template=', '');
+			}
+
+			// data=xxxを取得
+			var data = query.match(/data=[a-zA-Z0-9-./]*/);
+			if (data) {
+				data = data[0].replace('data=', '');
+			}
+
+			return {
+				template: template,
+				data: data
+			};
 		}
+
 
 	};
 
