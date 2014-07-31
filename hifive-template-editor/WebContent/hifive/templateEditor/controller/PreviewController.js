@@ -30,7 +30,7 @@
 	//
 	// =========================================================================
 
-	var TEMPLATE_ID = 'dummyId';
+	var TEMPLATE_ID = 'templateId';
 
 
 	// =========================================================================
@@ -72,8 +72,6 @@
 
 		_view: null,
 
-		_data: null,
-
 		_$target: null,
 
 		__construct: function() {
@@ -83,16 +81,6 @@
 
 		'{rootElement} keyup': function() {
 			this.trigger('textChange');
-
-		},
-
-		/**
-		 * テンプレートに適用するデータ（パラメータオブジェクト）をセットします。
-		 *
-		 * @param data
-		 */
-		setData: function(data) {
-			this._data = data;
 		},
 
 
@@ -112,16 +100,16 @@
 
 
 		/**
-		 * テンプレート文字列とオブジェクトデータからテンプレートを生成し、返します。
+		 * テンプレートとデータからテンプレートを生成して返します。
 		 *
 		 * @param template
 		 * @return generated
 		 */
-		generate: function(template) {
+		generate: function(template, data) {
 			// テンプレートが不正な場合ここで例外が発生する
 			this._view.register(TEMPLATE_ID, template);
 
-			var generated = this._view.get(TEMPLATE_ID, this._data);
+			var generated = this._view.get(TEMPLATE_ID, data);
 
 			return generated;
 		}

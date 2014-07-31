@@ -518,11 +518,15 @@
 			var data = this._getData();
 
 			try {
-				data = JSON.parse(data);
+				if (!data || data === '') {
+					data = null;
+				} else {
+					data = $.parseJSON(data);
+				}
 				this.setDataText(data);
 			}
 			catch (e) {
-				var msg = 'JSONパースに失敗しました。JSON文字列にしてください。';
+				var msg = 'JSONへのパースに失敗しました';
 				this._alertMessage(msg, this.$find('.data-alert'));
 			}
 		},
@@ -691,26 +695,58 @@
 		applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
 
-			var json;
+			try {
+				// データをテキストエリアから取得してパースします
+				var data = this._getData();
+				if (!data || data === '') {
+					data = null;
+				} else {
+					data = $.parseJSON(data);
+				}
+			}
+			catch (e) {
+				var tab = $('.tab-pane.active').attr('id');
+				switch (tab) {
+				case 'template':
+					this._alertMessage('JSONへのパースに失敗しました', this.$find('.template-alert'));
+					break;
 
-			var data = this._getData();
-			if (!data || data === '') {
-				json = null;
-			} else {
-				json = $.parseJSON(data);
+				case 'data':
+					this._alertMessage('JSONへのパースに失敗しました', this.$find('.data-alert'));
+					break;
+
+				default:
+					break;
+				}
+				return;
 			}
 
-			this._previewController.setData(json);
+			try {
+				// テンプレートを生成します
+				var generated = this._previewController.generate(template, data);
 
-			// テンプレートを生成します
-			var generated = this._previewController.generate(template);
+				var data = {
+					type: 'preview',
+					template: generated
+				};
 
-			var data = {
-				type: 'preview',
-				template: generated
-			};
+				this._sendMessage(data);
+			}
+			catch (e) {
+				var tab = $('.tab-pane.active').attr('id');
+				switch (tab) {
+				case 'template':
+					this._alertMessage('テンプレートの生成に失敗しました', this.$find('.template-alert'));
+					break;
 
-			this._sendMessage(data);
+				case 'data':
+					this._alertMessage('テンプレートの生成に失敗しました', this.$find('.data-alert'));
+					break;
+
+				default:
+					break;
+				}
+			}
 
 		},
 
