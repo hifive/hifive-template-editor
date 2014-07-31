@@ -4,9 +4,9 @@
 	<property name="webinf.dir" value="WEB-INF" />
 	<property name="index.release" value="index.release.html" />
 	<property name="src.dir" value="${webcontent.dir}/hifive/templateEditor" />
-	<property name="build.dir" value="build" />
+	<property name="build.dir" value="${webcontent.dir}/build" />
 	<property name="min.src.dir" value="${build.dir}/hifive/templateEditor" />
-	<property name="build.tmp.dir" value="build/tmp" />
+	<property name="build.tmp.dir" value="${build.dir}/tmp" />
 	<property name="build.min.filename" value="templateEditor.min.js" />
 	<property name="config.dir" value="config" />
 	<property name="min.header.filename" value="min-build-header.txt" />
