@@ -47,7 +47,6 @@
 
 <script src="res/lib/hifive/ejs-h5mod.js"></script>
 <script src="res/lib/hifive/h5.js"></script>
-<!-- <script src="res/lib/hifive/h5.dev.js"></script> -->
 
 <script src="hifive/templateEditor/templateEditor.min.js"></script>
 <!-- <script src="hifive/templateEditor/js/h5.ext.js"></script> -->
@@ -60,7 +59,7 @@
 <!-- <script src="hifive/templateEditor/controller/PreviewController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/SourceEditorController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/CSSEditorController.js"></script> -->
-<!-- <script src="hifive/templateEditor/controller/controller/ComponentPaletteController.js"></script> -->
+<!-- <script src="hifive/templateEditor/controller/ComponentPaletteController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/ParameterEditController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/TemplateEditController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/PageController.js"></script> -->
@@ -71,32 +70,7 @@
 
 <script src="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
 
-<!-- u.jsが必要 -->
-
-<script>
-	// 環境変数の設定
-	hifive.editor.u.setEnv('SYSTEM_LIB', '/hifive-template-editor/WebContent/res/lib');
-</script>
-
-<script>
-	h5.u.obj.ns('hifive.templateEditor.settings').srcBase = '/hifive-template-editor/WebContent/hifive';
-
-	h5.u.obj.ns('hifive.templateEditor.settings').fileStoreBase = '/hifive-template-editor/WebContent/hifive/templateEditor/storage/files/';
-	h5.u.obj.ns('hifive.templateEditor.settings').pathHandwritingController = '/hifive-template-editor/WebContent/hifive/templateEditor/controller/HandwritingController.js';
-
-	h5.u.obj.ns('hifive.templateEditor.settings').savePathBase = '/hifive-template-editor/WebContent/hifive/templateEditor/storage/files/';
-
-	//JsBaseとCssBaseは同一でもよい
-	h5.u.obj.ns('hifive.templateEditor.settings').libraryJsBase = '/hifive-template-editor/WebContent/res/lib';
-	h5.u.obj.ns('hifive.templateEditor.settings').libraryCssBase = '/hifive-template-editor/WebContent/res/lib';
-
-	h5.ext.basePath = './';
-	h5.core.controller.registerAlias('c', 'hifive.templateEditor.controller');
-</script>
-
-<script id="tmp-cssErrorMessage" type="text/ejs">
-<p>[%= message %]</p>
-</script>
+<script src="sample/sample.js"></script>
 
 <script>
 	$(function() {
@@ -105,23 +79,6 @@
 		});
 	});
 </script>
-
-<script id="tagEdit-table" type="text/ejs">
-[%# TODO タイトルは不要か
-<h3 >タグ属性編集<button type="button" class="btn-small apply">適用</button></h3>
-%]
-<h3 class="tagName">(ダブルクリックで選択)</h3>
-<table>
-<thead>
-<tr><th>属性名</th><th>属性値</th></tr>
-</thead>
-<tbody>
-</tbody>
-</tbody></table>
-</script>
-
-<script src="sample/sample.js"></script>
-
 
 </head>
 <body class='bg-carbon'>
