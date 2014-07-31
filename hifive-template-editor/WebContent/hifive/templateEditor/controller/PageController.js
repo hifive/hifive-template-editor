@@ -77,9 +77,11 @@
 
 		_templateEditorController: hifive.templateEditor.controller.TemplateEditController,
 
-		_queryTemplateUrl: null,
+		_query: null,
 
-		_queryDataUrl: null,
+		_templateURL: null,
+
+		_dataURL: null,
 
 
 		/**
@@ -147,24 +149,19 @@
 			// クエリパラメータを取得
 			var query = location.search;
 
-			var url = null;
-
 			if (query) {
-				// パラメータにtemplate,dataがあるかチェックします
-				url = this._disbandQuery(query);
-				this._queryDataUrl = url.data;
-				this._queryTemplateUrl = url.template;
+				this._query = this._parseQueryParameters(query);
 
-
+				var dataURL = this._query.data;
 				// データを取得し、セットします
-				if (url.data) {
+				if (dataURL) {
 					// urlを入力欄に入れます
 					this.$find('.input-data-url').each(function() {
-						$(this).val(url.data);
+						$(this).val(dataURL);
 					});
 
 					// データを取得し、テキストエリアに表示します
-					var dataDef = this._templateEditorController.getData(url.data).then(
+					var dataDef = this._templateEditorController.getData(dataURL).then(
 							this.own(function(data) {
 								this._templateEditorController.setDataText(data);
 
@@ -175,28 +172,29 @@
 							}));
 				}
 
-
+				var templateURL = this._query.template;
 				// テンプレートを取得し、セットします
-				if (url.template) {
-					var templateDef = this._templateEditorController.getTemplate(url.template)
-							.then(
-									this.own(function(template) {
-										template = template.replace(/<script.*>/, '').replace(
-												/<\/script>/, '');
-										this._templateEditorController.setTemplateText(template);
+				if (templateURL) {
+					var templateDef = this._templateEditorController.getTemplate(templateURL).then(
+							this.own(function(template) {
+								template = template.replace(/<script.*>/, '').replace(/<\/script>/,
+										'');
+								this._templateEditorController.setTemplateText(template);
 
-									}),
-									this.own(function(xhr, textStatus) {
-										this._templateEditorController.notFoundData(xhr,
-												textStatus, this.$find('.template-alert'));
-									}));
+							}),
+							this.own(function(xhr, textStatus) {
+								this._templateEditorController.notFoundTemplate(xhr, this
+										.$find('.template-alert'));
+							}));
 				}
 
-				var def = [dataDef, templateDef];
+				if (dataURL && templateURL) {
+					var def = [dataDef, templateDef];
 
-				h5.async.when(def).done(this.own(function() {
-					this._templateEditorController.applyTemplate();
-				}));
+					h5.async.when(def).done(this.own(function() {
+						this._templateEditorController.applyTemplate();
+					}));
+				}
 			}
 		},
 
@@ -216,24 +214,29 @@
 		},
 
 
-		_disbandQuery: function(query) {
+		_parseQueryParameters: function(query) {
+			var param = query.slice(1);
 
-			// template=xxxを取得します
-			var template = query.match(/template=[a-zA-Z0-9-./]*/);
-			if (template) {
-				template = template[0].replace('template=', '');
+			var ary = param.split('&');
+
+			var map = {};
+			for (var i = 0, len = ary.length; i < len; i++) {
+
+				temp = ary[i].split('=');// [key,value]
+
+				var key = temp[0];
+
+				var value;
+				if (temp.length === 2) {
+					value = temp[1];
+				} else {
+					value = null;
+				}
+
+				map[key] = value;
 			}
 
-			// data=xxxを取得
-			var data = query.match(/data=[a-zA-Z0-9-./]*/);
-			if (data) {
-				data = data[0].replace('data=', '');
-			}
-
-			return {
-				template: template,
-				data: data
-			};
+			return map;
 		}
 
 

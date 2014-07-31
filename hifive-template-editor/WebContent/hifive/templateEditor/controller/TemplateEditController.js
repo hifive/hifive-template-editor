@@ -220,7 +220,18 @@
 
 
 		/**
-		 * 指定されたURLがなかったとき、メッセージを表示します
+		 * 指定されたtemplateURLがなかったとき、メッセージを表示します
+		 */
+		notFoundTemplate: function(xhr, $el) {
+			var status = xhr.status;
+
+			var msg = 'status:' + status + '\nテンプレートの取得に失敗しました';
+			this._alertMessage(msg, $el);
+		},
+
+
+		/**
+		 * 指定されたdataURLがなかったとき、メッセージを表示します
 		 */
 		notFoundData: function(xhr, textStatus, $el) {
 			var status = xhr.status;
