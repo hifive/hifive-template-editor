@@ -152,7 +152,7 @@
 
 					hifive.editor.u.execInsertTextCommand(html);
 
-					this._applyTemplate();
+					this.applyTemplate();
 				}
 			});
 
@@ -209,6 +209,34 @@
 		},
 
 
+		getTemplate: function(url) {
+			return this._templateEditorLogic.loadTemplate(url);
+		},
+
+
+		getData: function(url) {
+			return this._templateEditorLogic.loadData(url);
+		},
+
+
+		/**
+		 * 指定されたURLがなかったとき、メッセージを表示します
+		 */
+		notFoundData: function(xhr, textStatus, $el) {
+			var status = xhr.status;
+
+			var msg;
+			if (textStatus === 'parsererror') {
+				msg = 'データはJSON型を指定してください';
+				this._alertMessage(msg, $el);
+				return;
+			}
+
+			msg = 'status:' + status + '\nデータの取得に失敗しました';
+			this._alertMessage(msg, $el);
+		},
+
+
 		/**
 		 * メッセージのtypeプロパティからメソッドを呼び出します。
 		 */
@@ -224,7 +252,7 @@
 				switch (data.type) {
 
 				case 'applyTemplate':
-					this._applyTemplate();
+					this.applyTemplate();
 					break;
 
 				case 'applyLibrary':
@@ -273,12 +301,12 @@
 		 * 再適用ボタンをクリックしたときのイベントハンドラ。テンプレートを反映させます
 		 */
 		'.applyTemplateBtn click': function() {
-			this._applyTemplate();
+			this.applyTemplate();
 		},
 
 
 		'{rootElement} textChange': function() {
-			this._applyTemplate();
+			this.applyTemplate();
 		},
 
 
@@ -290,27 +318,16 @@
 
 			var url = this.$find('.input-url').val();
 
-			// TODO: 別オリジンのページのロードの対応
-			if (/https?:/.test(url)) {
-				var myOrigin = location.protocol + '//' + location.host;
-
-				if (!url.match(myOrigin)) {
-					var msg = 'ページのロードに失敗しました。オリジンが異なります';
-					this._alertMessage(msg, this.$find('.preview-alert'));
-					return
-				}
-			}
-
-
-			this._target.contentDocument.location.replace(url);
+			this._target.src = url;
 
 			if (url !== DEFAULT_PAGE) {
 				this._disableLibrary();
 
 			} else {
 				this._enableLibrary();
-
 			}
+
+
 		},
 
 		/**
@@ -395,6 +412,7 @@
 
 			var url = this.$find('.input-data-url').val();
 
+			// URLが未入力であればメッセージを表示します
 			if (url === '') {
 				var msg = 'URLを指定してください';
 				this._alertMessage(msg, this.$find('.data-alert'));
@@ -402,11 +420,11 @@
 				return;
 			}
 
+			// パラメータを取得します
 			var param = this._parameterEditController.getParameter();
 
 			var type = null;
 			var elm = $('.sendType');
-
 			for (var i = 0, len = elm.length; i < len; i++) {
 				if ($(elm[i]).prop('checked')) {
 					type = $(elm[i]).context.value;
@@ -414,13 +432,18 @@
 				}
 			}
 
+			// データを取得します
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
+
+				// データをテキストエリアに反映します
 				this.setDataText(data);
-				this._applyTemplate();
+
+				this.applyTemplate();
+
 				this._alertMessage('データの取得が完了しました', this.$find('.data-msg'));
 
 			}), this.own(function(xhr, textStatus) {
-				this._notFoundData(xhr, textStatus, this.$find('.data-alert'));
+				this.notFoundData(xhr, textStatus, this.$find('.data-alert'));
 			}));
 		},
 
@@ -439,37 +462,42 @@
 			this._target.contentDocument.location.reload(true);
 		},
 
-
-		'.undo-button click': function() {
-			var undoBuffer = this._getUndoBuffer();
-			var redoBuffer = this._getRedoBuffer();
-
-			if (undoBuffer.length != 0) {
-				var temp = undoBuffer.pop();
-
-				redoBuffer.push(this._sourceEditorController.getText());
-
-				this.setTemplateText(temp);
-
-				this._applyTemplate();
-			}
-		},
-
-
-		'.redo-button click': function() {
-			var undoBuffer = this._getUndoBuffer();
-			var redoBuffer = this._getRedoBuffer();
-
-			if (redoBuffer.length != 0) {
-				var temp = redoBuffer.pop();
-
-				undoBuffer.push(this._sourceEditorController.getText());
-
-				this.setTemplateText(temp);
-
-				this._applyTemplate();
-			}
-		},
+		// /**
+		// * UNDO
+		// */
+		// '.undo-button click': function() {
+		// var undoBuffer = this._getUndoBuffer();
+		// var redoBuffer = this._getRedoBuffer();
+		//
+		// if (undoBuffer.length != 0) {
+		// var temp = undoBuffer.pop();
+		//
+		// redoBuffer.push(this._sourceEditorController.getText());
+		//
+		// this.setTemplateText(temp);
+		//
+		// this.applyTemplate();
+		// }
+		// },
+		//
+		//
+		// /**
+		// * REDO
+		// */
+		// '.redo-button click': function() {
+		// var undoBuffer = this._getUndoBuffer();
+		// var redoBuffer = this._getRedoBuffer();
+		//
+		// if (redoBuffer.length != 0) {
+		// var temp = redoBuffer.pop();
+		//
+		// undoBuffer.push(this._sourceEditorController.getText());
+		//
+		// this.setTemplateText(temp);
+		//
+		// this.applyTemplate();
+		// }
+		// },
 
 
 		/**
@@ -493,7 +521,8 @@
 		 * プレビューにデフォルトページを表示します。
 		 */
 		'.blank-button click': function() {
-			this._target.contentDocument.location.replace(DEFAULT_PAGE);
+			// this._target.contentDocument.location.replace(DEFAULT_PAGE);
+			this._target.src = DEFAULT_PAGE;
 
 			this._enableLibrary();
 
@@ -579,7 +608,7 @@
 
 			// チェックされたライブラリがない場合、テンプレートを適用します。
 			if (applyLibs.length === 0) {
-				this._applyTemplate();
+				this.applyTemplate();
 				return;
 			}
 
@@ -608,7 +637,7 @@
 			}
 
 			// テンプレートを適用します。
-			this._applyTemplate();
+			this.applyTemplate();
 		},
 
 
@@ -621,6 +650,15 @@
 				this._indicatorDeferred.resolve();
 			}
 
+			// var myOrigin = location.protocol + '//' + location.host;
+			// var reg = new RegExp(myOrigin);
+
+			// if (!reg.test(this.$find('iframe')[0].src)) {
+			// this._alertMessage('別ドメインのページをロードしました。現在は何もできません。別ページのロードは可能です。', this
+			// .$find('.preview-alert'));
+			// return;
+			// }
+			// this._alertMessage('ページのロードが完了しました', this.$find('.preview-msg'));
 		},
 
 
@@ -639,49 +677,30 @@
 		/**
 		 * テンプレートを生成してpostMessageで送ります。
 		 */
-		_applyTemplate: function() {
+		applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
 
 			var json;
 
-			this._clearMessage();
-
-			try {
-				var data = this._getData();
-				if (!data || data === '') {
-					json = null;
-				} else {
-					json = $.parseJSON(data);
-				}
-			}
-			catch (e) {
-				this._setMessage('データオブジェクトが不正です：' + e.message);
-				return;
+			var data = this._getData();
+			if (!data || data === '') {
+				json = null;
+			} else {
+				json = $.parseJSON(data);
 			}
 
 			this._previewController.setData(json);
 
-			try {
-				var generated = this._previewController.generate(template);
-				var data = {
-					type: 'preview',
-					template: generated
-				};
+			// テンプレートを生成します
+			var generated = this._previewController.generate(template);
 
-				this._sendMessage(data);
+			var data = {
+				type: 'preview',
+				template: generated
+			};
 
-			}
-			catch (e) {
-				this._setMessage(e.message);
-			}
-		},
+			this._sendMessage(data);
 
-		_clearMessage: function() {
-			this._setMessage('');
-		},
-
-		_setMessage: function(text) {
-			this.$find('.statusMessage').text(text);
 		},
 
 		_getData: function() {
@@ -771,7 +790,7 @@
 
 				break;
 
-			case 'preview-alert':
+			case '.preview-alert':
 				if (this._previewTimer) {
 					clearTimeout(this._previewTimer);
 				}
@@ -782,7 +801,7 @@
 
 				break;
 
-			case 'preview-msg':
+			case '.preview-msg':
 				if (this._previewErrorTimer) {
 					clearTimeout(this._previewErrorTimer);
 				}
@@ -796,24 +815,6 @@
 			default:
 				break;
 			}
-		},
-
-
-		/**
-		 * 指定されたURLがなかったとき、メッセージを表示します
-		 */
-		_notFoundData: function(xhr, textStatus, $el) {
-			var status = xhr.status;
-
-			var msg;
-			if (textStatus === 'parsererror') {
-				msg = 'データはJSON型を指定してください';
-				this._alertMessage(msg, $el);
-				return;
-			}
-
-			msg = 'status:' + status + '\nデータの取得に失敗しました';
-			this._alertMessage(msg, $el);
 		}
 
 	};

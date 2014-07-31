@@ -79,7 +79,7 @@
 		_hasJQM: null,// jQuery Mobile 1.3.0が読み込まれているとtrue
 
 		__ready: function() {
-			this._applyTarget = $('.preview')[0];
+			this._applyTarget = $('.preview');
 
 			this._sendMessage({
 				type: 'applyLibrary'
@@ -140,7 +140,7 @@
 				return;
 			}
 
-			this._applyTarget.innerHTML = data.template;
+			this._applyTarget.html(data.template);
 
 			// jqmを読み込んでいる場合、要素追加後に初期化処理を促します
 			if (this._hasJQM) {
@@ -230,10 +230,10 @@
 
 			// 変更前のテンプレートを除去
 			if (this._applyTarget) {
-				this._applyTarget.innerHTML = '';
+				this._applyTarget.empty();
 			}
 
-			var el = $(data.selector)[0];
+			var el = $(data.selector);
 			if (!el) {
 				// 指定されたセレクタがない
 				var data = {
