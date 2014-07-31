@@ -136,10 +136,10 @@
 			}
 
 			// 入力される度、内容を保存
-			this._undoBuffer.push(this.getText());
-			if (this._undoBuffer.length > UNDO_BUFFER_SIZE) {
-				this._undoBuffer.shift();
-			}
+			// this._undoBuffer.push(this.getText());
+			// if (this._undoBuffer.length > UNDO_BUFFER_SIZE) {
+			// this._undoBuffer.shift();
+			//			}
 
 		},
 
