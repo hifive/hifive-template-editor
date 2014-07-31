@@ -15,8 +15,8 @@ Local Modifications: None.
 Code under:
 WebContent/res/lib/bootstrap3.2
 
-Bootstrap.js
-URL:https://github.com/twbs/bootstrap/tree/master/js
+Bootstrap
+URL:https://github.com/twbs/bootstrap/
 License:MIT license
 	https://github.com/twbs/bootstrap/blob/master/LICENSE
 Local Modifications: None.
@@ -27,7 +27,7 @@ WebContent/res/lib/editor-external.css
 
 URL:http://lea.verou.me/
 License: MIT license
-		https://jquery.org/license/
+		http://www.opensource.org/licenses/mit-license.php
 Local Modifications: None.
 
 -----
@@ -37,7 +37,7 @@ WebContent/res/lib/jqm
 jQuery Mobile
 URL:http://jquerymobile.com/
 License:MIT licenses.
-	https://jquery.org/license/
+	http://www.opensource.org/licenses/mit-license.php
 Local Modifications: None.
 
 -----
@@ -60,8 +60,18 @@ WebContent/images/redo_32.png
 Font Awesome by Dave Gandy
 URL: http://fontawesome.io
 License: SIL OFL 1.1
-  http://scripts.sil.org/OFL
+	http://scripts.sil.org/OFL
 Local Modifications: Yes
+
+-----
+Code under:
+lib/closurecompiler
+
+closure-compiler
+URL:https://github.com/google/closure-compiler
+License: Apache License, Version 2.0 (the "License")
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
 
 -----
 Code under:
@@ -75,7 +85,7 @@ Local Modifications: None.
 
 -----
 Code under:
-src/main/webapp/editor/lib/DividedBox
+WebContent/res/lib/hifive-ui-library/components/dividedBox/DividedBox
 
 hifive-ui-library
 URL:https://github.com/hifive/hifive-ui-library
