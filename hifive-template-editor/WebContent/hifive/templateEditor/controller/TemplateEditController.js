@@ -31,7 +31,7 @@
 	// スコープ内定数
 	//
 	// =========================================================================
-	var DEFAULT_PAGE = 'sample/sample-preview.html';// デフォルトページ
+	var BLANK_PAGE = 'sample/sample-preview.html';// デフォルトページ
 
 
 	// =========================================================================
@@ -158,7 +158,14 @@
 
 			this._target = $('iframe')[0];// postMessageの送信先を設定
 
+			$('iframe').load(this.own(function() {
+				this._alertMessage('ページのロードが完了しました', $('.preview-msg'));
+			}));
+
+			// editAreaBarの高さを調整(window幅によって高さが変わる)
 			this._editAreaBarHeight = $('.active .editAreaBar').outerHeight();
+
+			this._beginIndicator();
 		},
 
 
@@ -331,15 +338,15 @@
 
 			this._target.src = url;
 
-			if (url !== DEFAULT_PAGE) {
+			if (url !== BLANK_PAGE) {
 				this._disableLibrary();
 
 			} else {
 				this._enableLibrary();
 			}
 
-
 		},
+
 
 		/**
 		 * テンプレートを反映させるセレクタ(文字列)をプレビューに送る
@@ -533,16 +540,18 @@
 
 
 		/**
-		 * プレビューにデフォルトページを表示します。
+		 * プレビューにブランクページを表示します。
 		 */
 		'.blank-button click': function() {
-			// this._target.contentDocument.location.replace(DEFAULT_PAGE);
-			this._target.src = DEFAULT_PAGE;
+			this._target.src = BLANK_PAGE;
 
 			this._enableLibrary();
+		},
 
-			var msg = 'ブランクページをロードしました';
-			this._alertMessage(msg, this.$find('.preview-msg'));
+
+		'iframe load': function() {
+			console.log('load iframe');
+
 		},
 
 
