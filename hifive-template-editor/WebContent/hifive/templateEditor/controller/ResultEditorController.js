@@ -136,10 +136,10 @@
 
 			if (!this._applyTarget) {
 				// TODO: エラーメッセージ
-				this.log.debug('error');
 				return;
 			}
 
+			// テンプレートを流し込みます
 			this._applyTarget.html(data.template);
 
 			// jqmを読み込んでいる場合、要素追加後に初期化処理を促します
@@ -234,7 +234,7 @@
 			}
 
 			var el = $(data.selector);
-			if (!el) {
+			if (el.length === 0) {
 				// 指定されたセレクタがない
 				var data = {
 					type: 'notFoundSelector',
