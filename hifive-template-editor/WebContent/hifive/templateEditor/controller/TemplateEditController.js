@@ -318,7 +318,6 @@
 
 			var url = this.$find('.input-url').val();
 
-			// this._target.contentDocument.location.replace(url);
 			this._target.src = url;
 
 			if (url !== DEFAULT_PAGE) {
@@ -413,6 +412,7 @@
 
 			var url = this.$find('.input-data-url').val();
 
+			// URLが未入力であればメッセージを表示します
 			if (url === '') {
 				var msg = 'URLを指定してください';
 				this._alertMessage(msg, this.$find('.data-alert'));
@@ -420,11 +420,11 @@
 				return;
 			}
 
+			// パラメータを取得します
 			var param = this._parameterEditController.getParameter();
 
 			var type = null;
 			var elm = $('.sendType');
-
 			for (var i = 0, len = elm.length; i < len; i++) {
 				if ($(elm[i]).prop('checked')) {
 					type = $(elm[i]).context.value;
@@ -432,9 +432,14 @@
 				}
 			}
 
+			// データを取得します
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
+
+				// データをテキストエリアに反映します
 				this.setDataText(data);
+
 				this.applyTemplate();
+
 				this._alertMessage('データの取得が完了しました', this.$find('.data-msg'));
 
 			}), this.own(function(xhr, textStatus) {
@@ -457,37 +462,42 @@
 			this._target.contentDocument.location.reload(true);
 		},
 
-
-		'.undo-button click': function() {
-			var undoBuffer = this._getUndoBuffer();
-			var redoBuffer = this._getRedoBuffer();
-
-			if (undoBuffer.length != 0) {
-				var temp = undoBuffer.pop();
-
-				redoBuffer.push(this._sourceEditorController.getText());
-
-				this.setTemplateText(temp);
-
-				this.applyTemplate();
-			}
-		},
-
-
-		'.redo-button click': function() {
-			var undoBuffer = this._getUndoBuffer();
-			var redoBuffer = this._getRedoBuffer();
-
-			if (redoBuffer.length != 0) {
-				var temp = redoBuffer.pop();
-
-				undoBuffer.push(this._sourceEditorController.getText());
-
-				this.setTemplateText(temp);
-
-				this.applyTemplate();
-			}
-		},
+		// /**
+		// * UNDO
+		// */
+		// '.undo-button click': function() {
+		// var undoBuffer = this._getUndoBuffer();
+		// var redoBuffer = this._getRedoBuffer();
+		//
+		// if (undoBuffer.length != 0) {
+		// var temp = undoBuffer.pop();
+		//
+		// redoBuffer.push(this._sourceEditorController.getText());
+		//
+		// this.setTemplateText(temp);
+		//
+		// this.applyTemplate();
+		// }
+		// },
+		//
+		//
+		// /**
+		// * REDO
+		// */
+		// '.redo-button click': function() {
+		// var undoBuffer = this._getUndoBuffer();
+		// var redoBuffer = this._getRedoBuffer();
+		//
+		// if (redoBuffer.length != 0) {
+		// var temp = redoBuffer.pop();
+		//
+		// undoBuffer.push(this._sourceEditorController.getText());
+		//
+		// this.setTemplateText(temp);
+		//
+		// this.applyTemplate();
+		// }
+		// },
 
 
 		/**
@@ -640,6 +650,15 @@
 				this._indicatorDeferred.resolve();
 			}
 
+			// var myOrigin = location.protocol + '//' + location.host;
+			// var reg = new RegExp(myOrigin);
+
+			// if (!reg.test(this.$find('iframe')[0].src)) {
+			// this._alertMessage('別ドメインのページをロードしました。現在は何もできません。別ページのロードは可能です。', this
+			// .$find('.preview-alert'));
+			// return;
+			// }
+			// this._alertMessage('ページのロードが完了しました', this.$find('.preview-msg'));
 		},
 
 
@@ -663,44 +682,25 @@
 
 			var json;
 
-			this._clearMessage();
-
-			try {
-				var data = this._getData();
-				if (!data || data === '') {
-					json = null;
-				} else {
-					json = $.parseJSON(data);
-				}
-			}
-			catch (e) {
-				this._setMessage('データオブジェクトが不正です：' + e.message);
-				return;
+			var data = this._getData();
+			if (!data || data === '') {
+				json = null;
+			} else {
+				json = $.parseJSON(data);
 			}
 
 			this._previewController.setData(json);
 
-			try {
-				var generated = this._previewController.generate(template);
-				var data = {
-					type: 'preview',
-					template: generated
-				};
+			// テンプレートを生成します
+			var generated = this._previewController.generate(template);
 
-				this._sendMessage(data);
+			var data = {
+				type: 'preview',
+				template: generated
+			};
 
-			}
-			catch (e) {
-				this._setMessage(e.message);
-			}
-		},
+			this._sendMessage(data);
 
-		_clearMessage: function() {
-			this._setMessage('');
-		},
-
-		_setMessage: function(text) {
-			this.$find('.statusMessage').text(text);
 		},
 
 		_getData: function() {
