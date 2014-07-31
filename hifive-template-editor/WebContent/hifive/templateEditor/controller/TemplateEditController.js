@@ -727,6 +727,10 @@
 				default:
 					break;
 				}
+
+				if (this._indicator) {
+					this._indicatorDeferred.resolve();
+				}
 				return;
 			}
 
@@ -754,6 +758,10 @@
 
 				default:
 					break;
+				}
+
+				if (this._indicator) {
+					this._indicatorDeferred.resolve();
 				}
 			}
 
