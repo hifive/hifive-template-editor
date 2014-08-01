@@ -122,6 +122,8 @@
 
 		_editAreaBarHeight: null,
 
+		_isBlank: true,// iframeがロードしているページがブランクページかのフラグ
+
 		__ready: function() {
 
 			h5.u.obj.expose('hifive.editor', {
@@ -158,6 +160,10 @@
 			this._target = $('iframe')[0];// postMessageの送信先を設定
 
 			$('iframe').load(this.own(function() {
+				if (this._isBlank) {
+					this._alertMessage('ブランクページのロードが完了しました', $('.preview-msg'));
+					return;
+				}
 				this._alertMessage('ページのロードが完了しました', $('.preview-msg'));
 			}));
 
@@ -347,9 +353,11 @@
 
 			if (url !== BLANK_PAGE) {
 				this._disableLibrary();
+				this._isBlank = false;
 
 			} else {
 				this._enableLibrary();
+				this._isBlank = true;
 			}
 
 		},
@@ -551,6 +559,8 @@
 		 */
 		'.blank-button click': function() {
 			this._target.src = BLANK_PAGE;
+
+			this._isBlank = true;
 
 			this._enableLibrary();
 		},
