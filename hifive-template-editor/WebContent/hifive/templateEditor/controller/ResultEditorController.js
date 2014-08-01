@@ -238,7 +238,23 @@
 				this._applyTarget.empty();
 			}
 
-			var el = $(data.selector);
+			var el;
+			try {
+				el = $(data.selector);
+			}
+			catch (e) {
+				var data = {
+					type: 'notFoundSelector',
+					msg: '無効なセレクタが入力されています'
+				};
+
+				this._applyTarget.html(temp);// 除去したテンプレートを戻します
+
+				this._sendMessage(data);
+
+				return;
+			}
+
 
 			if (el.length === 0) {
 				// 指定されたセレクタがない
