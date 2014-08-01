@@ -222,18 +222,23 @@
 		 */
 		_changeTarget: function(data) {
 
-			// 変更前のテンプレートを除去
+			var temp = this._applyTarget.html();
+
+			// テンプレートで追加されたDOMをセレクタの検索対象から外すため、テンプレートを除去します
 			if (this._applyTarget) {
 				this._applyTarget.empty();
 			}
 
 			var el = $(data.selector);
+
 			if (el.length === 0) {
 				// 指定されたセレクタがない
 				var data = {
 					type: 'notFoundSelector',
 					msg: '指定された要素が見つかりません'
 				};
+
+				this._applyTarget.html(temp);// 除去したテンプレートを戻します
 
 				this._sendMessage(data);
 
