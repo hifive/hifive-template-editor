@@ -792,6 +792,9 @@
 				$(this).prop('disabled', 'disabled');
 			});
 
+			this.$find('.applyLibBtn').attr('disabled', 'disabled');
+
+
 			this.$find('.libraryMessage').show();
 		},
 
@@ -799,6 +802,8 @@
 			this.$find('.libraries input').each(function() {
 				$(this).prop('disabled', '');
 			});
+
+			this.$find('.applyLibBtn').removeAttr('disabled')
 
 			this.$find('.libraryMessage').hide();
 		},
