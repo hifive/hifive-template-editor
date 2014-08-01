@@ -337,6 +337,12 @@
 
 			var url = this.$find('.input-url').val();
 
+			url = $.trim(url);
+
+			if (url.length === 0) {
+				return;
+			}
+
 			this._target.src = url;
 
 			if (url !== BLANK_PAGE) {
