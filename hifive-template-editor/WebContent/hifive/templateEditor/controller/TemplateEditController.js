@@ -532,7 +532,7 @@
 				this.setDataText(data);
 			}
 			catch (e) {
-				var msg = 'JSONへのパースに失敗しました';
+				var msg = 'JSONのパースに失敗しました';
 				this._alertMessage(msg, this.$find('.data-alert'));
 			}
 		},
