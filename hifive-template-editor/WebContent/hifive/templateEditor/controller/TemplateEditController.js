@@ -165,6 +165,8 @@
 			this._editAreaBarHeight = $('.active .editAreaBar').outerHeight();
 
 			this._beginIndicator();
+
+			this.$find('iframe')[0].src = BLANK_PAGE;
 		},
 
 

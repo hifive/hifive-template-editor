@@ -183,14 +183,14 @@
 				}
 			}
 
-			var loadJS = h5.u.loadScript(jsPaths);
-
-			// js,cssをロードします
-			h5.async.when(loadJS, this._loadCSS(cssPaths)).done(this.own(function() {
-				this._sendMessage({
-					type: 'loadLibraryComp'
-				});
+			this._loadCSS(cssPaths).then(this.own(function() {
+				h5.u.loadScript(jsPaths).then(this.own(function() {
+					this._sendMessage({
+						type: 'loadLibraryComp'
+					});
+				}));
 			}));
+
 		},
 
 
@@ -202,14 +202,23 @@
 		 */
 		_loadCSS: function(cssPaths) {
 			var def = h5.async.deferred();
+
+			var numLoaded = 0;
+
 			for (var i = 0, len = cssPaths.length; i < len; i++) {
 				var css = document.createElement('link');
-				css.href = cssPaths[i];
+
+				$(css).load(function() {
+					numLoaded++;
+					if (numLoaded === cssPaths.length) {
+						def.resolve();
+					}
+				});
+
+				$('head')[0].appendChild(css);
 				css.type = 'text/css';
 				css.rel = 'stylesheet';
-				css.media = 'screen';
-				$('head')[0].appendChild(css);
-				def.resolve();
+				css.href = cssPaths[i];
 			}
 			return def;
 		},
