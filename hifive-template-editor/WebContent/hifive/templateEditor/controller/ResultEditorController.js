@@ -133,11 +133,6 @@
 		 */
 		_preview: function(data) {
 
-			if (!this._applyTarget) {
-				// TODO: エラーメッセージ
-				return;
-			}
-
 			// テンプレートを流し込みます
 			this._applyTarget.html(data.template);
 
@@ -241,6 +236,7 @@
 				};
 
 				this._sendMessage(data);
+
 				return;
 			}
 
