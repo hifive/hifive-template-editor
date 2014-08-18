@@ -555,12 +555,6 @@
 		},
 
 
-		'iframe load': function() {
-			console.log('load iframe');
-
-		},
-
-
 		/**
 		 * dividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
 		 *
@@ -802,14 +796,14 @@
 				$(this).prop('disabled', '');
 			});
 
-			this.$find('.applyLibBtn').removeAttr('disabled')
+			this.$find('.applyLibBtn').removeAttr('disabled');
 
 			this.$find('.libraryMessage').hide();
 		},
 
 
 		/**
-		 * エラーメッセージを表示します
+		 * メッセージを表示します
 		 *
 		 * @param msg 表示するメッセージ
 		 * @param $el メッセージを表示する要素
