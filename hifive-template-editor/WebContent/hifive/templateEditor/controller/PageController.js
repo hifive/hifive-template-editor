@@ -166,8 +166,8 @@
 
 							}),
 							this.own(function(xhr, textStatus) {
-								this._templateEditorController.notFoundData(xhr, textStatus, this
-										.$find('.template-alert'));
+								this._templateEditorController.showErrMsg(xhr, this
+										.$find('.template-alert'), '\nデータの取得に失敗しました', textStatus);
 							}));
 				}
 
@@ -182,8 +182,8 @@
 
 							}),
 							this.own(function(xhr, textStatus) {
-								this._templateEditorController.notFoundTemplate(xhr, this
-										.$find('.template-alert'));
+								this._templateEditorController.showErrMsg(xhr, this
+										.$find('.template-alert'), '\nテンプレートの取得に失敗しました');
 							}));
 				}
 
@@ -191,7 +191,7 @@
 					var def = [dataDef, templateDef];
 
 					h5.async.when(def).done(this.own(function() {
-						this._templateEditorController.applyTemplate();
+						this._templateEditorController.createTemplate();
 					}));
 				}
 			}

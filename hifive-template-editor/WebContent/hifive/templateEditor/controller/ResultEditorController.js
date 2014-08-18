@@ -81,7 +81,7 @@
 			this._applyTarget = $('.preview');
 
 			this._sendMessage({
-				type: 'applyLibrary'
+				type: 'getLibraryPath'
 			});
 		},
 
@@ -142,7 +142,7 @@
 			}
 
 			this._sendMessage({
-				type: 'applyTemplateComp'
+				type: 'previewComp'
 			});
 		},
 
@@ -238,13 +238,13 @@
 				this._applyTarget.empty();
 			}
 
-			var el;
+			var $el;
 			try {
-				el = $(data.selector);
+				$el = $(data.selector);
 			}
 			catch (e) {
 				var data = {
-					type: 'notFoundSelector',
+					type: 'showErrMsg',
 					msg: '無効なセレクタが入力されています'
 				};
 
@@ -256,10 +256,10 @@
 			}
 
 
-			if (el.length === 0) {
+			if ($el.length === 0) {
 				// 指定されたセレクタがない
 				var data = {
-					type: 'notFoundSelector',
+					type: 'showErrMsg',
 					msg: '指定された要素が見つかりません'
 				};
 
@@ -271,10 +271,10 @@
 			}
 
 			// テンプレートの適用先を更新
-			this._applyTarget = el;
+			this._applyTarget = $el;
 
 			var data = {
-				type: 'applyTemplate'
+				type: 'createTemplate'
 			};
 
 			this._sendMessage(data);

@@ -153,7 +153,7 @@
 
 					hifive.editor.u.execInsertTextCommand(html);
 
-					this.applyTemplate();
+					this.createTemplate();
 				}
 			});
 
@@ -234,30 +234,19 @@
 
 
 		/**
-		 * 指定されたtemplateURLがなかったとき、メッセージを表示します
+		 * エラーメッセージを表示します
 		 */
-		notFoundTemplate: function(xhr, $el) {
+		showErrMsg: function(xhr, $el, message, textStatus) {
 			var status = xhr.status;
-
-			var msg = 'status:' + status + '\nテンプレートの取得に失敗しました';
-			this._alertMessage(msg, $el);
-		},
-
-
-		/**
-		 * 指定されたdataURLがなかったとき、メッセージを表示します
-		 */
-		notFoundData: function(xhr, textStatus, $el) {
-			var status = xhr.status;
-
 			var msg;
+
 			if (textStatus === 'parsererror') {
 				msg = 'データはJSON型を指定してください';
 				this._alertMessage(msg, $el);
 				return;
 			}
 
-			msg = 'status:' + status + '\nデータの取得に失敗しました';
+			msg = 'status:' + status + message;
 			this._alertMessage(msg, $el);
 		},
 
@@ -276,23 +265,23 @@
 
 				switch (data.type) {
 
-				case 'applyTemplate':
-					this.applyTemplate();
+				case 'createTemplate':
+					this.createTemplate();
 					break;
 
-				case 'applyLibrary':
-					this._applyLibrary();
+				case 'getLibraryPath':
+					this._getLibraryPath();
 					break;
 
 				case 'loadLibraryComp':
 					this._loadLibraryComp();
 					break;
 
-				case 'applyTemplateComp':
+				case 'previewComp':
 					this._applyTemplateComp();
 					break;
 
-				case 'notFoundSelector':
+				case 'showErrMsg':
 					this._alertMessage(data.msg, this.$find('.template-alert'));
 					break;
 
@@ -326,12 +315,12 @@
 		 * 再適用ボタンをクリックしたときのイベントハンドラ。テンプレートを反映させます
 		 */
 		'.applyTemplateBtn click': function() {
-			this.applyTemplate();
+			this.createTemplate();
 		},
 
 
 		'{rootElement} textChange': function() {
-			this.applyTemplate();
+			this.createTemplate();
 		},
 
 
@@ -416,7 +405,7 @@
 
 
 		/**
-		 * ラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
+		 * データタブのラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
 		 *
 		 * @param context
 		 * @param $el
@@ -471,12 +460,12 @@
 				// データをテキストエリアに反映します
 				this.setDataText(data);
 
-				this.applyTemplate();
+				this.createTemplate();
 
 				this._alertMessage('データの取得が完了しました', this.$find('.data-msg'));
 
 			}), this.own(function(xhr, textStatus) {
-				this.notFoundData(xhr, textStatus, this.$find('.data-alert'));
+				this.showErrMsg(xhr, this.$find('.data-alert'), '\nデータの取得に失敗しました', textStatus);
 			}));
 		},
 
@@ -509,7 +498,7 @@
 		//
 		// this.setTemplateText(temp);
 		//
-		// this.applyTemplate();
+		// this.createTemplate();
 		// }
 		// },
 		//
@@ -528,7 +517,7 @@
 		//
 		// this.setTemplateText(temp);
 		//
-		// this.applyTemplate();
+		// this.createTemplate();
 		// }
 		// },
 
@@ -632,7 +621,7 @@
 		/**
 		 * チェックされたライブラリのパスを取得しpostMessageします。
 		 */
-		_applyLibrary: function() {
+		_getLibraryPath: function() {
 
 			// インジケータのメッセージを更新
 			if (this._indicator) {
@@ -649,7 +638,7 @@
 
 			// チェックされたライブラリがない場合、テンプレートを適用します。
 			if (applyLibs.length === 0) {
-				this.applyTemplate();
+				this.createTemplate();
 				return;
 			}
 
@@ -678,7 +667,7 @@
 			}
 
 			// テンプレートを適用します。
-			this.applyTemplate();
+			this.createTemplate();
 		},
 
 
@@ -718,7 +707,7 @@
 		/**
 		 * テンプレートを生成してpostMessageで送ります。
 		 */
-		applyTemplate: function() {
+		createTemplate: function() {
 			var template = this._sourceEditorController.getText();
 
 			try {
@@ -766,8 +755,7 @@
 				var tab = $('.tab-pane.active').attr('id');
 				switch (tab) {
 				case 'template':
-					this._alertMessage('テンプレートの生成に失敗しました' + e.stack, this
-							.$find('.template-alert'));
+					this._alertMessage('テンプレートの生成に失敗しました' + e.stack, this.$find('.template-alert'));
 					break;
 
 				case 'data':
