@@ -73,12 +73,12 @@
 		 */
 		__name: 'hifive.templateEditor.controller.ResultEditorController',
 
-		_applyTarget: null,// テンプレート適用先
+		_target: null,// テンプレート適用先
 
 		_hasJQM: null,// jQuery Mobile 1.3.0が読み込まれているとtrue
 
 		__ready: function() {
-			this._applyTarget = $('.preview');
+			this._target = $('body');
 
 			this._sendMessage({
 				type: 'getLibraryPath'
@@ -134,7 +134,7 @@
 		_preview: function(data) {
 
 			// テンプレートを流し込みます
-			this._applyTarget.html(data.template);
+			this._target.html(data.template);
 
 			// jqmを読み込んでいる場合、要素追加後に初期化処理を促します
 			if (this._hasJQM) {
@@ -231,11 +231,11 @@
 		 */
 		_changeTarget: function(data) {
 
-			var temp = this._applyTarget.html();
+			var temp = this._target.html();
 
 			// テンプレートで追加されたDOMをセレクタの検索対象から外すため、テンプレートを除去します
-			if (this._applyTarget) {
-				this._applyTarget.empty();
+			if (this._target) {
+				this._target.empty();
 			}
 
 			var $el;
@@ -248,7 +248,7 @@
 					msg: '無効なセレクタが入力されています'
 				};
 
-				this._applyTarget.html(temp);// 除去したテンプレートを戻します
+				this._target.html(temp);// 除去したテンプレートを戻します
 
 				this._sendMessage(data);
 
@@ -263,7 +263,7 @@
 					msg: '指定された要素が見つかりません'
 				};
 
-				this._applyTarget.html(temp);// 除去したテンプレートを戻します
+				this._target.html(temp);// 除去したテンプレートを戻します
 
 				this._sendMessage(data);
 
@@ -271,7 +271,7 @@
 			}
 
 			// テンプレートの適用先を更新
-			this._applyTarget = $el;
+			this._target = $el;
 
 			var data = {
 				type: 'createTemplate'
