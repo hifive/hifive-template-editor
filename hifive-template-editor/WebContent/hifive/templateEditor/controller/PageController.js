@@ -92,7 +92,7 @@
 
 			var controllers = h5.core.controllerManager.getControllers($('body'));
 
-			var sourceEditorController = controllers[0]._pageController._templateEditorController._sourceEditorController;
+			var sourceEditorController = controllers[0]._templateEditorController._sourceEditorController;
 
 			if (context.event.target.hash === '#template') {
 
@@ -143,7 +143,7 @@
 		},
 
 
-		init: function() {
+		__init: function() {
 
 			// クエリパラメータを取得
 			var query = location.search;
@@ -250,3 +250,8 @@
 	h5.core.expose(pageController);
 
 })(jQuery);
+
+//---- Init ---- //
+$(function() {
+	h5.core.controller('body', hifive.templateEditor.controller.PageController);
+});
