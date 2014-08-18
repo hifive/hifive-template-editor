@@ -766,11 +766,12 @@
 				var tab = $('.tab-pane.active').attr('id');
 				switch (tab) {
 				case 'template':
-					this._alertMessage('テンプレートの生成に失敗しました', this.$find('.template-alert'));
+					this._alertMessage('テンプレートの生成に失敗しました' + e.stack, this
+							.$find('.template-alert'));
 					break;
 
 				case 'data':
-					this._alertMessage('テンプレートの生成に失敗しました', this.$find('.data-alert'));
+					this._alertMessage('テンプレートの生成に失敗しました' + e.stack, this.$find('.data-alert'));
 					break;
 
 				default:
