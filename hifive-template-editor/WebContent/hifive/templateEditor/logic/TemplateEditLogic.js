@@ -40,7 +40,8 @@
 		 */
 		loadTemplate: function(url) {
 			return h5.ajax({
-				url: url
+				url: url,
+				dataType: 'text'
 			});
 		}
 
