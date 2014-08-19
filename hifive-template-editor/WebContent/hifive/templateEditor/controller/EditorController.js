@@ -31,6 +31,7 @@
 	//
 	// =========================================================================
 	var BLANK_PAGE = 'sample/blank.html';// ブランクページ
+	var TEMPLATE_ID = 'templateId';
 
 
 	// =========================================================================
@@ -72,9 +73,6 @@
 		__name: 'hifive.templateEditor.controller.EditorController',
 
 		__meta: {
-			_previewController: {
-				rootElement: '.dataText'
-			},
 			_sourceEditorController: {
 				rootElement: '.sourceText'
 			},
@@ -89,8 +87,6 @@
 		 * _cssEditorController: { rootElement: '#editCSSPanel' }
 		 */
 		},
-
-		_previewController: hifive.templateEditor.controller.PreviewController,
 
 		_sourceEditorController: hifive.templateEditor.controller.SourceEditorController,
 
@@ -113,8 +109,6 @@
 		_indicatorDeferred: null,
 
 		_target: null,// postMessageの送信先
-
-
 
 		_editAreaBarHeight: null,
 
@@ -169,53 +163,6 @@
 			this._beginIndicator();
 
 			this.$find('iframe')[0].src = BLANK_PAGE;
-		},
-
-
-		/**
-		 * postMessageの送信先を設定します。
-		 *
-		 * @param element
-		 */
-		setTarget: function(element) {
-			if (element) {
-				this._target = element;
-			} else {
-				this._target = null;
-			}
-		},
-
-
-		/**
-		 * テンプレートをセットします。
-		 *
-		 * @param text
-		 */
-		setTemplateText: function(text) {
-			this._sourceEditorController.setText(text);
-		},
-
-
-		/**
-		 * editAreaBarの高さが変わっていたらeditAreaの高さを修正します
-		 */
-		resizeEditAreaBar: function() {
-			var height = this.$find('.active .editAreaBar').outerHeight();
-
-			if (this._editAreaBarHeight !== height) {
-				this.$find('.tab-content').css('padding-bottom', height);
-				this._editAreaBarHeight = height;
-			}
-		},
-
-
-		loadTemplate: function(url) {
-			return this._templateEditorLogic.loadTemplate(url);
-		},
-
-
-		loadData: function(url, type, param) {
-			return this._templateEditorLogic.loadData(url, type, param);
 		},
 
 
@@ -329,6 +276,66 @@
 			this._target.contentDocument.location.reload(true);
 		},
 
+
+		/**
+		 * postMessageの送信先を設定します。
+		 *
+		 * @param element
+		 */
+		setTarget: function(element) {
+			if (element) {
+				this._target = element;
+			} else {
+				this._target = null;
+			}
+		},
+
+
+		/**
+		 * テンプレートをセットします。
+		 *
+		 * @param text
+		 */
+		setTemplateText: function(text) {
+			this._sourceEditorController.setText(text);
+		},
+
+
+		/**
+		 * editAreaBarの高さが変わっていたらeditAreaの高さを修正します
+		 */
+		resizeEditAreaBar: function() {
+			var height = this.$find('.active .editAreaBar').outerHeight();
+
+			if (this._editAreaBarHeight !== height) {
+				this.$find('.tab-content').css('padding-bottom', height);
+				this._editAreaBarHeight = height;
+			}
+		},
+
+
+		loadTemplate: function(url) {
+			return this._templateEditorLogic.loadTemplate(url);
+		},
+
+
+		loadData: function(url, type, param) {
+			return this._templateEditorLogic.loadData(url, type, param);
+		},
+
+
+		/**
+		 * プレビューにブランクページを表示します。
+		 */
+		'.blank-button click': function() {
+			this._target.src = BLANK_PAGE;
+
+			this._isBlank = true;
+
+			this._enableLibrary();
+		},
+
+
 		// /**
 		// * UNDO
 		// */
@@ -365,18 +372,6 @@
 		// this.createTemplate();
 		// }
 		// },
-
-
-		/**
-		 * プレビューにブランクページを表示します。
-		 */
-		'.blank-button click': function() {
-			this._target.src = BLANK_PAGE;
-
-			this._isBlank = true;
-
-			this._enableLibrary();
-		},
 
 
 		/**
@@ -560,7 +555,7 @@
 
 			try {
 				// テンプレートを生成します
-				var generated = this._previewController.generate(template, data);
+				var generated = this._generate(template, data);
 
 				var data = {
 					type: 'preview',
@@ -582,6 +577,23 @@
 				}
 			}
 		},
+
+
+		/**
+		 * テンプレートとデータからテンプレートを生成して返します。
+		 *
+		 * @param template
+		 * @return generated
+		 */
+		_generate: function(template, data) {
+			// テンプレートが不正な場合ここで例外が発生する
+			var view = h5.core.view.createView();
+
+			view.register(TEMPLATE_ID, template);
+
+			return view.get(TEMPLATE_ID, data);
+		},
+
 
 		_getData: function() {
 			var data = this.$find('.dataText').val();

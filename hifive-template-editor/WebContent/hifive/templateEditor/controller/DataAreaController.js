@@ -88,6 +88,11 @@
 		},
 
 
+		'.dataText keyup': function() {
+			this.trigger('textChange');
+		},
+
+
 		/**
 		 * データタブのラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
 		 *
