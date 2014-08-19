@@ -78,7 +78,7 @@
 		_hasJQM: null,// jQuery Mobile 1.3.0が読み込まれているとtrue
 
 		__ready: function() {
-			this._target = $('body');
+			this._target = $('.dummy');
 
 			this._sendMessage({
 				type: 'getLibraryPath'
@@ -239,13 +239,14 @@
 			}
 
 			var $el;
+			var selector = '.template-alert';
 			try {
 				$el = $(data.selector);
-			}
-			catch (e) {
+			} catch (e) {
 				var data = {
-					type: 'showErrMsg',
-					msg: '無効なセレクタが入力されています'
+					type: 'showMessage',
+					msg: '無効なセレクタが入力されています',
+					selector: selector
 				};
 
 				this._target.html(temp);// 除去したテンプレートを戻します
@@ -259,8 +260,9 @@
 			if ($el.length === 0) {
 				// 指定されたセレクタがない
 				var data = {
-					type: 'showErrMsg',
-					msg: '指定された要素が見つかりません'
+					type: 'showMessage',
+					msg: '指定された要素が見つかりません',
+					selector: selector
 				};
 
 				this._target.html(temp);// 除去したテンプレートを戻します
