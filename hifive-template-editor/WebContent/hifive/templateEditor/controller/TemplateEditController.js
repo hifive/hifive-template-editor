@@ -78,8 +78,11 @@
 			_sourceEditorController: {
 				rootElement: '.sourceText'
 			},
-			_parameterEditController: {
-				rootElement: '.parameter-input'
+			_templateAreaController: {
+				rootElement: '#template'
+			},
+			_dataAreaController: {
+				rootElement: '#data'
 			}
 
 		/*
@@ -93,7 +96,9 @@
 
 		/* _cssEditorController: hifive.templateEditor.controller.CSSEditorController, */
 
-		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
+		_templateAreaController: hifive.templateEditor.controller.TemplateAreaController,
+
+		_dataAreaController: hifive.templateEditor.controller.DataAreaController,
 
 		_templateEditorLogic: hifive.templateEditor.logic.TemplateEditLogic,
 
@@ -192,16 +197,6 @@
 
 
 		/**
-		 * データオブジェクトをテキストエリアに反映します。
-		 *
-		 * @param json
-		 */
-		setDataText: function(data) {
-			this.$find('.dataText').val(JSON.stringify(data, null, '  '));
-		},
-
-
-		/**
 		 * editAreaBarの高さが変わっていたらeditAreaの高さを修正します
 		 */
 		resizeEditAreaBar: function() {
@@ -214,13 +209,13 @@
 		},
 
 
-		getTemplate: function(url) {
+		loadTemplate: function(url) {
 			return this._templateEditorLogic.loadTemplate(url);
 		},
 
 
-		getData: function(url) {
-			return this._templateEditorLogic.loadData(url);
+		loadData: function(url, type, param) {
+			return this._templateEditorLogic.loadData(url, type, param);
 		},
 
 
@@ -283,14 +278,6 @@
 		},
 
 
-		/**
-		 * 再適用ボタンをクリックしたときのイベントハンドラ。テンプレートを反映させます
-		 */
-		'.applyTemplateBtn click': function() {
-			this.createTemplate();
-		},
-
-
 		'{rootElement} textChange': function() {
 			this.createTemplate();
 		},
@@ -323,137 +310,8 @@
 		},
 
 
-		/**
-		 * テンプレートを反映させるセレクタ(文字列)をプレビューに送る
-		 * <p>
-		 * ここで指定されるセレクタはiframeが読み込むhtml上の要素
-		 */
-		'.selector-button click': function() {
-			var selector = this.$find('.input-selector').val();
-
-			var data = {
-				type: 'changeTarget',
-				selector: selector
-			};
-
-			this._sendMessage(data);
-		},
-
-
-		/**
-		 * テンプレートを反映させるセレクタ(文字列)をプレビューに送る
-		 * <p>
-		 * ここで指定されるセレクタはiframeが読み込むhtml上の要素
-		 *
-		 * @param context
-		 */
-		'.target-selector submit': function(context) {
-			context.event.preventDefault();
-
-			var selector = this.$find('.input-selector').val();
-
-			if (selector === '') {
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'セレクタを指定してください',
-					'$el': this.$find('.template-alert')
-				});
-
-				return;
-			}
-
-			var data = {
-				type: 'changeTarget',
-				selector: selector
-			};
-
-			this._sendMessage(data);
-		},
-
-
-		/**
-		 * パラメータ入力ポップ画面を表示します
-		 */
-		'.data-parameter click': function() {
-			this.$find('.parameter-input').css('display', 'block');
-		},
-
-
-		/**
-		 * データタブのラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
-		 *
-		 * @param context
-		 * @param $el
-		 */
-		'.sendType change': function(context, $el) {
-			var type = $el[0].value;
-
-			if (type === "GET") {
-				this.$find('.sendType[value="GET"]').each(function() {
-					$(this).prop('checked', 'checked');
-				});
-				return;
-			}
-
-			this.$find('.sendType[value="POST"]').each(function() {
-				$(this).prop('checked', 'checked');
-			});
-		},
-
-
-		/**
-		 * 指定されたurlでデータオブジェクトを取得します
-		 */
-		'.load-data submit': function(context, $el) {
-			context.event.preventDefault();
-
-			var url = this.$find('.input-data-url').val();
-
-			if (url === '') {
-				// URLが未入力であればメッセージを表示します
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'URLを指定してください',
-					'$el': this.$find('.data-alert')
-				});
-
-				return;
-			}
-
-			var param = this._parameterEditController.getParameter();
-
-			var type = null;
-			var $elm = $('.sendType');
-
-			// 送信方法を取得(GET/POST)します
-			for (var i = 0, len = $elm.length; i < len; i++) {
-				if ($($elm[i]).prop('checked')) {
-					type = $elm[i].value;
-					break;
-				}
-			}
-
-			// データを取得します
-			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
-
-				this.setDataText(data);// データをテキストエリアに反映します
-
-				this.createTemplate();
-
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'データの取得が完了しました',
-					'$el': this.$find('.data-msg')
-				});
-
-			}), this.own(function(xhr, textStatus) {
-				// 取得に失敗したらエラーメッセージを表示します
-				var msg = 'status:' + xhr.status;
-
-				msg += (textStatus === 'parsererror') ? '\nJSONへのパースに失敗しました' : '\nデータの取得に失敗しました';
-
-				$(this.rootElement).trigger('showMessage', {
-					'msg': msg,
-					'$el': this.$find('.data-alert')
-				});
-			}));
+		'{rootElement} sendMsg': function(context) {
+			this._sendMessage(context.evArg.data);
 		},
 
 
@@ -507,30 +365,6 @@
 		// this.createTemplate();
 		// }
 		// },
-
-
-		/**
-		 * データオブジェクトをフォーマットします
-		 */
-		'.format-button click': function() {
-			var data = this._getData();
-
-			try {
-				if (!data || data === '') {
-					data = null;
-				} else {
-					data = $.parseJSON(data);
-				}
-
-				this.setDataText(data);
-
-			} catch (e) {
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'JSONのパースに失敗しました',
-					'$el': this.$find('.data-alert')
-				});
-			}
-		},
 
 
 		/**
@@ -688,6 +522,11 @@
 		},
 
 
+		'{rootElement} createTemplate': function() {
+			this.createTemplate();
+		},
+
+
 		/**
 		 * テンプレートを生成してpostMessageで送ります。
 		 */
@@ -696,7 +535,7 @@
 
 			try {
 				// データをテキストエリアから取得してパースします
-				var data = this._getData();
+				var data = this.$find('.dataText').val();
 				if (!data || data === '') {
 					data = null;
 				} else {
@@ -708,7 +547,7 @@
 				var $el = $('.tab-pane.active .alert-danger');
 
 				$(this.rootElement).trigger('showMessage', {
-					'msg': 'JSONのパースに失敗しました' + e.stack,
+					'msg': 'JSONのパースに失敗しました\n' + e.stack,
 					'$el': $el
 				});
 
