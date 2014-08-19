@@ -65,11 +65,11 @@
 	//
 	// =========================================================================
 
-	var templateEditController = {
+	var editorController = {
 		/**
-		 * @memberOf hifive.templateEditor.controller.TemplateEditorController
+		 * @memberOf hifive.templateEditor.controller.EditorController
 		 */
-		__name: 'hifive.templateEditor.controller.TemplateEditController',
+		__name: 'hifive.templateEditor.controller.EditorController',
 
 		__meta: {
 			_previewController: {
@@ -623,6 +623,6 @@
 	//
 	// =========================================================================
 
-	h5.core.expose(templateEditController);
+	h5.core.expose(editorController);
 
 })(jQuery);

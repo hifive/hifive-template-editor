@@ -71,11 +71,11 @@
 		__name: 'hifive.templateEditor.controller.PageController',
 
 		__meta: {
-			_templateEditController: '#ejsEditorRoot',
+			_editorController: '#ejsEditorRoot',
 			_messageController: this.rootElement
 		},
 
-		_templateEditController: hifive.templateEditor.controller.TemplateEditController,
+		_editorController: hifive.templateEditor.controller.EditorController,
 
 		_messageController: hifive.templateEditor.controller.MessageController,
 
@@ -103,9 +103,9 @@
 					});
 
 					// データを取得し、テキストエリアに表示します
-					var dataDef = this._templateEditController.loadData(dataURL).then(
+					var dataDef = this._editorController.loadData(dataURL).then(
 							this.own(function(data) {
-								this._templateEditController._dataAreaController.setDataText(data);
+								this._editorController._dataAreaController.setDataText(data);
 							}),
 
 							this.own(function(xhr, textStatus) {
@@ -127,11 +127,11 @@
 				var templateURL = this._query.template;
 				// テンプレートを取得し、セットします
 				if (templateURL) {
-					var templateDef = this._templateEditController.loadTemplate(templateURL).then(
+					var templateDef = this._editorController.loadTemplate(templateURL).then(
 
 					this.own(function(template) {
 						template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
-						this._templateEditController.setTemplateText(template);
+						this._editorController.setTemplateText(template);
 					}),
 
 					this.own(function(xhr) {
@@ -147,7 +147,7 @@
 					var def = [dataDef, templateDef];
 
 					h5.async.when(def).done(this.own(function() {
-						this._templateEditController.createTemplate();
+						this._editorController.createTemplate();
 					}));
 				}
 			}
@@ -175,11 +175,11 @@
 		 */
 		'.nav-tabs shown.bs.tab': function(context) {
 
-			this._templateEditController.resizeEditAreaBar();
+			this._editorController.resizeEditAreaBar();
 
 			var controllers = h5.core.controllerManager.getControllers($('body'));
 
-			var sourceEditorController = controllers[0]._templateEditController._sourceEditorController;
+			var sourceEditorController = controllers[0]._editorController._sourceEditorController;
 
 			if (context.event.target.hash === '#template') {
 
