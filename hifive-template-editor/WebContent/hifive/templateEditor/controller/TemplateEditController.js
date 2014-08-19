@@ -81,6 +81,7 @@
 			_parameterEditController: {
 				rootElement: '.parameter-input'
 			}
+
 		/*
 		 * _cssEditorController: { rootElement: '#editCSSPanel' }
 		 */
@@ -108,17 +109,7 @@
 
 		_target: null,// postMessageの送信先
 
-		_templateTimer: null,// テンプレートタブのメッセージ表示用タイマー
 
-		_templateErrorTimer: null,// テンプレートタブのエラーメッセージ表示用タイマー
-
-		_dataTimer: null, // データタブのメッセージ表示用タイマー
-
-		_dataErrorTimer: null, // データタブのエラーメッセージ表示用タイマー
-
-		_previewTimer: null,// プレビューのメッセージ表示用タイマー
-
-		_previewErrorTimer: null,// プレビューのエラーメッセージ表示用タイマー
 
 		_editAreaBarHeight: null,
 
@@ -160,15 +151,15 @@
 			this._target = $('iframe')[0];// postMessageの送信先を設定
 
 			$('iframe').load(this.own(function() {
-				if (this._isBlank) {
-					this._alertMessage('ブランクページのロードが完了しました', $('.preview-msg'));
-					return;
-				}
-				this._alertMessage('ページのロードが完了しました', $('.preview-msg'));
+				var msg = this._isBlank ? 'ブランクページのロードが完了しました' : 'ページのロードが完了しました';
+
+				$(this.rootElement).trigger('showMessage', {
+					'msg': msg,
+					'$el': this.$find('.preview-msg')
+				});
 			}));
 
-			// editAreaBarの高さを調整(window幅によって高さが変わる)
-			this._editAreaBarHeight = $('.active .editAreaBar').outerHeight();
+			this._editAreaBarHeight = $('.active .editAreaBar').outerHeight();// editAreaBarの高さを調整(window幅によって高さが変わる)
 
 			this._beginIndicator();
 
@@ -234,24 +225,6 @@
 
 
 		/**
-		 * エラーメッセージを表示します
-		 */
-		showErrMsg: function(xhr, $el, message, textStatus) {
-			var status = xhr.status;
-			var msg;
-
-			if (textStatus === 'parsererror') {
-				msg = 'データはJSON型を指定してください';
-				this._alertMessage(msg, $el);
-				return;
-			}
-
-			msg = 'status:' + status + message;
-			this._alertMessage(msg, $el);
-		},
-
-
-		/**
 		 * メッセージのtypeプロパティからメソッドを呼び出します。
 		 */
 		'{window} message': function(context) {
@@ -281,8 +254,8 @@
 					this._applyTemplateComp();
 					break;
 
-				case 'showErrMsg':
-					this._alertMessage(data.msg, this.$find('.template-alert'));
+				case 'showMessage':
+					$(this.rootElement).trigger('showMessage', data);
 					break;
 
 				default:
@@ -294,8 +267,8 @@
 			}
 		},
 
-		'{window} resize': function(context) {
 
+		'{window} resize': function(context) {
 			this.resizeEditAreaBar();
 
 			// DividedBoxのrefreshを呼ぶ
@@ -307,7 +280,6 @@
 			for (var i = 0, len = dividedBoxes.length; i < len; i++) {
 				dividedBoxes[i].refresh();
 			}
-
 		},
 
 
@@ -348,7 +320,6 @@
 				this._enableLibrary();
 				this._isBlank = true;
 			}
-
 		},
 
 
@@ -368,6 +339,7 @@
 			this._sendMessage(data);
 		},
 
+
 		/**
 		 * テンプレートを反映させるセレクタ(文字列)をプレビューに送る
 		 * <p>
@@ -381,8 +353,10 @@
 			var selector = this.$find('.input-selector').val();
 
 			if (selector === '') {
-				var msg = 'セレクタを指定してください';
-				this._alertMessage(msg, this.$find('.template-alert'));
+				$(this.rootElement).trigger('showMessage', {
+					'msg': 'セレクタを指定してください',
+					'$el': this.$find('.template-alert')
+				});
 
 				return;
 			}
@@ -434,22 +408,25 @@
 
 			var url = this.$find('.input-data-url').val();
 
-			// URLが未入力であればメッセージを表示します
 			if (url === '') {
-				var msg = 'URLを指定してください';
-				this._alertMessage(msg, this.$find('.data-alert'));
+				// URLが未入力であればメッセージを表示します
+				$(this.rootElement).trigger('showMessage', {
+					'msg': 'URLを指定してください',
+					'$el': this.$find('.data-alert')
+				});
 
 				return;
 			}
 
-			// パラメータを取得します
 			var param = this._parameterEditController.getParameter();
 
 			var type = null;
-			var elm = $('.sendType');
-			for (var i = 0, len = elm.length; i < len; i++) {
-				if ($(elm[i]).prop('checked')) {
-					type = $(elm[i]).context.value;
+			var $elm = $('.sendType');
+
+			// 送信方法を取得(GET/POST)します
+			for (var i = 0, len = $elm.length; i < len; i++) {
+				if ($($elm[i]).prop('checked')) {
+					type = $elm[i].value;
 					break;
 				}
 			}
@@ -457,15 +434,25 @@
 			// データを取得します
 			this._templateEditorLogic.loadData(url, type, param).then(this.own(function(data) {
 
-				// データをテキストエリアに反映します
-				this.setDataText(data);
+				this.setDataText(data);// データをテキストエリアに反映します
 
 				this.createTemplate();
 
-				this._alertMessage('データの取得が完了しました', this.$find('.data-msg'));
+				$(this.rootElement).trigger('showMessage', {
+					'msg': 'データの取得が完了しました',
+					'$el': this.$find('.data-msg')
+				});
 
 			}), this.own(function(xhr, textStatus) {
-				this.showErrMsg(xhr, this.$find('.data-alert'), '\nデータの取得に失敗しました', textStatus);
+				// 取得に失敗したらエラーメッセージを表示します
+				var msg = 'status:' + xhr.status;
+
+				msg += (textStatus === 'parsererror') ? '\nJSONへのパースに失敗しました' : '\nデータの取得に失敗しました';
+
+				$(this.rootElement).trigger('showMessage', {
+					'msg': msg,
+					'$el': this.$find('.data-alert')
+				});
 			}));
 		},
 
@@ -534,11 +521,14 @@
 				} else {
 					data = $.parseJSON(data);
 				}
+
 				this.setDataText(data);
-			}
-			catch (e) {
-				var msg = 'JSONのパースに失敗しました';
-				this._alertMessage(msg, this.$find('.data-alert'));
+
+			} catch (e) {
+				$(this.rootElement).trigger('showMessage', {
+					'msg': 'JSONのパースに失敗しました',
+					'$el': this.$find('.data-alert')
+				});
 			}
 		},
 
@@ -712,25 +702,20 @@
 				} else {
 					data = $.parseJSON(data);
 				}
-			}
-			catch (e) {
-				var tab = $('.tab-pane.active').attr('id');
-				switch (tab) {
-				case 'template':
-					this._alertMessage('JSONへのパースに失敗しました', this.$find('.template-alert'));
-					break;
 
-				case 'data':
-					this._alertMessage('JSONへのパースに失敗しました', this.$find('.data-alert'));
-					break;
+			} catch (e) {
+				// activeなタブにエラーを表示します
+				var $el = $('.tab-pane.active .alert-danger');
 
-				default:
-					break;
-				}
+				$(this.rootElement).trigger('showMessage', {
+					'msg': 'JSONのパースに失敗しました' + e.stack,
+					'$el': $el
+				});
 
 				if (this._indicator) {
 					this._indicatorDeferred.resolve();
 				}
+
 				return;
 			}
 
@@ -744,27 +729,19 @@
 				};
 
 				this._sendMessage(data);
-			}
-			catch (e) {
-				var tab = $('.tab-pane.active').attr('id');
-				switch (tab) {
-				case 'template':
-					this._alertMessage('テンプレートの生成に失敗しました' + e.stack, this.$find('.template-alert'));
-					break;
 
-				case 'data':
-					this._alertMessage('テンプレートの生成に失敗しました' + e.stack, this.$find('.data-alert'));
-					break;
-
-				default:
-					break;
-				}
+			} catch (e) {
+				// activeなタブにエラーメッセージを表示します
+				var $el = $('.tab-pane.active .alert-danger');
+				$(this.rootElement).trigger('showMessage', {
+					'msg': 'テンプレートの生成に失敗しました\n' + e.stack,
+					'$el': $el
+				});
 
 				if (this._indicator) {
 					this._indicatorDeferred.resolve();
 				}
 			}
-
 		},
 
 		_getData: function() {
@@ -787,7 +764,6 @@
 
 			this.$find('.applyLibBtn').attr('disabled', 'disabled');
 
-
 			this.$find('.libraryMessage').show();
 		},
 
@@ -799,93 +775,7 @@
 			this.$find('.applyLibBtn').removeAttr('disabled');
 
 			this.$find('.libraryMessage').hide();
-		},
-
-
-		/**
-		 * メッセージを表示します
-		 *
-		 * @param msg 表示するメッセージ
-		 * @param $el メッセージを表示する要素
-		 */
-		_alertMessage: function(msg, $el) {
-
-			$el.text(msg);
-			$el.css('display', 'block');
-
-			switch ($el.selector) {
-
-			case '.template-alert':
-				if (this._templateTimer) {
-					clearTimeout(this._templateTimer);
-				}
-
-				this._templateTimer = setTimeout(function() {
-					$el.css('display', 'none');
-				}, 3000);
-
-				break;
-
-			case '.template-msg':
-				if (this._templateErrorTimer) {
-					clearTimeout(this._templateErrorTimer);
-				}
-
-				this._templateErrorTimer = setTimeout(function() {
-					$el.css('display', 'none');
-				}, 3000);
-
-				break;
-
-			case '.data-alert':
-				if (this._dataTimer) {
-					clearTimeout(this._dataTimer);
-				}
-
-				this._dataTimer = setTimeout(function() {
-					$el.css('display', 'none');
-				}, 3000);
-
-				break;
-
-			case '.data-msg':
-				if (this._dataErrorTimer) {
-					clearTimeout(this._dataErrorTimer);
-				}
-
-				this._dataErrorTimer = setTimeout(function() {
-					$el.css('display', 'none');
-				}, 3000);
-
-				break;
-
-			case '.preview-alert':
-				if (this._previewTimer) {
-					clearTimeout(this._previewTimer);
-				}
-
-				this._previewTimer = setTimeout(function() {
-					$el.css('display', 'none');
-				}, 3000);
-
-				break;
-
-			case '.preview-msg':
-				if (this._previewErrorTimer) {
-					clearTimeout(this._previewErrorTimer);
-				}
-
-				this._previewErrorTimer = setTimeout(function() {
-					$el.css('display', 'none');
-				}, 3000);
-
-				break;
-
-			default:
-				break;
-			}
 		}
-
 	};
 
 	// =========================================================================

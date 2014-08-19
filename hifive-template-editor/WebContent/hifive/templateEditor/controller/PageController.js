@@ -71,16 +71,103 @@
 		__name: 'hifive.templateEditor.controller.PageController',
 
 		__meta: {
-			_templateEditorController: '#ejsEditorRoot'
+			_templateEditorController: '#ejsEditorRoot',
+			_messageController: this.rootElement
 		},
 
 		_templateEditorController: hifive.templateEditor.controller.TemplateEditController,
+
+		_messageController: hifive.templateEditor.controller.MessageController,
 
 		_query: null,
 
 		_templateURL: null,
 
 		_dataURL: null,
+
+
+		__ready: function() {
+
+			// クエリパラメータを取得
+			var query = location.search;
+
+			if (query) {
+				this._query = this._parseQueryParameters(query);
+
+				var dataURL = this._query.data;
+				// データを取得し、セットします
+				if (dataURL) {
+					// urlを入力欄に入れます
+					this.$find('.input-data-url').each(function() {
+						$(this).val(dataURL);
+					});
+
+					// データを取得し、テキストエリアに表示します
+					var dataDef = this._templateEditorController.getData(dataURL).then(
+							this.own(function(data) {
+								this._templateEditorController.setDataText(data);
+							}),
+
+							this.own(function(xhr, textStatus) {
+
+								var $el = this.$find('.template-alert');
+								var msg = 'status:' + xhr.status;
+
+								if (textStatus === 'parsererror') {
+									msg = msg + '\nデータはJSON型を指定してください';
+									this._messageController.alertMessage(msg, $el);
+									return;
+								}
+
+								msg = msg + '\nデータの取得に失敗しました';
+								this._messageController.alertMessage(msg, $el);
+							}));
+				}
+
+				var templateURL = this._query.template;
+				// テンプレートを取得し、セットします
+				if (templateURL) {
+					var templateDef = this._templateEditorController.getTemplate(templateURL).then(
+
+					this.own(function(template) {
+						template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
+						this._templateEditorController.setTemplateText(template);
+					}),
+
+					this.own(function(xhr) {
+						var $el = this.$find('.template-alert');
+						var msg = 'status:' + xhr.status;
+						msg = msg + '\nテンプレートの取得に失敗しました';
+
+						this._messageController.alertMessage(msg, $el);
+					}));
+				}
+
+				if (dataURL && templateURL) {
+					var def = [dataDef, templateDef];
+
+					h5.async.when(def).done(this.own(function() {
+						this._templateEditorController.createTemplate();
+					}));
+				}
+			}
+		},
+
+
+		/**
+		 * メッセージを表示します
+		 *
+		 * @param context
+		 * @prop {string} args.msg メッセージ
+		 * @prop {object} args.el メッセージを表示する要素
+		 */
+		'{rootElement} showMessage': function(context) {
+			var args = context.evArg;
+			if (args.selector) {
+				args.$el = this.$find(args.selector);
+			}
+			this._messageController.alertMessage(args.msg, args.$el);
+		},
 
 
 		/**
@@ -143,61 +230,6 @@
 		},
 
 
-		__init: function() {
-
-			// クエリパラメータを取得
-			var query = location.search;
-
-			if (query) {
-				this._query = this._parseQueryParameters(query);
-
-				var dataURL = this._query.data;
-				// データを取得し、セットします
-				if (dataURL) {
-					// urlを入力欄に入れます
-					this.$find('.input-data-url').each(function() {
-						$(this).val(dataURL);
-					});
-
-					// データを取得し、テキストエリアに表示します
-					var dataDef = this._templateEditorController.getData(dataURL).then(
-							this.own(function(data) {
-								this._templateEditorController.setDataText(data);
-
-							}),
-							this.own(function(xhr, textStatus) {
-								this._templateEditorController.showErrMsg(xhr, this
-										.$find('.template-alert'), '\nデータの取得に失敗しました', textStatus);
-							}));
-				}
-
-				var templateURL = this._query.template;
-				// テンプレートを取得し、セットします
-				if (templateURL) {
-					var templateDef = this._templateEditorController.getTemplate(templateURL).then(
-							this.own(function(template) {
-								template = template.replace(/<script.*>/, '').replace(/<\/script>/,
-										'');
-								this._templateEditorController.setTemplateText(template);
-
-							}),
-							this.own(function(xhr, textStatus) {
-								this._templateEditorController.showErrMsg(xhr, this
-										.$find('.template-alert'), '\nテンプレートの取得に失敗しました');
-							}));
-				}
-
-				if (dataURL && templateURL) {
-					var def = [dataDef, templateDef];
-
-					h5.async.when(def).done(this.own(function() {
-						this._templateEditorController.createTemplate();
-					}));
-				}
-			}
-		},
-
-
 		/**
 		 * dividedBoxをリフレッシュします
 		 */
@@ -251,7 +283,7 @@
 
 })(jQuery);
 
-//---- Init ---- //
+// ---- Init ---- //
 $(function() {
 	h5.core.controller('body', hifive.templateEditor.controller.PageController);
 });
