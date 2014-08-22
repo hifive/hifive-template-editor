@@ -62,7 +62,7 @@ input[type="text"] {
 	height: 100%;
 	width: 100%;
 	/* タブコンテントでh3で表示しているタイトルの高さ分底上げ */
-	padding-bottom: 43px;
+	padding-bottom: 48px;
 }
 
 .tab-pane {

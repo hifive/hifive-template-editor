@@ -71,6 +71,8 @@
 			this._redoBuffer = [];
 		},
 
+		_sourceText: null,
+
 		_undoBuffer: null,
 
 		_redoBuffer: null,
@@ -81,28 +83,62 @@
 
 			$(this.rootElement).text('').focus();
 
+			this._sourceText = converted;
+
 			hifive.editor.u.execInsertTextCommand(converted);
 		},
 
 		getText: function() {
+
 			// 改行を考慮するinnerTextを使用
 			var raw = this.rootElement.innerText;
+
 			if (raw === undefined) {
 				// innerTextのない場合(Firefox)、textNodeのtextContentを取得し、<br>を改行にする
 				raw = '';
-				$(this.rootElement).contents().each(function() {
+				var $rootClone = $(this.rootElement).clone();
+
+				// <ol>タグがあれば除去します。その子要素は残します
+				var $ol = $rootClone.children('ol');
+				$ol.each(function() {
+					var $children = $(this).children();
+
+					$(this).after($children);
+
+					$(this).remove();
+				});
+
+				// $rootの各子要素からテキストを取得します
+				$rootClone.contents().each(function() {
+
 					if (this.nodeType === 3) {
-						raw += this.textContent;
-						return;
+						raw += this.textContent;//テキストノードならばテキストを取得します
+
 					} else if (this.nodeName === 'BR') {
 						raw += '\n';
+
+					} else {
+						// <li>や<p>ならばその子要素を見ます
+						$(this).contents().each(function() {
+							if (this.nodeType === 3) {
+								raw += this.textContent;
+
+							} else if (this.nodeName === 'BR') {
+								raw += '\n';
+							}
+						});
 					}
+
 				});
 			}
 
 			// ノード中の空白(&nbsp;)を空白文字に変更
 			var text = raw.replace(/\xA0/g, ' ');
 			return text;
+		},
+
+		getSrcText: function() {
+			return this._sourceText;
 		},
 
 		getUndoBuffer: function() {
@@ -144,8 +180,8 @@
 
 		'{rootElement} keyup': function() {
 			this.trigger('textChange');
-
 		},
+
 
 		'{rootElement} paste': function(context) {
 			var ev = context.event.originalEvent;
@@ -156,7 +192,142 @@
 
 			hifive.editor.u.execInsertTextCommand(text);
 			context.event.preventDefault();
+		},
+
+
+		/**
+		 * 行番号を追加します（Ch）
+		 * <p>
+		 * 1度目の行番号の付加時、1行目の文字列のみdivでwrapされていないのでwrapします
+		 */
+		addLineNumCh: function() {
+			// <ol>タグがあれば除去します。その子要素は残します
+			var $ol = this.$find('ol');
+			$ol.each(function() {
+				var $children = $(this).children();
+
+				$(this).after($children);
+
+				$(this).remove();
+			});
+
+			var $root = $(this.rootElement);
+
+			var liTxt = $root.children('li').text();
+			if (liTxt.length === 0) {
+				// <li>でwrapされた要素がなければ1度目の行番号付加
+				// 1行目の文字列を取得してdivでwrapする
+				var $divClone = $root.children('div').clone();
+
+				var srcTxt = $root.text();
+				var divTxt = $root.children('div').text();// １行目のテキスト
+				var diffTxt = srcTxt.replace(divTxt, '');// テキストの差分
+
+				var $el = $('<div></div>').text(diffTxt);
+				$el = $('<li></li>').append($el);
+
+				$root.text('');
+
+				$root.append($el);
+				$divClone.each(function() {
+					var $temp = $('<li></li>').append($(this));
+					$root.append($temp);
+				});
+
+			} else {
+				var $div = $root.children('div');
+
+				$div.each(function() {
+					$(this).wrap('<li></li>');
+				});
+			}
+
+			$root.children().wrapAll('<ol></ol>');
+		},
+
+
+		/**
+		 * 行番号を追加します(FF)
+		 */
+		addLineNumFF: function() {
+			// <ol>タグがあれば除去します。その子要素は残します
+			var $ol = this.$find('ol');
+			$ol.each(function() {
+				var $children = $(this).children();
+
+				$(this).after($children);
+
+				$(this).remove();
+			});
+
+			var $root = $(this.rootElement);
+
+			var $li = $root.children('li');
+			if ($li.length === 0) {
+				// 行番号の付加が初回の時の処理
+				var html = $root.html();
+				var rows = html.split('<br>');
+
+				var retHtml = '';
+				for (var i = 0, len = rows.length; i < len; i++) {
+					retHtml = retHtml + '<li>' + rows[i] + '<br /></li>';
+				}
+
+				$root.html(retHtml);
+
+			} else {
+				var $p = $root.children('p');
+
+				$p.each(function() {
+					var html = $(this).html();
+					var row = html.split('<br>');
+
+					var $li = $('<li>' + row[0] + '</li>');
+
+					$(this).after($li);
+					$(this).remove();
+				});
+			}
+
+			$root.children().wrapAll('<ol></ol>');
+		},
+
+
+		/**
+		 * 行番号を追加します(IE8-11)
+		 */
+		addLineNumIE: function() {
+			// <ol>タグがあれば除去します。その子要素は残します
+			var $ol = this.$find('ol');
+			$ol.each(function() {
+				var $children = $(this).children();
+
+				$(this).after($children);
+
+				$(this).remove();
+			});
+
+			var $root = $(this.rootElement);
+
+			var $p = $root.children('p');
+
+			$p.each(function() {
+				var html = $(this).html();
+				var rows = html.split('<br>');
+
+				for (var i = 0, len = rows.length; i < len; i++) {
+					$(this).append('<li><p>' + rows[i] + '</p></li>');
+				}
+
+				var $li = $(this).children('li');
+				$(this).after($li);
+
+				$(this).remove();
+			});
+
+			$root.children().wrapAll('<ol></ol>');
 		}
+
 
 	// コピー時にSpace -> Tab変換する、等
 	// '{rootElement} copy': function(context) {

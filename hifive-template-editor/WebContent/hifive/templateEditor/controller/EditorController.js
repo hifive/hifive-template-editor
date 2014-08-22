@@ -211,9 +211,9 @@
 
 
 		'{window} resize': function(context) {
-			this.resizeEditAreaBar();
+			this.resizeEditAreaBar();// editAreaBarの高さを調整します
 
-			// DividedBoxのrefreshを呼ぶ
+			// DividedBoxのrefreshを呼びます
 			var dividedBoxes = h5.core.controllerManager.getControllers($('body'), {
 				name: 'h5.ui.container.DividedBox',
 				deep: true
@@ -259,6 +259,32 @@
 
 		'{rootElement} sendMsg': function(context) {
 			this._sendMessage(context.evArg.data);
+		},
+
+
+		'{rootElement} addLineNum': function() {
+			var ua = this._selectedClient();
+			switch (ua) {
+
+			case 'ch':
+				this._sourceEditorController.addLineNumCh();
+				break;
+
+			case 'ff':
+				this._sourceEditorController.addLineNumFF();
+				break;
+
+			case 'ie':
+				this._sourceEditorController.addLineNumIE();
+				break;
+
+			default:
+				$(this.rootElement).trigger('showMessage', {
+					'msg': '未対応のブラウザです',
+					'selector': $('.tab-pane.active .alert-danger')
+				});
+				break;
+			}
 		},
 
 
@@ -626,7 +652,26 @@
 			this.$find('.applyLibBtn').removeAttr('disabled');
 
 			this.$find('.libraryMessage').hide();
+		},
+
+
+		_selectedClient: function() {
+			var userAgent = window.navigator.userAgent.toLowerCase();
+
+			if (userAgent.indexOf('chrome') != -1) {
+				return 'ch';
+
+			} else if (userAgent.indexOf('gecko') != -1) {
+				return 'ff';
+
+			} else if (userAgent.indexOf('msie') != -1) {
+				return 'ie';
+
+			} else {
+				return 'other';
+			}
 		}
+
 	};
 
 	// =========================================================================
