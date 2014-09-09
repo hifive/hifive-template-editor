@@ -114,7 +114,7 @@
 		'.load-data submit': function(context, $el) {
 			context.event.preventDefault();
 
-			var url = this.$find('.input-data-url').val();
+			var url = $el.find('input').val();
 
 			if (url === '') {
 				// URLが未入力であればメッセージを表示します
