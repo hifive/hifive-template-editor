@@ -65,7 +65,7 @@
 		__name: 'hifive.templateEditor.controller.SourceEditorController',
 
 		__init: function() {
-			$(this.rootElement).attr('contentEditable', true);
+			//			$(this.rootElement).attr('contentEditable', true);
 
 			this._undoBuffer = [];
 			this._redoBuffer = [];
@@ -85,13 +85,15 @@
 
 			this._sourceText = converted;
 
-			hifive.editor.u.execInsertTextCommand(converted);
+			//			hifive.editor.u.execInsertTextCommand(converted);
+			this.rootElement.value = converted;
 		},
 
 		getText: function() {
 
 			// 改行を考慮するinnerTextを使用
-			var raw = this.rootElement.innerText;
+			//			var raw = this.rootElement.innerText;
+			var raw = this.rootElement.value;
 
 			if (raw === undefined) {
 				// innerTextのない場合(Firefox)、textNodeのtextContentを取得し、<br>を改行にする
