@@ -104,9 +104,9 @@
 		},
 
 
-		'.lineNum-btn click': function() {
-			$(this.rootElement).trigger('addLineNum');
-		}
+	//		'.lineNum-btn click': function() {
+	//			$(this.rootElement).trigger('addLineNum');
+	//		}
 
 
 	};

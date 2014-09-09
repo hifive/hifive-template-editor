@@ -262,30 +262,30 @@
 		},
 
 
-		'{rootElement} addLineNum': function() {
-			var ua = this._selectedClient();
-			switch (ua) {
-
-			case 'ch':
-				this._sourceEditorController.addLineNumCh();
-				break;
-
-			case 'ff':
-				this._sourceEditorController.addLineNumFF();
-				break;
-
-			case 'ie':
-				this._sourceEditorController.addLineNumIE();
-				break;
-
-			default:
-				$(this.rootElement).trigger('showMessage', {
-					'msg': '未対応のブラウザです',
-					'selector': $('.tab-pane.active .alert-danger')
-				});
-				break;
-			}
-		},
+		//		'{rootElement} addLineNum': function() {
+		//			var ua = this._selectedClient();
+		//			switch (ua) {
+		//
+		//			case 'ch':
+		//				this._sourceEditorController.addLineNumCh();
+		//				break;
+		//
+		//			case 'ff':
+		//				this._sourceEditorController.addLineNumFF();
+		//				break;
+		//
+		//			case 'ie':
+		//				this._sourceEditorController.addLineNumIE();
+		//				break;
+		//
+		//			default:
+		//				$(this.rootElement).trigger('showMessage', {
+		//					'msg': '未対応のブラウザです',
+		//					'selector': $('.tab-pane.active .alert-danger')
+		//				});
+		//				break;
+		//			}
+		//		},
 
 
 		/**
