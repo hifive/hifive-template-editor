@@ -47,6 +47,8 @@ limitations under the License.
 <script src="res/lib/hifive/ejs-h5mod.js"></script>
 <script src="res/lib/hifive/h5.js"></script>
 
+<script src="res/lib/ejs/ejs_fulljslint.js"></script>
+
 <script src="hifive/templateEditor/templateEditor.min.js"></script>
 <!-- <script src="hifive/templateEditor/js/h5.ext.js"></script> -->
 <!-- <script src="hifive/templateEditor/js/constants.js"></script> -->
@@ -55,12 +57,14 @@ limitations under the License.
 <!-- <script src="hifive/templateEditor/js/dependencyMap.js"></script> -->
 <!-- <script src="hifive/templateEditor/logic/TemplateEditLogic.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/GenericParameterEditController.js"></script> -->
-<!-- <script src="hifive/templateEditor/controller/PreviewController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/SourceEditorController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/CSSEditorController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/ComponentPaletteController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/ParameterEditController.js"></script> -->
-<!-- <script src="hifive/templateEditor/controller/TemplateEditController.js"></script> -->
+<!-- <script src="hifive/templateEditor/controller/DataAreaController.js"></script> -->
+<!-- <script src="hifive/templateEditor/controller/TemplateAreaController.js"></script> -->
+<!-- <script src="hifive/templateEditor/controller/EditorController.js"></script> -->
+<!-- <script src="hifive/templateEditor/controller/MessageController.js"></script> -->
 <!-- <script src="hifive/templateEditor/controller/PageController.js"></script> -->
 <!-- <script src="hifive/templateEditor/parts/ui/ui.common.js"></script> -->
 <!-- <script src="hifive/templateEditor/parts/ui/base/base.js"></script> -->
@@ -68,8 +72,6 @@ limitations under the License.
 <!-- <script src="hifive/templateEditor/parts/bootstraps3/bootstrap.js"></script> -->
 
 <script src="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
-
-<script src="sample/sample.js"></script>
 
 <script>
 	$(function() {
@@ -147,9 +149,10 @@ limitations under the License.
 					<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 
 					<!-- テンプレート文字列表示エリア -->
-					<div class="sourceText pageWrapper col-xs-12">
-						<!-- contentEditable="true" -->
-					</div>
+					<textarea class="sourceText pageWrapper col-xs-12"></textarea>
+					<!-- <div class="sourceText pageWrapper col-xs-12">
+						contentEditable="true"
+					</div> -->
 
 					<!-- メッセージ表示画面 -->
 					<div class="alert alert-success template-msg" role="alert"></div>
