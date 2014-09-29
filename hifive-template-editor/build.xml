@@ -68,24 +68,15 @@ the License.
 		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
 		<jscomp compilationLevel="simple" debug="false" output="${build.tmp.dir}/${build.min.filename}">
 			<sources dir="${src.dir}">
-				<file name="js/h5.ext.js" />
-				<file name="js/constants.js" />
-				<file name="js/u.js" />
-				<file name="js/_.js" />
 				<file name="js/dependencyMap.js" />
 				<file name="logic/TemplateEditLogic.js" />
-				<file name="controller/GenericParameterEditController.js" />
-				<file name="controller/PreviewController.js" />
 				<file name="controller/SourceEditorController.js" />
-				<file name="controller/CSSEditorController.js" />
-				<file name="controller/ComponentPaletteController.js" />
 				<file name="controller/ParameterEditController.js" />
-				<file name="controller/TemplateEditController.js" />
+				<file name="controller/DataAreaController.js" />
+				<file name="controller/TemplateAreaController.js" />
+				<file name="controller/EditorController.js" />
+				<file name="controller/MessageController.js" />
 				<file name="controller/PageController.js" />
-				<file name="parts/ui/ui.common.js" />
-				<file name="parts/ui/base/base.js" />
-				<file name="parts/ui/layout/layout.js" />
-				<file name="parts/bootstraps3/bootstrap.js" />
 			</sources>
 		</jscomp>
 		<!-- min版のヘッダ挿入 -->

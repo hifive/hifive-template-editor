@@ -101,7 +101,7 @@
 			$(this.rootElement).trigger('sendMsg', {
 				'data': data
 			});
-		},
+		}
 
 
 	//		'.lineNum-btn click': function() {

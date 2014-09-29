@@ -194,7 +194,7 @@
 
 			hifive.editor.u.execInsertTextCommand(text);
 			context.event.preventDefault();
-		},
+		}
 
 
 	/**
