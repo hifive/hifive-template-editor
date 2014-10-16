@@ -144,12 +144,7 @@
 					hifive.editor.u.execInsertTextCommand(html);
 
 					var template = this.createTemplate();
-					var data = {
-						type: 'preview',
-						template: template
-					};
-
-					this._sendMessage(data);
+					this._sendPreviewMessage(template);
 				}
 			});
 
@@ -188,12 +183,7 @@
 
 				case 'createTemplate':
 					var template = this.createTemplate();
-					var data = {
-						type: 'preview',
-						template: template
-					};
-
-					this._sendMessage(data);
+					this._sendPreviewMessage(template);
 					break;
 
 				case 'getLibraryPath':
@@ -243,12 +233,7 @@
 
 		'{rootElement} textChange': function() {
 			var template = this.createTemplate();
-			var data = {
-				type: 'preview',
-				template: template
-			};
-
-			this._sendMessage(data);
+			this._sendPreviewMessage(template);
 		},
 
 
@@ -399,13 +384,7 @@
 		// this.setTemplateText(temp);
 		//
 		// var template = this.createTemplate();
-		//		var data = {
-		//				type: 'preview',
-		//				template: template
-		//			};
-		//
-		//			this._sendMessage(data);
-		// }
+		//		this._sendPreviewMessage(template);
 		// },
 		//
 		//
@@ -424,13 +403,7 @@
 		// this.setTemplateText(temp);
 		//
 		// var template = this.createTemplate();
-		//		var data = {
-		//				type: 'preview',
-		//				template: template
-		//			};
-		//
-		//			this._sendMessage(data);
-		// }
+		//		this._sendPreviewMessage(template);
 		// },
 
 
@@ -512,12 +485,7 @@
 			// チェックされたライブラリがない場合、テンプレートを適用します。
 			if (applyLibs.length === 0) {
 				var template = this.createTemplate();
-				var data = {
-					type: 'preview',
-					template: template
-				};
-
-				this._sendMessage(data);
+				this._sendPreviewMessage(template);
 				return;
 			}
 
@@ -547,12 +515,7 @@
 
 			// テンプレートを適用します。
 			var template = this.createTemplate();
-			var data = {
-				type: 'preview',
-				template: template
-			};
-
-			this._sendMessage(data);
+			this._sendPreviewMessage(template);
 		},
 
 		/**
@@ -565,12 +528,7 @@
 
 			// テンプレートを適用します
 			var template = this.createTemplate();
-			var data = {
-				type: 'preview',
-				template: template
-			};
-
-			this._sendMessage(data);
+			this._sendPreviewMessage(template);
 
 			// activeなタブにエラーメッセージを表示します
 			var $el = $('.tab-pane.active .alert-danger');
@@ -616,12 +574,7 @@
 
 		'{rootElement} createTemplate': function() {
 			var template = this.createTemplate();
-			var data = {
-				type: 'preview',
-				template: template
-			};
-
-			this._sendMessage(data);
+			this._sendPreviewMessage(template);
 		},
 
 
@@ -741,6 +694,14 @@
 			} else {
 				return 'other';
 			}
+		},
+
+		_sendPreviewMessage: function(template) {
+			var data = {
+				type: 'preview',
+				template: template
+			};
+			this._sendMessage(data);
 		}
 
 	};
