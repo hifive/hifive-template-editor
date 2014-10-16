@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 html,body {
 	height: 100%;
 	width: 100%;
@@ -62,7 +62,7 @@ input[type="text"] {
 	height: 100%;
 	width: 100%;
 	/* タブコンテントでh3で表示しているタイトルの高さ分底上げ */
-	padding-bottom: 48px;
+	padding-bottom: 43px;
 }
 
 .tab-pane {
@@ -243,8 +243,6 @@ iframe {
 	right: 18px;
 	top: 50px;
 }
-
-
 
 /* プレビューのエラーメッセージ表示画面 */
 .preview-alert {
