@@ -66,8 +66,8 @@ the License.
 		</tstamp>
 
 		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
-		<jscomp compilationLevel="simple" debug="false" output="${build.tmp.dir}/${build.min.filename}">
-			<sources dir="${src.dir}">
+		<concat destfile="${build.tmp.dir}/preConcat.js" outputencoding="UTF-8">
+			<filelist dir="${src.dir}">
 				<file name="js/dependencyMap.js" />
 				<file name="logic/TemplateEditLogic.js" />
 				<file name="controller/SourceEditorController.js" />
@@ -77,6 +77,11 @@ the License.
 				<file name="controller/EditorController.js" />
 				<file name="controller/MessageController.js" />
 				<file name="controller/PageController.js" />
+			</filelist>
+		</concat>
+		<jscomp compilationLevel="simple" debug="false" output="${build.tmp.dir}/${build.min.filename}">
+			<sources dir="${build.tmp.dir}">
+				<file name="preConcat.js" />
 			</sources>
 		</jscomp>
 		<!-- min版のヘッダ挿入 -->
