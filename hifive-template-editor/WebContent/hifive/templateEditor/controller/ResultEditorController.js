@@ -78,6 +78,7 @@
 		_hasJQM: null,// jQuery Mobile 1.3.0が読み込まれているとtrue
 
 		__ready: function() {
+			//TODO: bodyにするとjqm1.3.0でcreateイベントをトリガしたときにエラーが起こる
 			this._target = $('.dummy');
 
 			this._sendMessage({
@@ -167,7 +168,6 @@
 				}
 			}
 
-
 			var jsPaths = [];
 			var cssPaths = [];
 			for (var i = 0, len = path.length; i < len; i++) {
@@ -188,6 +188,10 @@
 					this._sendMessage({
 						type: 'loadLibraryComp'
 					});
+				}), this.own(function() {
+					this._sendMessage({
+						type: 'loadLibraryFail'
+					});
 				}));
 			}));
 
@@ -202,7 +206,6 @@
 		 */
 		_loadCSS: function(cssPaths) {
 			var def = h5.async.deferred();
-
 			var numLoaded = 0;
 
 			for (var i = 0, len = cssPaths.length; i < len; i++) {
@@ -214,6 +217,16 @@
 						def.resolve();
 					}
 				});
+
+				$(css).error(this.own(function(e) {
+					numLoaded++;
+					if (numLoaded === cssPaths.length) {
+						def.resolve();
+					}
+					this._sendMessage({
+						type: 'loadLibraryFail'
+					});
+				}));
 
 				$('head')[0].appendChild(css);
 				css.type = 'text/css';

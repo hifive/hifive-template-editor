@@ -192,6 +192,10 @@
 					this._loadLibraryComp();
 					break;
 
+				case 'loadLibraryFail':
+					this._loadLibraryFail();
+					break;
+
 				case 'previewComp':
 					this._applyTemplateComp();
 					break;
@@ -507,6 +511,25 @@
 
 			// テンプレートを適用します。
 			this.createTemplate();
+		},
+
+		/**
+		 * ライブラリのロードに失敗した場合
+		 */
+		_loadLibraryFail: function() {
+			if (this._indicator) {
+				this._indicator.message('テンプレートのプレビューを再生成しています');
+			}
+
+			// テンプレートを適用します
+			this.createTemplate();
+
+			// activeなタブにエラーメッセージを表示します
+			var $el = $('.tab-pane.active .alert-danger');
+			$(this.rootElement).trigger('showMessage', {
+				'msg': 'ライブラリのロードに失敗しました\n',
+				'$el': $el
+			});
 		},
 
 
