@@ -289,7 +289,7 @@
 			this._target = $el;
 
 			var data = {
-				type: 'createTemplate'
+				type: 'applyTemplate'
 			};
 
 			this._sendMessage(data);

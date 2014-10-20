@@ -147,7 +147,7 @@
 					var def = [dataDef, templateDef];
 
 					h5.async.when(def).done(this.own(function() {
-						this._editorController.createTemplate();
+						this.$find('#ejsEditorRoot').trigger('applyTemplate');
 					}));
 				}
 			}

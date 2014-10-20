@@ -143,8 +143,7 @@
 
 					hifive.editor.u.execInsertTextCommand(html);
 
-					var template = this.createTemplate();
-					this._sendPreviewMessage(template);
+					this._sendPreviewMessage();
 				}
 			});
 
@@ -181,9 +180,8 @@
 
 				switch (data.type) {
 
-				case 'createTemplate':
-					var template = this.createTemplate();
-					this._sendPreviewMessage(template);
+				case 'applyTemplate':
+					this._sendPreviewMessage();
 					break;
 
 				case 'getLibraryPath':
@@ -232,8 +230,7 @@
 
 
 		'{rootElement} textChange': function() {
-			var template = this.createTemplate();
-			this._sendPreviewMessage(template);
+			this._sendPreviewMessage();
 		},
 
 
@@ -383,8 +380,7 @@
 		//
 		// this.setTemplateText(temp);
 		//
-		// var template = this.createTemplate();
-		//		this._sendPreviewMessage(template);
+		//	this._sendPreviewMessage();
 		// },
 		//
 		//
@@ -402,8 +398,7 @@
 		//
 		// this.setTemplateText(temp);
 		//
-		// var template = this.createTemplate();
-		//		this._sendPreviewMessage(template);
+		//	this._sendPreviewMessage();
 		// },
 
 
@@ -484,8 +479,7 @@
 
 			// チェックされたライブラリがない場合、テンプレートを適用します。
 			if (applyLibs.length === 0) {
-				var template = this.createTemplate();
-				this._sendPreviewMessage(template);
+				this._sendPreviewMessage();
 				return;
 			}
 
@@ -514,8 +508,7 @@
 			}
 
 			// テンプレートを適用します。
-			var template = this.createTemplate();
-			this._sendPreviewMessage(template);
+			this._sendPreviewMessage();
 		},
 
 		/**
@@ -527,8 +520,7 @@
 			}
 
 			// テンプレートを適用します
-			var template = this.createTemplate();
-			this._sendPreviewMessage(template);
+			this._sendPreviewMessage();
 
 			// activeなタブにエラーメッセージを表示します
 			var $el = $('.tab-pane.active .alert-danger');
@@ -572,16 +564,15 @@
 		},
 
 
-		'{rootElement} createTemplate': function() {
-			var template = this.createTemplate();
-			this._sendPreviewMessage(template);
+		'{rootElement} applyTemplate': function() {
+			this._sendPreviewMessage();
 		},
 
 
 		/**
 		 * テンプレートを生成します
 		 */
-		createTemplate: function() {
+		_applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
 
 			try {
@@ -696,7 +687,8 @@
 			}
 		},
 
-		_sendPreviewMessage: function(template) {
+		_sendPreviewMessage: function() {
+			var template = this._applyTemplate();
 			var data = {
 				type: 'preview',
 				template: template
