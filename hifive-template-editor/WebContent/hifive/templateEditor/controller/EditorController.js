@@ -150,12 +150,41 @@
 			this._target = $('iframe')[0];// postMessageの送信先を設定
 
 			$('iframe').load(this.own(function() {
-				var msg = this._isBlank ? 'ブランクページのロードが完了しました' : 'ページのロードが完了しました';
+				// インジケータのメッセージを更新
+				if (this._indicator) {
+					this._indicator.message('プレビューページをロードしました');
+				}
 
-				$(this.rootElement).trigger('showMessage', {
-					'msg': msg,
-					'$el': this.$find('.preview-msg')
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.src = '/hifive-template-editor/hifive/templateEditor/controller/ResultEditorController.js';
+
+				script.onload = this.own(function() {
+					// インジケータのメッセージを更新
+					if (this._indicator) {
+						this._indicator.message('スクリプトをロードしました');
+					}
+
+					var msg = this._isBlank ? 'ブランクページのロードが完了しました' : 'ページのロードが完了しました';
+
+					$(this.rootElement).trigger('showMessage', {
+						'msg': msg,
+						'$el': this.$find('.preview-msg')
+					});
 				});
+
+
+				var iframe = this.$find('iframe').get(0);
+				if (iframe.contentDocument.head) {
+					iframe.contentDocument.head.appendChild(script);
+				} else {
+					iframe.contentWindow.document.body.appendChild(script);
+				}
+
+				// インジケータのメッセージを更新
+				if (this._indicator) {
+					this._indicator.message('スクリプトをロードしています');
+				}
 			}));
 
 			this._editAreaBarHeight = $('.active .editAreaBar').outerHeight();// editAreaBarの高さを調整(window幅によって高さが変わる)
@@ -451,7 +480,7 @@
 			var indicator = this.indicator({
 				promises: dfd.promise(),
 				target: document.body,
-				message: 'プレビューページをリロードしています'
+				message: 'プレビューページをロードしています'
 			}).show();
 
 			this._indicator = indicator;
