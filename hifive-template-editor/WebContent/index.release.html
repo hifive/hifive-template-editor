@@ -32,7 +32,14 @@ limitations under the License.
 <link rel="stylesheet" href="res/lib/editor-external.css">
 <link rel="stylesheet" href="css/index.css">
 
-<script src="res/lib/jquery/jquery-1.9.1.min.js"></script>
+<!-- jQueryの読み込み。IE8以下の場合は1.xを、それ以外の場合は2.xを読み込む -->
+<!--[if lt IE 9]>
+    <script src="./res/lib/jquery/jquery-1.js"></script>
+    <![endif]-->
+<!--[if gte IE 9]><!-->
+<script src="./res/lib/jquery/jquery-2.js"></script>
+<!--<![endif]-->
+
 <script src="res/lib/bootstrap3.2/js/bootstrap.js"></script>
 
 <script src="res/lib/hifive/ejs-h5mod.js"></script>
