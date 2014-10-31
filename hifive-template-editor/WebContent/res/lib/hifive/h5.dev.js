@@ -14,9 +14,9 @@
  * limitations under the License.
  *
  * hifive
- *   version 1.1.12
- *   gitCommitId : 77423d67d2e34680e128be6d9e1fe616c45a9cc4
- *   build at 2014/07/02 10:50:45.875 (+0900)
+ *   version 1.1.14
+ *   gitCommitId : a4c4bbab5019987c08ee2ba99ec4612a7054b8b3
+ *   build at 2014/09/02 13:16:17.913 (+0900)
  *   (util,controller,modelWithBinding,view,ui,api.geo,api.sqldb,api.storage)
  */
 (function($){
@@ -31,7 +31,7 @@
 
 	//h5存在チェック
 	if (window.h5) {
-		if (window.h5.env && (window.h5.env.version === '1.1.12')) {
+		if (window.h5.env && (window.h5.env.version === '1.1.14')) {
 			// 既にロード済みのhifiveと同じバージョンをロードしようとした場合は何もしない
 			return;
 		}
@@ -55,7 +55,7 @@
 	};
 
 	h5.env = {
-		version: '1.1.12'
+		version: '1.1.14'
 	};
 
 	// =========================================================================
@@ -2405,6 +2405,11 @@ var h5internal = {
 	 */
 	var ERR_CODE_OUT_CATEGORY_INVALID = 10010;
 
+	/**
+	 * スタックトレース出力時に1行目(メッセージ部)に表示するトレース件数
+	 */
+	var PREVIEW_TRACE_COUNT = 3;
+
 	// =============================
 	// Development Only
 	// =============================
@@ -2553,34 +2558,36 @@ var h5internal = {
 			return null;
 		}
 	}
-	;
 
 	/**
 	 * トレース情報からトレース結果のオブジェクト取得します。
-	 * <ul>
-	 * <li>result.all {String} 全てトレースする
-	 * <li>result.recent {String} Logクラス/LogTargetクラスのメソッドは省いた最大3件のスタックトーレス"[func1_2 () <- func1_1 () <-
-	 * func1 () ...]"
-	 * </ul>
+	 * <p>
+	 * 以下のようなオブジェクトを返します
+	 * </p>
+	 *
+	 * <pre><code>
+	 * {
+	 * 	 all: maxStackSize maxStackSizeまでのトレース結果を改行で結合した文字列
+	 * 	 preview: 最大でPREVIEW_TRACE_COUNTまでのトレース結果を&quot; &lt;- &quot;で結合した文字列 &quot;[func1_2 () &lt;- func1_1 () &lt;- func1 () ...]&quot;
+	 * }
+	 * </code></pre>
+	 *
+	 * @param {String[]} traces トレース結果
+	 * @param {Integer} maxStackSize 最大トレース数
 	 */
-	function getTraceResult(recentTraces, detailTraces) {
-		var COUNT = 3;
+	function getFormattedTraceMessage(traces, maxStackSize) {
 		var result = {};
+		var slicedTraces = traces.slice(0, maxStackSize);
 
-		if (isArray(recentTraces)) {
-			var recent = recentTraces.slice(0, COUNT).join(' <- ');
+		var previewLength = Math.min(PREVIEW_TRACE_COUNT, maxStackSize);
+		var preview = slicedTraces.slice(0, previewLength).join(' <- ');
 
-			if (recentTraces.slice(COUNT).length > 0) {
-				recent += ' ...';
-			}
-
-			result.recent = recent;
-			result.all = detailTraces.join('\n');
-		} else {
-			result.recent = recentTraces;
-			result.all = detailTraces;
+		if (slicedTraces.length > previewLength) {
+			preview += ' ...';
 		}
 
+		result.preview = preview;
+		result.all = slicedTraces.join('\n');
 		return result;
 	}
 
@@ -2686,7 +2693,7 @@ var h5internal = {
 			var logMsg = this._getLogPrefix(logObj) + msg;
 
 			if (logObj.logger.enableStackTrace) {
-				logMsg += '  [' + logObj.stackTrace.recent + ']';
+				logMsg += '  [' + logObj.stackTrace.preview + ']';
 			}
 
 			if (logObj.logger.enableStackTrace && console.groupCollapsed) {
@@ -2874,8 +2881,7 @@ var h5internal = {
 			if (!isDefault || targets != null) {
 				var targetNames = [];
 				// targetsの指定は文字列または配列またはnull,undefinedのみ
-				if (!(targets == null || isArray(targets) || (isString(targets) && $
-						.trim(targets).length))) {
+				if (!(targets == null || isArray(targets) || (isString(targets) && $.trim(targets).length))) {
 					throwFwError(ERR_CODE_LOG_TARGETS_INVALID);
 				}
 				targets = wrapInArray(targets);
@@ -3068,23 +3074,21 @@ var h5internal = {
 		 * @memberOf Log
 		 * @function
 		 * @param fn {Function} トレース対象の関数
-		 * @returns {Object} スタックトレース<br>
+		 * @returns {Object} 以下のようなオブジェクトを返します
 		 *
-		 * <pre>
+		 * <pre><code>
 		 * {
-		 *   all: 全てトレースした文字列,
-		 *   recent: Logクラス/LogTargetクラスのメソッドは省いた最大3件トレースした文字列
-		 *    &quot;[func1_2 () &lt;- func1_1 () &lt;- func1 () ...]&quot;
+		 * 	 all: maxStackSize maxStackSizeまでのトレース結果を改行で結合した文字列
+		 * 	 preview: 最大でPREVIEW_TRACE_COUNTまでのトレース結果を&quot; &lt;- &quot;で結合した文字列 &quot;[func1_2 () &lt;- func1_1 () &lt;- func1 () ...]&quot;
 		 * }
-		 * </pre>
+		 * </code></pre>
 		 */
 		_traceFunctionName: function(fn) {
 			var e = new Error();
 			var errMsg = e.stack || e.stacktrace;
 			var traces = [];
-			/** @type Object */
-			var result = {};
 
+			// stackまたはstacktraceがある場合(IE,Safari以外)
 			if (errMsg) {
 				// トレースされたログのうち、トレースの基点から3メソッド分(_traceFunction、_log、
 				// debug|info|warn|error|trace)はログに出力しない。
@@ -3105,10 +3109,7 @@ var h5internal = {
 						ret = $.trim(value);
 					}
 					return ret;
-				});
-
-				result = getTraceResult(traces.slice(DROP_TRACE_COUNT, traces.length), traces
-						.slice(0, this.maxStackSize));
+				}).slice(DROP_TRACE_COUNT);
 			} else {
 				// IE, Safari
 
@@ -3118,53 +3119,32 @@ var h5internal = {
 				// (例えばjQuery1.9.0は"use strict"宣言がされており、jQuery1.9.0内の関数を経由して呼ばれた関数は全てstrictモード扱いとなり、
 				// callerプロパティにアクセスできない)
 				// そのため、try-catchで囲んで、取得できなかった場合は{unable to trace}を出力する
-				var currentCaller = null;
-				try {
-					currentCaller = fn.caller;
-				} catch (e) {
-					// 何もしない
-				}
-				var index = 0;
-
-				if (!currentCaller) {
-					result = getTraceResult('{unable to trace}', '{unable to trace}');
-				} else {
-					while (true) {
-						var argStr = parseArgs(currentCaller.arguments);
-						var funcName = getFunctionName(currentCaller);
-
-						var nextCaller = null;
-						try {
-							nextCaller = currentCaller.caller;
-						} catch (e) {
-							// エラーが発生してトレースできなくなったら終了
-							traces.push('{unable to trace}');
-							result = getTraceResult(traces, traces);
-							break;
-						}
-						if (funcName) {
-							// 関数名が取得できているときは関数名を表示
-							traces.push('{' + funcName + '}(' + argStr + ')');
-						} else {
-							if (!nextCaller) {
-								// nullの場合はルートからの呼び出し
-								traces.push('{root}(' + argStr + ')');
-							} else {
-								traces.push('{anonymous}(' + argStr + ')');
-							}
-						}
-
-						if (!nextCaller || index >= this.maxStackSize) {
-							result = getTraceResult(traces, traces);
-							break;
-						}
-
-						currentCaller = nextCaller;
-						index++;
+				for (var i = 0, l = this.maxStackSize, caller = fn; i < l; i++) {
+					var funcName = getFunctionName(caller);
+					var argStr = parseArgs(caller.arguments);
+					var nextCaller;
+					try {
+						nextCaller = caller.caller;
+					} catch (e) {
+						// エラーが発生してトレースできなくなったら終了
+						traces.push('{unable to trace}');
+						break;
 					}
+					if (!funcName) {
+						if (!nextCaller) {
+							// nullの場合はルートからの呼び出し
+							traces.push('{root}(' + argStr + ')');
+						} else {
+							traces.push('{anonymous}(' + argStr + ')');
+							break;
+						}
+					}
+					// 関数名が取得できているときは関数名を表示
+					traces.push('{' + funcName + '}(' + argStr + ')');
+					caller = nextCaller;
 				}
 			}
-			return result;
+			return getFormattedTraceMessage(traces, this.maxStackSize);
 		},
 
 		/**
@@ -5131,7 +5111,8 @@ var h5internal = {
 	var FW_LOG_INIT_CONTROLLER_BEGIN = 'コントローラ"{0}"の初期化を開始しました。';
 	var FW_LOG_INIT_CONTROLLER_COMPLETE = 'コントローラ"{0}"の初期化が正常に完了しました。';
 	var FW_LOG_INIT_CONTROLLER_THROWN_ERROR = 'コントローラ"{0}"の{1}内でエラーが発生したため、コントローラの初期化を中断しdisposeしました。';
-	var FW_LOG_BIND_TARGET_INVALID = 'イベントのバインド対象オブジェクトが不正です。DOMノードまたはaddEventListener/removeEventListenerを持つオブジェクトを指定してください。';
+	var FW_LOG_BIND_TARGET_NOT_FOUND = 'イベントのバインド対象が見つかりません。指定されたグローバルセレクタ：{0}';
+	var FW_LOG_BIND_TARGET_INVALID = 'イベントハンドラのセットに失敗しました。指定されたオブジェクトがaddEventListenerメソッドを持っていません。対象のオブジェクト：{0}';
 
 	// エラーコードマップ
 	var errMsgMap = {};
@@ -6197,14 +6178,19 @@ var h5internal = {
 				// ルートコントローラであれば次の処理
 				// イベントハンドラのバインド
 				doForEachControllerGroups(controller, function(c, parent, prop) {
-					// 親コントローラの__metaからこのコントローラについてuseHandlersの定義を取得
-					var useHandlers = parent && parent.__meta && parent.__meta[prop]
-							&& parent.__meta[prop].useHandlers;
-					if (useHandlers === false) {
-						// 親のuseHandlersでfalseが指定されていた場合は何もしない
-						return;
+					// useHandlersの判定文について、minifyした時にiOS7.0で正しく解釈されるようにisUseHandlersという変数を作って対応している(issue #402)
+					// iOS7.0.xで、「論理値との比較で、片方が論理積」である条件式がif文に指定されていた場合、正しく解釈されないバグがある
+					// if(false !== (null && 'fuga')) { } else { iOS7.0.xだとelse文に入る }
+					// minfyした時に↑のような条件式にならないようにこのような実装にしている
+					// (この実装の場合、3項演算に展開される)
+					var isUseHandlers = true;
+					if (parent && parent.__meta && parent.__meta[prop]) {
+						isUseHandlers = parent.__meta[prop].useHandlers !== false;
 					}
-					bindByBindMap(c);
+					if (isUseHandlers) {
+						// 親のuseHandlersでfalseが指定されていなければバインドを実行する
+						bindByBindMap(c);
+					}
 				});
 				// __readyの実行
 				triggerReady(controller);
@@ -7620,8 +7606,14 @@ var h5internal = {
 			// ノードタイプが定義されている(=ノード)またはwindowオブジェクトの場合またはjQueryオブジェクトの場合はjQueryのbindを使う
 			$(bindTarget).bind(eventName, handler);
 		} else {
+			/* del begin */
+			if (bindTarget == null) {
+				fwLogger.warn(FW_LOG_BIND_TARGET_NOT_FOUND, bindObj.selector);
+			} else if (!bindTarget.addEventListener) {
+				fwLogger.warn(FW_LOG_BIND_TARGET_INVALID, bindObj.selector);
+			}
+			/* del end */
 			if (!bindTarget || !bindTarget.addEventListener) {
-				fwLogger.warn(FW_LOG_BIND_TARGET_INVALID);
 				bindObj.isBindCanceled = true;
 				return;
 			}
@@ -14788,7 +14780,9 @@ var h5internal = {
 			}
 
 			function load(absolutePath, filePath, df) {
-				h5.ajax(filePath).done(
+				h5.ajax(filePath, {
+					dataType: 'text'
+				}).done(
 						function(result, statusText, obj) {
 							// アクセス中のURLのプロミスを保持するaccessingUrlsから、このURLのプロミスを削除する
 							delete that.accessingUrls[absolutePath];
@@ -15532,11 +15526,6 @@ var h5internal = {
 	var isLegacyIE = h5ua.isIE && h5ua.browserVersion <= 6;
 
 	/**
-	 * timer + transformでスロバーを回すかどうか (PC版chromeでは、timer + transformでスロバーを回すようにするため)
-	 */
-	var useTransformTimerAnimation = h5ua.isChrome && h5ua.isDesktop;
-
-	/**
 	 * position:fixedでインジケータを描画するかのフラグ。
 	 * <p>
 	 * 自動更新またはアップデート可能なブラウザは、最新のブラウザであるものとして判定しない。(常にposition:fixedは有効とする)
@@ -15718,6 +15707,7 @@ var h5internal = {
 	 *
 	 * @private
 	 * @param elem {Element} DOM要素
+	 * @returns {Object}
 	 */
 	function getScrollSize(elem) {
 		var retW = elem.scrollWidth;
@@ -16278,6 +16268,10 @@ var h5internal = {
 		},
 		_run: function() {
 			var lineCount = this.style.throbber.lines;
+			if (lineCount === 0) {
+				// ラインの数が0なら何もしない
+				return;
+			}
 			var roundTime = this.style.throbber.roundTime;
 			var highlightPos = this.highlightPos;
 			var lines = this.group.childNodes;
@@ -16382,24 +16376,24 @@ var h5internal = {
 			$(this.baseDiv).remove();
 
 			if (this._runId) {
+				// Timerで動かしている場合(CSSAnimationをサポートしていないためにTimerで動かしている場合)
 				// Timerを止める
-				// chromeの場合はsetIntervalでタイマーを回しているため、clearIntervalで止める
-				if (useTransformTimerAnimation) {
-					clearInterval(this._runId);
-				} else {
-					clearTimeout(this._runId);
-				}
+				clearTimeout(this._runId);
 				this._runId = null;
 			}
 		},
 		_run: function() {
+			var lineCount = this.style.throbber.lines;
+			if (lineCount === 0) {
+				// lineの数が0なら何もしない
+				return;
+			}
 			var canvas = this.canvas;
 			var ctx = canvas.getContext('2d');
 			var highlightPos = this.highlightPos;
 			var positions = this.positions;
 			var lineColor = this.style.throbberLine.color;
 			var lineWidth = this.style.throbberLine.width;
-			var lineCount = this.style.throbber.lines;
 			var roundTime = this.style.throbber.roundTime;
 
 			canvas.width = canvas.width;
@@ -16430,25 +16424,6 @@ var h5internal = {
 			}
 			this.highlightPos = highlightPos;
 
-
-			if (useTransformTimerAnimation) {
-				// chrome22で、webkit-animationでアニメーションしている要素を消すと、表示上残ってしまう。(すべてのPCで起きるわけではない)
-				// そのため、chromeの場合はwebkit-animationを使わず、Timer + transform でスロバーを回している
-				//
-				// このwebkit-animationの問題について調べたところ、
-				// chrome23βでも同様の問題が起きたが、
-				// chrome24devとchrome25canaryではきちんと消えることを確認した。(2012/11/06現在)
-				var deg = 0;
-				this._runId = setInterval(function() {
-					deg++;
-					canvas.style.webkitTransform = 'rotate(' + deg + 'deg)';
-					if (deg >= 360) {
-						deg -= 360;
-					}
-				}, roundTime / 360);
-				return;
-			}
-
 			if (isCSS3AnimationsSupported) {
 				// CSS3Animationをサポートしている場合は、keyframesでスロバーを描写する
 				canvas.className = CLASS_THROBBER_CANVAS;
@@ -16457,11 +16432,9 @@ var h5internal = {
 				var that = this;
 
 				// CSSAnimation未サポートの場合タイマーアニメーションで描画する
-				// 対象ブラウザ: Firefox 2,3 / Opera  9.0～10.1 / Opera Mini 5.0～7.0 / Opera Mobile 10.0
+				// 対象ブラウザ: IE 9 / Firefox 2,3 / Opera  9.0～10.1 / Opera Mini 5.0～7.0 / Opera Mobile 10.0
 				// http://caniuse.com/transforms2d
 				// http://caniuse.com/#search=canvas
-				// ただし、Android 2.xは、-webkit-keyframesで-webkit-transformを使用すると、topとleftを変更してもその位置に描画されないバグがあるため、
-				// タイマーアニメーションでスロバーを描写する
 				this._runId = setTimeout(function() {
 					that._run.call(that);
 				}, perMills);
@@ -16550,6 +16523,9 @@ var h5internal = {
 		this._settings = settings;
 		// スタイル情報
 		this._styles = $.extend(true, {}, defaultStyle, readThrobberStyle(settings.theme));
+		if (settings.throbber) {
+			$.extend(this._styles.throbber, settings.throbber);
+		}
 		// スクリーンロックで表示するか
 		this._isScreenLock = isScreenlock;
 		// 表示対象であるDOM要素を保持するjQueryオブジェクト
@@ -16724,7 +16700,7 @@ var h5internal = {
 		/**
 		 * オーバーレイのサイズを再計算します。
 		 * <p>
-		 * position:fixedで表示している場合は再計算しません。
+		 * position:fixedで表示している場合は再計算しません。また、オーバレイ非表示の場合は何もしません。
 		 * <p>
 		 * position:absoluteの場合は高さのみ再計算を行い、IE6以下の標準モード及びQuirksモードの場合は高さと幅の両方を再計算します。
 		 *
@@ -16733,13 +16709,17 @@ var h5internal = {
 		 * @private
 		 */
 		_resizeOverlay: function() {
-			if (this._isScreenLock && usePositionFixed) {
+			// スクリーンロックでpoisition:fixedが使用可能なブラウザの場合は、オーバレイをposition:fixedで表示している
+			// オーバレイをposition:fixedで表示している場合は何もしない
+			// また、オーバレイを表示していない(block:false)インジケータなら何もしない
+			if ((this._isScreenLock && usePositionFixed) || this._$overlay.length === 0) {
 				return;
 			}
 
 			for (var i = 0, len = this._$target.length; i < len; i++) {
-				var _$target = this._$target.eq(i);
+				var _$content = this._$content.eq(i);
 				var _$overlay = this._$overlay.eq(i);
+				var _$target = this._$target.eq(i);
 				var _$skin = this._$skin.eq(i);
 
 				var w, h;
@@ -16749,7 +16729,12 @@ var h5internal = {
 					w = documentWidth();
 					h = documentHeight();
 				} else {
+					// オーバレイとコンテンツを非表示にしたときのscrollWidth/Heightを取得する
+					_$overlay.css('display', 'none');
+					_$content.css('display', 'none');
 					var scrSize = getScrollSize(_$target[0]);
+					_$overlay.css('display', 'block');
+					_$content.css('display', 'block');
 					w = scrSize.w;
 					h = scrSize.h;
 				}
@@ -16863,11 +16848,8 @@ var h5internal = {
 				}
 			};
 
-			if (!isCSS3AnimationsSupported || useTransformTimerAnimation) {
-				// CSS3Animationをサポートしないブラウザまたはchromeの場合、タイマーでスロバーのアニメーションを動かしているため、スロバーのhide()でタイマーを停止させる。
-				for (var i = 0, len = this._throbbers.length; i < len; i++) {
-					this._throbbers[i].hide();
-				}
+			for (var i = 0, len = this._throbbers.length; i < len; i++) {
+				this._throbbers[i].hide();
 			}
 
 			if (fadeOutTime < 0) {

@@ -15,9 +15,9 @@
  * limitations under the License.
  *
  * hifive css
- *   version 1.1.12
- *   gitCommitId : 77423d67d2e34680e128be6d9e1fe616c45a9cc4
- *   build at 2014/07/02 10:50:51.057 (+0900)
+ *   version 1.1.14
+ *   gitCommitId : a4c4bbab5019987c08ee2ba99ec4612a7054b8b3
+ *   build at 2014/09/02 13:16:23.002 (+0900)
  *   (util,controller,modelWithBinding,view,ui,api.geo,api.sqldb,api.storage)
  */
 
@@ -28,6 +28,18 @@
 	padding: 5px 10px 5px 10px;
 	white-space: nowarp;
 	cursor: wait;
+}
+
+/* インジケータ オーバレイDIV */
+.h5-indicator.overlay {
+	height: 100%;
+	width: 100%;
+	border: none;
+	margin: 0px;
+	padding: 0px;
+	top: 0;
+	left: 0;
+	z-index: 1001;
 }
 
 /* インジケータメッセージDIV - スロバーSPAN */
@@ -114,7 +126,7 @@ div.a.throbber-line {
 }
 
 /** no-prefix (IE10) */
-@-keyframes rotateThrobber {
+@keyframes rotateThrobber {
     from {transform: rotate(0deg);}
     to {transform: rotate(360deg);}
 }
@@ -164,14 +176,6 @@ div.a.throbber-line {
 	background-color: #000;
 	opacity: 0.6;
 	filter: alpha(opacity=60);
-	height: 100%;
-	width: 100%;
-	border: none;
-	margin: 0px;
-	padding: 0px;
-	top: 0;
-	left: 0;
-	z-index: 1001;
 }
 
 /* メッセージDIV */
