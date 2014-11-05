@@ -30,8 +30,9 @@
 	// スコープ内定数
 	//
 	// =========================================================================
-	var BLANK_PAGE = 'sample/blank.html';// ブランクページ
+	var BLANK_PAGE = 'blank.html';// ブランクページ
 	var TEMPLATE_ID = 'templateId';
+	var RESULT_EDITOR_CTRL = './hifive/templateEditor/controller/ResultEditorController.js';
 
 
 	// =========================================================================
@@ -147,51 +148,58 @@
 				}
 			});
 
-			this._target = $('iframe')[0];// postMessageの送信先を設定
+			var $iframe = this.$find('iframe');
+			this._target = $iframe.get(0);
 
-			$('iframe').load(this.own(function() {
-				// インジケータのメッセージを更新
-				if (this._indicator) {
-					this._indicator.message('プレビューページをロードしました');
-				}
+			$iframe.load(this.own(function() {
 
-				var script = document.createElement('script');
-				script.type = 'text/javascript';
-				script.src = '/hifive-template-editor/hifive/templateEditor/controller/ResultEditorController.js';
-
-				script.onload = this.own(function() {
-					// インジケータのメッセージを更新
-					if (this._indicator) {
-						this._indicator.message('スクリプトをロードしました');
-					}
-
-					var msg = this._isBlank ? 'ブランクページのロードが完了しました' : 'ページのロードが完了しました';
-
-					$(this.rootElement).trigger('showMessage', {
-						'msg': msg,
-						'$el': this.$find('.preview-msg')
-					});
-				});
-
-
-				var iframe = this.$find('iframe').get(0);
-				if (iframe.contentDocument.head) {
-					iframe.contentDocument.head.appendChild(script);
-				} else {
-					iframe.contentWindow.document.body.appendChild(script);
-				}
-
-				// インジケータのメッセージを更新
 				if (this._indicator) {
 					this._indicator.message('スクリプトをロードしています');
 				}
+
+				var def = h5.async.deferred();
+
+				def.then(this.own(function() {
+					// h5.cssをロード
+					var h5CSSPath = './res/lib/hifive/h5.css';
+					this._insertCSSToIFrame(h5CSSPath).then(this.own(function() {
+						// h5.jsをロード
+						var h5ScriptPath = './res/lib/hifive/h5.js';
+						this._insertScriptToIFrame(h5ScriptPath).then(this.own(function() {
+							// ResultEditorControllerをロード
+							this._insertScriptToIFrame(RESULT_EDITOR_CTRL).then(this.own(function() {
+
+								var msg = this._isBlank ? 'ブランクページのロードが完了しました' : 'ページのロードが完了しました';
+								$(this.rootElement).trigger('showMessage', {
+									'msg': msg,
+									'$el': this.$find('.preview-msg')
+								});
+							}));
+						}));
+					}));
+				}));
+
+				if (!this._target.contentWindow.jquery) {
+					var jqPath;
+					if (h5.env.ua.isIE && h5.env.ua.browserVersion <= 8) {
+						jqPath = './res/lib/jquery/jquery-1.js';
+					} else {
+						jqPath = './res/lib/jquery/jquery-2.js';
+					}
+
+					this._insertScriptToIFrame(jqPath).then(function() {
+						def.resolve();
+					});
+				}
+				def.resolve();
+
 			}));
 
 			this._editAreaBarHeight = $('.active .editAreaBar').outerHeight();// editAreaBarの高さを調整(window幅によって高さが変わる)
 
 			this._beginIndicator();
 
-			this.$find('iframe')[0].src = BLANK_PAGE;
+			this._target.src = BLANK_PAGE;
 		},
 
 
@@ -723,6 +731,63 @@
 				template: template
 			};
 			this._sendMessage(data);
+		},
+
+		_insertScriptToIFrame: function(jsPath) {
+			var def = this.deferred();
+
+			var script = document.createElement('script');
+			if (h5.env.ua.isIE && h5.env.ua.browserVersion <= 8) {
+				script.onreadystatechange = function() {
+					if (script.readyState == 'loaded') {
+						def.resolve();
+					}
+				};
+			} else {
+				$(script).load(function() {
+					def.resolve();
+				});
+			}
+
+			$(script).error(this.own(function(e) {
+				def.resolve();
+				$(this).trigger('loadLibraryFail');
+			}));
+
+			script.type = 'text/javascript';
+			script.src = jsPath;
+			this._getIFrameDocument().appendChild(script);
+
+			return def;
+		},
+
+		_insertCSSToIFrame: function(cssPath) {
+			var def = h5.async.deferred();
+
+			var css = document.createElement('link');
+			$(css).load(function() {
+				def.resolve();
+			});
+
+			$(css).error(this.own(function(e) {
+				def.resolve();
+				$(this).trigger('loadLibraryFail');
+			}));
+
+			css.type = 'text/css';
+			css.rel = 'stylesheet';
+			css.href = cssPath;
+			this._getIFrameDocument().appendChild(css);
+
+			return def;
+		},
+
+		_getIFrameDocument: function() {
+			var iframe = this.$find('iframe').get(0);
+			if (h5.env.ua.isIE) {
+				return iframe.contentWindow.document.body;
+			}
+			return iframe.contentDocument.head;
 		}
 
 	};
