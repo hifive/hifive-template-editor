@@ -17,6 +17,7 @@ the License.
 	<property name="webcontent.dir" value="WebContent" />
 	<property name="webinf.dir" value="WEB-INF" />
 	<property name="index.release" value="index.release.html" />
+	<property name="blank" value="blank.html" />
 	<property name="src.dir" value="${webcontent.dir}/hifive/templateEditor" />
 	<property name="build.dir" value="${webcontent.dir}/build" />
 	<property name="min.src.dir" value="${build.dir}/hifive/templateEditor" />
@@ -111,6 +112,7 @@ the License.
 
 		<!-- htmlファイルをbuildに出力 -->
 		<copy file="${webcontent.dir}/${index.release}" tofile="${build.dir}/index.html" />
+		<copy file="${webcontent.dir}/${blank}" tofile="${build.dir}/blank.html" />
 
 		<!-- tmpフォルダの削除 -->
 		<delete dir="${build.tmp.dir}" />
