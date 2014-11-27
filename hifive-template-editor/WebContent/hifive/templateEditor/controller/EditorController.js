@@ -818,8 +818,8 @@
 
 		_getIFrameDocument: function() {
 			var iframe = this.$find('iframe').get(0);
-			if (h5.env.ua.isIE) {
-				return iframe.contentWindow.document.body;
+			if (h5.env.ua.isIE && h5.env.ua.browserVersion <= 8) {
+				return iframe.contentDocument.getElementsByTagName('head')[0];
 			}
 			return iframe.contentDocument.head;
 		}
