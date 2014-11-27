@@ -32,7 +32,9 @@
 	// =========================================================================
 	var BLANK_PAGE = 'blank.html';// ブランクページ
 	var TEMPLATE_ID = 'templateId';
-	var RESULT_EDITOR_CTRL = './hifive/templateEditor/controller/ResultEditorController.js';
+	var RESULT_EDITOR_CTRL_PATH = 'hifive/templateEditor/controller/ResultEditorController.js';
+	var H5_CSS_PATH = 'res/lib/hifive/h5.css';
+	var H5_JS_PATH = 'res/lib/hifive/h5.js';
 
 
 	// =========================================================================
@@ -151,47 +153,72 @@
 			var $iframe = this.$find('iframe');
 			this._target = $iframe.get(0);
 
+			// IFrameのloadイベントハンドラ
 			$iframe.load(this.own(function() {
 
 				if (this._indicator) {
 					this._indicator.message('スクリプトをロードしています');
 				}
 
+				// ブランクページを読み込む場合はjquery,hifiveはロード済み
+				if (this._isBlank) {
+					var msg = 'ブランクページのロードが完了しました';
+					$(this.rootElement).trigger('showMessage', {
+						'msg': msg,
+						'$el': this.$find('.preview-msg')
+					});
+					return;
+				}
+
 				var def = h5.async.deferred();
+				var pathname = location.pathname;
 
 				def.then(this.own(function() {
-					// h5.cssをロード
-					var h5CSSPath = './res/lib/hifive/h5.css';
-					this._insertCSSToIFrame(h5CSSPath).then(this.own(function() {
-						// h5.jsをロード
-						var h5ScriptPath = './res/lib/hifive/h5.js';
-						this._insertScriptToIFrame(h5ScriptPath).then(this.own(function() {
-							// ResultEditorControllerをロード
-							this._insertScriptToIFrame(RESULT_EDITOR_CTRL).then(this.own(function() {
+					var h5LoadDef = h5.async.deferred();
 
-								var msg = this._isBlank ? 'ブランクページのロードが完了しました' : 'ページのロードが完了しました';
-								$(this.rootElement).trigger('showMessage', {
-									'msg': msg,
-									'$el': this.$find('.preview-msg')
-								});
-							}));
+					h5LoadDef.then(this.own(function() {
+						// ResultEditorControllerをロード
+						var resultEditorCtrlPath = pathname + RESULT_EDITOR_CTRL_PATH;
+						this._insertScriptToIFrame(resultEditorCtrlPath).then(this.own(function() {
+							var msg = 'ページのロードが完了しました';
+							$(this.rootElement).trigger('showMessage', {
+								'msg': msg,
+								'$el': this.$find('.preview-msg')
+							});
 						}));
 					}));
+
+					// IFrameにhifiveがロードされていなければロードする
+					if (!this._target.contentWindow.h5) {
+						// h5.cssをロード
+						var h5CSSPath = pathname + H5_CSS_PATH;
+						this._insertCSSToIFrame(h5CSSPath).then(this.own(function() {
+							// h5.jsをロード
+							var h5ScriptPath = pathname + H5_JS_PATH;
+							this._insertScriptToIFrame(h5ScriptPath).then(this.own(function() {
+								h5LoadDef.resolve();
+							}));
+						}));
+					} else {
+						h5LoadDef.resolve();
+					}
 				}));
 
-				if (!this._target.contentWindow.jquery) {
+				// IFrameにjQueryがロードされていなければロードする
+				if (!this._target.contentWindow.jQuery) {
 					var jqPath;
 					if (h5.env.ua.isIE && h5.env.ua.browserVersion <= 8) {
-						jqPath = './res/lib/jquery/jquery-1.js';
+						jqPath = pathname + 'res/lib/jquery/jquery-1.js';
 					} else {
-						jqPath = './res/lib/jquery/jquery-2.js';
+						jqPath = pathname + 'res/lib/jquery/jquery-2.js';
 					}
 
 					this._insertScriptToIFrame(jqPath).then(function() {
 						def.resolve();
 					});
+				} else {
+					def.resolve();
 				}
-				def.resolve();
 
 			}));
 
@@ -287,6 +314,7 @@
 
 			this._target.src = url;
 
+			//TODO: ブランクページかどうかの判定方法が雑
 			if (url !== BLANK_PAGE) {
 				this._disableLibrary();
 				this._isBlank = false;
@@ -504,6 +532,12 @@
 			// インジケータのメッセージを更新
 			if (this._indicator) {
 				this._indicator.message('ライブラリをロードしています');
+			}
+
+			// IFrameがブランクページ以外を読み込んでいればライブラリはロードしない
+			if (!this._isBlank) {
+				this._sendPreviewMessage();
+				return;
 			}
 
 			// チェックされたライブラリを選別

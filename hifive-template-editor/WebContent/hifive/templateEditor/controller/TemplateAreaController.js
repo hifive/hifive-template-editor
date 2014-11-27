@@ -84,15 +84,6 @@
 
 			var selector = this.$find('.input-selector').val();
 
-			if (selector === '') {
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'セレクタを指定してください',
-					'$el': this.$find('.template-alert')
-				});
-
-				return;
-			}
-
 			var data = {
 				type: 'changeTarget',
 				selector: selector
@@ -102,12 +93,6 @@
 				'data': data
 			});
 		}
-
-
-	//		'.lineNum-btn click': function() {
-	//			$(this.rootElement).trigger('addLineNum');
-	//		}
-
 
 	};
 
