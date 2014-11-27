@@ -252,23 +252,27 @@
 			}
 
 			var $el;
-			var selector = '.template-alert';
+			var selector = data.selector;
+
 			try {
-				$el = $(data.selector);
+				if (selector === '') {
+					$el = $(this.rootElement);
+				} else {
+					$el = this.$find(selector);
+				}
+
 			} catch (e) {
 				var data = {
 					type: 'showMessage',
 					msg: '無効なセレクタが入力されています',
-					selector: selector
+					selector: '.template-alert'
 				};
 
 				this._target.html(temp);// 除去したテンプレートを戻します
-
 				this._sendMessage(data);
 
 				return;
 			}
-
 
 			if ($el.length === 0) {
 				// 指定されたセレクタがない
