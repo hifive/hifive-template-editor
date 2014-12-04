@@ -77,8 +77,19 @@
 			}
 		},
 
+		_editor: null,
+
 		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
 
+		__init: function() {
+
+			var editor = this._editor = ace.edit(this.$find('.dataText')[0]);
+			editor.getSession().setMode('ace/mode/json');
+			h5.u.obj.expose('hifive.templateEditor', {
+				dataEditor: editor
+			});
+			editor.on('change', this.own(this._change));
+		},
 
 		/**
 		 * パラメータ入力ポップ画面を表示します
@@ -88,7 +99,7 @@
 		},
 
 
-		'.dataText keyup': function() {
+		_change: function() {
 			this.trigger('textChange');
 		},
 
@@ -144,7 +155,7 @@
 
 				this.setDataText(data);// データをテキストエリアに反映します
 
-				//				this.createTemplate();
+				// this.createTemplate();
 				$(this.rootElement).trigger('createTemplate');
 
 				$(this.rootElement).trigger('showMessage', {
@@ -170,7 +181,7 @@
 		 * データオブジェクトをフォーマットします
 		 */
 		'.format-button click': function() {
-			var data = this.$find('.dataText').val();
+			var data = this._editor.getValue();
 
 			try {
 				if (!data || data === '') {
@@ -181,7 +192,8 @@
 
 				this.setDataText(data);
 
-			} catch (e) {
+			}
+			catch (e) {
 				$(this.rootElement).trigger('showMessage', {
 					'msg': 'JSONのパースに失敗しました\n' + e.stack,
 					'$el': this.$find('.data-alert')
@@ -189,6 +201,12 @@
 			}
 		},
 
+		/**
+		 * データ入力テキストを取得
+		 */
+		getText: function() {
+			return this._editor.getValue();
+		},
 
 		/**
 		 * データオブジェクトをテキストエリアに反映します。
@@ -196,9 +214,8 @@
 		 * @param json
 		 */
 		setDataText: function(data) {
-			this.$find('.dataText').val(JSON.stringify(data, null, '  '));
+			this._editor.setValue(JSON.stringify(data, null, '  '));
 		}
-
 	};
 
 	// =========================================================================

@@ -40,6 +40,8 @@ limitations under the License.
 <script src="./res/lib/jquery/jquery-2.js"></script>
 <!--<![endif]-->
 
+<script src="res/lib/ace.js" type="text/javascript" charset="utf-8"></script>
+
 <script src="res/lib/bootstrap3.2/js/bootstrap.js"></script>
 
 <script src="res/lib/hifive/ejs-h5mod.js"></script>
@@ -62,7 +64,14 @@ limitations under the License.
 <script>
 	$(function() {
 		$('.dividedBox').each(function() {
+			// DividedBox
 			h5.core.controller(this, h5.ui.container.DividedBox);
+
+			// Ace Editor
+			h5.u.obj.expose('hifive.templateEditor', {
+				sourceEditor: ace.edit('sourceText'),
+				dataEditor: ace.edit('dataText')
+			});
 		});
 	});
 </script>

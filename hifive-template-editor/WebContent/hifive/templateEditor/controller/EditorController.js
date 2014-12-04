@@ -77,7 +77,7 @@
 
 		__meta: {
 			_sourceEditorController: {
-				rootElement: '.sourceText'
+				rootElement: '.sourceTextWrapper'
 			},
 			_templateAreaController: {
 				rootElement: '#template'
@@ -488,7 +488,6 @@
 			this._removeIFrameCover();
 		},
 
-
 		/**
 		 * iframeを覆う要素を追加
 		 */
@@ -648,7 +647,7 @@
 
 			try {
 				// データをテキストエリアから取得してパースします
-				var data = this.$find('.dataText').val();
+				var data = this._dataAreaController.getText();
 				if (!data || data === '') {
 					data = null;
 				} else {

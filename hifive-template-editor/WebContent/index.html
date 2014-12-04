@@ -24,10 +24,12 @@ limitations under the License.
 
 <title>hifive テンプレートエディタ</title>
 
-<link rel="stylesheet" href="res/lib/bootstrap3.2/css/bootstrap.css" media="screen">
+<link rel="stylesheet" href="res/lib/bootstrap3.2/css/bootstrap.css"
+	media="screen">
 
 <link rel="stylesheet" href="res/lib/hifive/h5.css">
-<link rel="stylesheet" href="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.css">
+<link rel="stylesheet"
+	href="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.css">
 
 <link rel="stylesheet" href="res/lib/editor-external.css">
 <link rel="stylesheet" href="css/index.css">
@@ -40,18 +42,23 @@ limitations under the License.
 <script src="./res/lib/jquery/jquery-2.js"></script>
 <!--<![endif]-->
 
+<script src="res/lib/ace/src/ace.js" type="text/javascript"
+	charset="utf-8"></script>
+
 <script src="res/lib/bootstrap3.2/js/bootstrap.js"></script>
 
 <script src="res/lib/hifive/ejs-h5mod.js"></script>
 <script src="res/lib/hifive/h5.dev.js"></script>
 
-<script src="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
+<script
+	src="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
 <script src="res/lib/ejs/ejs_fulljslint.js"></script>
 
 <script src="hifive/templateEditor/js/dependencyMap.js"></script>
 <script src="hifive/templateEditor/logic/TemplateEditLogic.js"></script>
 <script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
-<script src="hifive/templateEditor/controller/ParameterEditController.js"></script>
+<script
+	src="hifive/templateEditor/controller/ParameterEditController.js"></script>
 <script src="hifive/templateEditor/controller/DataAreaController.js"></script>
 <script src="hifive/templateEditor/controller/TemplateAreaController.js"></script>
 <script src="hifive/templateEditor/controller/EditorController.js"></script>
@@ -60,6 +67,10 @@ limitations under the License.
 
 <script>
 	$(function() {
+		// PageController
+		h5.core.controller(document.body, hifive.templateEditor.controller.PageController);
+
+		// DividedBox
 		$('.dividedBox').each(function() {
 			h5.core.controller(this, h5.ui.container.DividedBox);
 		});
@@ -120,7 +131,8 @@ limitations under the License.
 									<label for="input-selector" class="input-group-addon">セレクタ</label>
 
 									<!-- セレクタ入力欄 -->
-									<input type="text" class="form-control input-selector" id="input-selector" placeholder="Selector">
+									<input type="text" class="form-control input-selector"
+										id="input-selector" placeholder="Selector">
 
 									<!-- テンプレート適用ボタン -->
 									<span class="input-group-btn">
@@ -137,7 +149,9 @@ limitations under the License.
 					<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 
 					<!-- テンプレート文字列表示エリア -->
-					<textarea class="sourceText pageWrapper col-xs-12"></textarea>
+					<div class="sourceTextWrapper">
+						<textarea id="sourceText" class="sourceText pageWrapper col-xs-12"></textarea>
+					</div>
 					<!-- <div class="sourceText pageWrapper col-xs-12">
 						contentEditable="true"
 					</div> -->
@@ -163,8 +177,10 @@ limitations under the License.
 							<button class="btn btn-primary btn-sm format-button ">フォーマット</button>
 							<!-- GET,POST指定 -->
 							<div class="pull-right">
-								<label class="radio-inline"><input type="radio" name="sendType-sm" class="sendType" value="GET" checked>GET</label>
-								<label class="radio-inline"><input type="radio" name="sendType-sm" class="sendType" value="POST">POST</label>
+								<label class="radio-inline"><input type="radio"
+									name="sendType-sm" class="sendType" value="GET" checked>GET</label>
+								<label class="radio-inline"><input type="radio"
+									name="sendType-sm" class="sendType" value="POST">POST</label>
 							</div>
 						</div>
 
@@ -173,7 +189,8 @@ limitations under the License.
 
 								<!-- フォーマット、パラメータボタン -->
 								<div class="btn-group">
-									<button class="btn btn-primary dropdown-toggle btn-sm" type="button" data-toggle="dropdown">
+									<button class="btn btn-primary dropdown-toggle btn-sm"
+										type="button" data-toggle="dropdown">
 										パラメータ <span class="caret"></span>
 									</button>
 
@@ -188,17 +205,21 @@ limitations under the License.
 
 								<!-- GET,POST -->
 								<div class="btn-group">
-									<button class="btn btn-primary dropdown-toggle btn-sm" type="button" data-toggle="dropdown">
+									<button class="btn btn-primary dropdown-toggle btn-sm"
+										type="button" data-toggle="dropdown">
 										Method <span class="caret"></span>
 									</button>
 
 									<ul class="dropdown-menu" role="menu" style="color: black;">
-										<li><label> <input type="radio" name="sendType-xs" class="sendType" value="GET" checked>GET
+										<li><label> <input type="radio"
+												name="sendType-xs" class="sendType" value="GET" checked>GET
 										</label></li>
 
 										<li role="presentation" class="divider"></li>
 
-										<li><label> <input type="radio" name="sendType-xs" class="sendType" value="POST"> POST
+										<li><label> <input type="radio"
+												name="sendType-xs" class="sendType" value="POST">
+												POST
 										</label></li>
 									</ul>
 								</div>
@@ -210,15 +231,17 @@ limitations under the License.
 							<form class="load-data">
 								<div class="input-group input-group-sm">
 									<!-- ラベル -->
-									<label for="input-data-url-sm input-data-url-xs" class="input-group-addon hidden-xs">URL</label>
+									<label for="input-data-url-sm input-data-url-xs"
+										class="input-group-addon hidden-xs">URL</label>
 
 									<!-- URL入力ボックス(データ取得用) -->
-									<input type="text" id="input-data-url-sm input-data-url-xs" class="form-control input-data-url"
-										placeholder="URL">
+									<input type="text" id="input-data-url-sm input-data-url-xs"
+										class="form-control input-data-url" placeholder="URL">
 
 									<!-- パラメータ,ロードボタン -->
 									<span class="input-group-btn">
-										<button class="btn btn-primary data-parameter hidden-xs" type="button">パラメータ</button>
+										<button class="btn btn-primary data-parameter hidden-xs"
+											type="button">パラメータ</button>
 										<button class="btn btn-primary data-button" type="submit">
 											<span class="glyphicon glyphicon-arrow-right"></span>
 										</button>
@@ -241,8 +264,11 @@ limitations under the License.
 							</thead>
 							<tbody>
 								<tr class="control-group ">
-									<td class="nameCell"><input class="param-name form-control input-sm" type="text" value=""></td>
-									<td class="valueCell"><input class="param-value form-control input-sm" name="" type="text" value=""></td>
+									<td class="nameCell"><input
+										class="param-name form-control input-sm" type="text" value=""></td>
+									<td class="valueCell"><input
+										class="param-value form-control input-sm" name="" type="text"
+										value=""></td>
 								</tr>
 							</tbody>
 						</table>
@@ -283,20 +309,21 @@ limitations under the License.
 					<div class="row">
 						<div class="libraries col-xs-4">
 							<div class="control-group">
-								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="bs3.2" checked="checked">
+								<label class="checkbox-inline"> <input class="lib"
+									type="checkbox" value="bs3.2" checked="checked">
 									Bootstrap3.2
 								</label>
 							</div>
 
 							<div class="control-group">
-								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.3.0"> jQuery
-									Mobile 1.3.0
+								<label class="checkbox-inline"> <input class="lib"
+									type="checkbox" value="jqm1.3.0"> jQuery Mobile 1.3.0
 								</label>
 							</div>
 
 							<div class="control-group">
-								<label class="checkbox-inline"> <input class="lib" type="checkbox" value="jqm1.4.2"> jQuery
-									Mobile 1.4.2
+								<label class="checkbox-inline"> <input class="lib"
+									type="checkbox" value="jqm1.4.2"> jQuery Mobile 1.4.2
 								</label>
 							</div>
 
@@ -322,7 +349,8 @@ limitations under the License.
 
 				<!-- ブランクページボタン -->
 				<div class="col-sm-3 col-xs-3">
-					<button class="btn btn-primary btn-sm blank-button pull-right" type="button">
+					<button class="btn btn-primary btn-sm blank-button pull-right"
+						type="button">
 						<img src="images/file.png" alt="ブランクページをロード" title="ブランクページをロード">
 					</button>
 				</div>
@@ -334,7 +362,8 @@ limitations under the License.
 							<label for="input-url" class="input-group-addon">URL</label>
 
 							<!-- URL入力欄 -->
-							<input type="text" id="input-url" class="form-control input-url" placeholder="URL">
+							<input type="text" id="input-url" class="form-control input-url"
+								placeholder="URL">
 
 							<!-- ページ読み込みボタン -->
 							<span class="input-group-btn">

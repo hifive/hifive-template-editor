@@ -282,8 +282,3 @@
 	h5.core.expose(pageController);
 
 })(jQuery);
-
-// ---- Init ---- //
-$(function() {
-	h5.core.controller('body', hifive.templateEditor.controller.PageController);
-});
