@@ -28,7 +28,9 @@
 	// スコープ内定数
 	//
 	// =========================================================================
-	var UNDO_BUFFER_SIZE = 25;
+	// var UNDO_BUFFER_SIZE = 25;
+
+	var TEXT_CHANGE_DELAY = 100;
 
 	// =========================================================================
 	//
@@ -207,7 +209,7 @@
 			this._textChangeDelayTimer = setTimeout(this.own(function() {
 				this._textChangeDelayTimer = null;
 				this.trigger('textChange');
-			}), 100);
+			}), TEXT_CHANGE_DELAY);
 		},
 
 
