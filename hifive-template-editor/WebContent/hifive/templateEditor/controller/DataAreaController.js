@@ -81,6 +81,8 @@
 
 		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
 
+		_textChangeDelayTimer: null,
+
 		__init: function() {
 
 			var editor = this._editor = ace.edit(this.$find('.dataText')[0]);
@@ -88,7 +90,8 @@
 			h5.u.obj.expose('hifive.templateEditor', {
 				dataEditor: editor
 			});
-			editor.on('change', this.own(this._change));
+			this._changeHandler = this.own(this._change);
+			editor.on('change', this._changeHandler);
 		},
 
 		/**
@@ -99,8 +102,14 @@
 		},
 
 
-		_change: function() {
-			this.trigger('textChange');
+		_change: function(context, editor) {
+			if (this._textChangeDelayTimer) {
+				clearTimeout(this._textChangeDelayTimer);
+			}
+			this._textChangeDelayTimer = setTimeout(this.own(function() {
+				this._textChangeDelayTimer = null;
+				this.trigger('textChange');
+			}), 100);
 		},
 
 
@@ -181,6 +190,8 @@
 		 * データオブジェクトをフォーマットします
 		 */
 		'.format-button click': function() {
+			// フォーマット時の入力でchangeイベントが上がらないようにする
+			this._editor.off('change', this._changeHandler);
 			var data = this._editor.getValue();
 
 			try {
@@ -199,6 +210,8 @@
 					'$el': this.$find('.data-alert')
 				});
 			}
+			// 再度ハンドラを設定
+			this._editor.on('change', this._changeHandler);
 		},
 
 		/**

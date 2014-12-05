@@ -66,6 +66,8 @@
 
 		_editor: null,
 
+		_textChangeDelayTimer: null,
+
 		__init: function() {
 			// $(this.rootElement).attr('contentEditable', true);
 
@@ -193,20 +195,26 @@
 		// },
 
 		_change: function() {
-			this.trigger('textChange');
+			if (this._textChangeDelayTimer) {
+				clearTimeout(this._textChangeDelayTimer);
+			}
+			this._textChangeDelayTimer = setTimeout(this.own(function() {
+				this._textChangeDelayTimer = null;
+				this.trigger('textChange');
+			}), 100);
 		},
 
 
-		'{rootElement} paste': function(context) {
-			var ev = context.event.originalEvent;
-
-			var raw = ev.clipboardData.getData('Text');
-
-			var text = raw.replace(/\x09/g, '    ').replace(/\x0D/g, '');
-
-			hifive.editor.u.execInsertTextCommand(text);
-			context.event.preventDefault();
-		}
+	// '{rootElement} paste': function(context) {
+	// var ev = context.event.originalEvent;
+	//
+	// var raw = ev.clipboardData.getData('Text');
+	//
+	// var text = raw.replace(/\x09/g, ' ').replace(/\x0D/g, '');
+	//
+	// hifive.editor.u.execInsertTextCommand(text);
+	// context.event.preventDefault();
+	// }
 
 
 	/**
