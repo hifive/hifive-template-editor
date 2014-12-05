@@ -185,7 +185,6 @@
 			}));
 		},
 
-
 		/**
 		 * データオブジェクトをフォーマットします
 		 */
@@ -228,6 +227,13 @@
 		 */
 		setDataText: function(data) {
 			this._editor.setValue(JSON.stringify(data, null, '  '));
+		},
+
+		/**
+		 * 現在の表示サイズに要素を調整
+		 */
+		adjustSize: function() {
+			this._editor.resize(true);
 		}
 	};
 

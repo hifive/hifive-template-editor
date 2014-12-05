@@ -149,8 +149,8 @@ limitations under the License.
 					<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
 
 					<!-- テンプレート文字列表示エリア -->
-					<div class="sourceTextWrapper">
-						<textarea id="sourceText" class="sourceText pageWrapper col-xs-12"></textarea>
+					<div class="sourceTextWrapper col-xs-12">
+						<textarea id="sourceText" class="sourceText"></textarea>
 					</div>
 					<!-- <div class="sourceText pageWrapper col-xs-12">
 						contentEditable="true"
@@ -275,7 +275,9 @@ limitations under the License.
 					</div>
 
 					<!-- データ表示エリア -->
-					<textarea class="col-xs-12 dataText"></textarea>
+					<div class="dataTextWrapper col-xs-12">
+						<textarea class="dataText"></textarea>
+					</div>
 
 					<!-- メッセージ表示画面 -->
 					<div class="alert alert-success data-msg" role="alert"></div>

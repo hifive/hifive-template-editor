@@ -166,6 +166,12 @@
 			return this._redoBuffer;
 		},
 
+		/**
+		 * 現在の表示サイズに要素を調整
+		 */
+		adjustSize: function() {
+			this._editor.resize(true);
+		},
 
 		// '{rootElement} keydown': function(context) {
 		// var ev = context.event.originalEvent;

@@ -277,6 +277,11 @@
 			}
 		},
 
+		'.editArea boxSizeChange ': function() {
+			// データエリアと、ソースエリアにリサイズを通知
+			this._sourceEditorController.adjustSize();
+			this._dataAreaController.adjustSize();
+		},
 
 		'{window} resize': function(context) {
 			this.resizeEditAreaBar();// editAreaBarの高さを調整します
@@ -314,7 +319,7 @@
 
 			this._target.src = url;
 
-			//TODO: ブランクページかどうかの判定方法が雑
+			// TODO: ブランクページかどうかの判定方法が雑
 			if (url !== BLANK_PAGE) {
 				this._disableLibrary();
 				this._isBlank = false;
@@ -331,30 +336,30 @@
 		},
 
 
-		//		'{rootElement} addLineNum': function() {
-		//			var ua = this._selectedClient();
-		//			switch (ua) {
+		// '{rootElement} addLineNum': function() {
+		// var ua = this._selectedClient();
+		// switch (ua) {
 		//
-		//			case 'ch':
-		//				this._sourceEditorController.addLineNumCh();
-		//				break;
+		// case 'ch':
+		// this._sourceEditorController.addLineNumCh();
+		// break;
 		//
-		//			case 'ff':
-		//				this._sourceEditorController.addLineNumFF();
-		//				break;
+		// case 'ff':
+		// this._sourceEditorController.addLineNumFF();
+		// break;
 		//
-		//			case 'ie':
-		//				this._sourceEditorController.addLineNumIE();
-		//				break;
+		// case 'ie':
+		// this._sourceEditorController.addLineNumIE();
+		// break;
 		//
-		//			default:
-		//				$(this.rootElement).trigger('showMessage', {
-		//					'msg': '未対応のブラウザです',
-		//					'selector': $('.tab-pane.active .alert-danger')
-		//				});
-		//				break;
-		//			}
-		//		},
+		// default:
+		// $(this.rootElement).trigger('showMessage', {
+		// 'msg': '未対応のブラウザです',
+		// 'selector': $('.tab-pane.active .alert-danger')
+		// });
+		// break;
+		// }
+		// },
 
 
 		/**
@@ -406,13 +411,15 @@
 				this.$find('.tab-content').css('padding-bottom', height);
 				this._editAreaBarHeight = height;
 			}
+			// データエリアと、ソースエリアにリサイズを通知
+			this._sourceEditorController.adjustSize();
+			this._dataAreaController.adjustSize();
 		},
 
 
 		loadTemplate: function(url) {
 			return this._templateEditorLogic.loadTemplate(url);
 		},
-
 
 		loadData: function(url, type, param) {
 			return this._templateEditorLogic.loadData(url, type, param);
@@ -445,7 +452,7 @@
 		//
 		// this.setTemplateText(temp);
 		//
-		//	this._sendPreviewMessage();
+		// this._sendPreviewMessage();
 		// },
 		//
 		//
@@ -463,7 +470,7 @@
 		//
 		// this.setTemplateText(temp);
 		//
-		//	this._sendPreviewMessage();
+		// this._sendPreviewMessage();
 		// },
 
 
@@ -654,7 +661,8 @@
 					data = $.parseJSON(data);
 				}
 
-			} catch (e) {
+			}
+			catch (e) {
 				// activeなタブにエラーを表示します
 				var $el = $('.tab-pane.active .alert-danger');
 
@@ -675,7 +683,8 @@
 				var generated = this._generate(template, data);
 				return generated;
 
-			} catch (e) {
+			}
+			catch (e) {
 				// activeなタブにエラーメッセージを表示します
 				var $el = $('.tab-pane.active .alert-danger');
 				$(this.rootElement).trigger('showMessage', {

@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 html,body {
 	height: 100%;
 	width: 100%;
@@ -75,11 +74,12 @@ input[type="text"] {
 	height: 100%;
 }
 
-.sourceText {
+.sourceTextWrapper {
 	height: 100%;
-	overflow: auto;
-	color: black;
-	background-color: white;
+}
+
+.sourceTextWrapper .ace_editor{
+	height: 100%;
 }
 
 .blank-button,.load-group {
@@ -98,9 +98,13 @@ input[type="text"] {
 	margin: 0px;
 }
 
-.dataText {
+.dataTextWrapper {
 	height: 100%;
 	width: 100%;
+}
+
+.dataTextWrapper .ace_editor{
+	height: 100%;
 }
 
 textarea {
