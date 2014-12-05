@@ -30,7 +30,6 @@
 	// スコープ内定数
 	//
 	// =========================================================================
-	var TEXT_CHANGE_DELAY  = 100;
 
 	// =========================================================================
 	//
@@ -71,6 +70,8 @@
 		 */
 		__name: 'hifive.templateEditor.controller.DataAreaController',
 
+		_aceEditorController: hifive.templateEditor.controller.AceEditorController,
+
 		__meta: {
 			_parameterEditController: {
 				rootElement: '.parameter-input'
@@ -83,15 +84,9 @@
 
 		_textChangeDelayTimer: null,
 
-		__init: function() {
-
-			var editor = this._editor = ace.edit(this.$find('.dataText')[0]);
-			editor.getSession().setMode('ace/mode/json');
-			h5.u.obj.expose('hifive.templateEditor', {
-				dataEditor: editor
-			});
-			this._changeHandler = this.own(this._change);
-			editor.on('change', this._changeHandler);
+		__ready: function() {
+			// Ace Editor
+			this._aceEditorController.createEditor(this.$find('.dataText')[0], 'json');
 		},
 
 		/**
@@ -100,18 +95,6 @@
 		'.data-parameter click': function() {
 			this.$find('.parameter-input').css('display', 'block');
 		},
-
-
-		_change: function(context, editor) {
-			if (this._textChangeDelayTimer) {
-				clearTimeout(this._textChangeDelayTimer);
-			}
-			this._textChangeDelayTimer = setTimeout(this.own(function() {
-				this._textChangeDelayTimer = null;
-				this.trigger('textChange');
-			}), TEXT_CHANGE_DELAY);
-		},
-
 
 		/**
 		 * データタブのラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
@@ -189,9 +172,7 @@
 		 * データオブジェクトをフォーマットします
 		 */
 		'.format-button click': function() {
-			// フォーマット時の入力でchangeイベントが上がらないようにする
-			this._editor.off('change', this._changeHandler);
-			var data = this._editor.getValue();
+			var data = this._aceEditorController.getValue();
 
 			try {
 				if (!data || data === '') {
@@ -204,20 +185,15 @@
 
 			}
 			catch (e) {
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'JSONのパースに失敗しました\n' + e.stack,
-					'$el': this.$find('.data-alert')
-				});
+				// エラー時は何もしない
 			}
-			// 再度ハンドラを設定
-			this._editor.on('change', this._changeHandler);
 		},
 
 		/**
 		 * データ入力テキストを取得
 		 */
 		getText: function() {
-			return this._editor.getValue();
+			return this._aceEditorController.getValue();
 		},
 
 		/**
@@ -226,14 +202,14 @@
 		 * @param json
 		 */
 		setDataText: function(data) {
-			this._editor.setValue(JSON.stringify(data, null, '  '));
+			this._aceEditorController.setValue(JSON.stringify(data, null, '  '));
 		},
 
 		/**
 		 * 現在の表示サイズに要素を調整
 		 */
 		adjustSize: function() {
-			this._editor.resize(true);
+			this._aceEditorController.adjustSize();
 		}
 	};
 

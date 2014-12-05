@@ -56,6 +56,7 @@ limitations under the License.
 
 <script src="hifive/templateEditor/js/dependencyMap.js"></script>
 <script src="hifive/templateEditor/logic/TemplateEditLogic.js"></script>
+<script src="hifive/templateEditor/controller/AceEditorController.js"></script>
 <script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
 <script
 	src="hifive/templateEditor/controller/ParameterEditController.js"></script>
@@ -82,8 +83,18 @@ limitations under the License.
 
 	<!-- タブ -->
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#template" data-toggle="tab">テンプレート</a></li>
-		<li><a href="#data" data-toggle="tab">データ</a></li>
+		<li class="active template-tab"><div class="badge-wrapper">
+				<span
+					class="glyphicon glyphicon-exclamation-sign error-badge hidden"
+					aria-hidden="true"></span>
+			</div> <a href="#template" data-toggle="tab">テンプレート</a></li>
+		<li class="data-tab"><div class="badge-wrapper">
+				<span
+					class="glyphicon glyphicon-exclamation-sign error-badge hidden"
+					aria-hidden="true"></span> <span
+					class="glyphicon glyphicon-exclamation-sign warn-badge hidden"
+					aria-hidden="true"></span>
+			</div> <a href="#data" data-toggle="tab">データ</a></li>
 		<!-- <li><a href="#css" data-toggle="tab">カスタムCSS</a></li> -->
 		<li><a href="#setting" data-toggle="tab">設定</a></li>
 	</ul>

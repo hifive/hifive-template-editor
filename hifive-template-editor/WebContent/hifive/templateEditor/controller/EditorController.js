@@ -663,14 +663,16 @@
 
 			}
 			catch (e) {
-				// activeなタブにエラーを表示します
+				// データタブが非アクティブならエラーのバッジを表示
+				var $dataTab = this.$find('.data-tab');
+				if (!$dataTab.hasClass('active')) {
+					$dataTab.find('.error-badge').removeClass('hidden');
+				}
 				var $el = $('.tab-pane.active .alert-danger');
-
 				$(this.rootElement).trigger('showMessage', {
-					'msg': 'JSONのパースに失敗しました\n' + e.stack,
+					'msg': 'テンプレートの生成に失敗しました',
 					'$el': $el
 				});
-
 				if (this._indicator) {
 					this._indicatorDeferred.resolve();
 				}
@@ -688,7 +690,7 @@
 				// activeなタブにエラーメッセージを表示します
 				var $el = $('.tab-pane.active .alert-danger');
 				$(this.rootElement).trigger('showMessage', {
-					'msg': 'テンプレートの生成に失敗しました\n' + e.stack,
+					'msg': 'テンプレートの生成に失敗しました',
 					'$el': $el
 				});
 

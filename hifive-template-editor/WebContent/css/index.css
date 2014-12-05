@@ -78,7 +78,7 @@ input[type="text"] {
 	height: 100%;
 }
 
-.sourceTextWrapper .ace_editor{
+.sourceTextWrapper .ace_editor {
 	height: 100%;
 }
 
@@ -103,7 +103,7 @@ input[type="text"] {
 	width: 100%;
 }
 
-.dataTextWrapper .ace_editor{
+.dataTextWrapper .ace_editor {
 	height: 100%;
 }
 
@@ -264,4 +264,18 @@ iframe {
 	position: absolute;
 	right: 18px;
 	top: 56px;
+}
+
+/* エラー、警告のバッジ */
+.badge-wrapper {
+	z-index: 1;
+	position: absolute;
+}
+
+.error-badge {
+	color: red;
+}
+
+.warn-badge {
+	color: yellow;
 }

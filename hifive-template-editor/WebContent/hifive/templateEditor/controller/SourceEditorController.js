@@ -30,8 +30,6 @@
 	// =========================================================================
 	// var UNDO_BUFFER_SIZE = 25;
 
-	var TEXT_CHANGE_DELAY = 100;
-
 	// =========================================================================
 	//
 	// スコープ内静的プロパティ
@@ -66,24 +64,17 @@
 		 */
 		__name: 'hifive.templateEditor.controller.SourceEditorController',
 
-		_editor: null,
+		_aceEditorController: hifive.templateEditor.controller.AceEditorController,
 
 		_textChangeDelayTimer: null,
 
-		__init: function() {
+		__ready: function() {
 			// $(this.rootElement).attr('contentEditable', true);
 
 			this._undoBuffer = [];
 			this._redoBuffer = [];
 			// Ace Editor
-			var editor = this._editor = ace.edit(this.$find('.sourceText')[0]);
-			editor.getSession().setMode('ace/mode/html');
-			h5.u.obj.expose('hifive.templateEditor', {
-				sourceEditor: editor
-			});
-
-			// イベントのバインド
-			editor.on('change', this.own(this._change));
+			this._aceEditorController.createEditor(this.$find('.sourceText')[0], 'ejs');
 		},
 
 		_sourceText: null,
@@ -109,7 +100,7 @@
 
 			// 改行を考慮するinnerTextを使用
 			// var raw = this.rootElement.innerText;
-			var raw = this._editor.getValue();
+			var raw = this._aceEditorController.getValue();
 
 			if (raw === undefined) {
 				// innerTextのない場合(Firefox)、textNodeのtextContentを取得し、<br>を改行にする
@@ -172,7 +163,7 @@
 		 * 現在の表示サイズに要素を調整
 		 */
 		adjustSize: function() {
-			this._editor.resize(true);
+			this._aceEditorController.adjustSize();
 		},
 
 		// '{rootElement} keydown': function(context) {
@@ -201,17 +192,6 @@
 		// // }
 		//
 		// },
-
-		_change: function() {
-			if (this._textChangeDelayTimer) {
-				clearTimeout(this._textChangeDelayTimer);
-			}
-			this._textChangeDelayTimer = setTimeout(this.own(function() {
-				this._textChangeDelayTimer = null;
-				this.trigger('textChange');
-			}), TEXT_CHANGE_DELAY);
-		},
-
 
 	// '{rootElement} paste': function(context) {
 	// var ev = context.event.originalEvent;
