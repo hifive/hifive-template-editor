@@ -75,6 +75,32 @@
 			this._redoBuffer = [];
 			// Ace Editor
 			this._aceEditorController.createEditor(this.$find('.sourceText')[0], 'ejs');
+
+			// h5-ejs用にカスタマイズ
+			var editor = this._aceEditorController.getAceEditor();
+			var session = editor.getSession();
+			session.on('changeMode', function() {
+				var mode = session.getMode();
+				var start = '(?:\\[%|\\[\\?|{{)';
+				var end = '(?:%\\]|\\?\\]|}})';
+				// 開始と終了の区切り文字設定
+				mode.HighlightRules.call(mode.$highlightRules, start, end);
+				// [%のエスケープ([%%) の設定
+				var $rules = mode.$highlightRules.$rules;
+				var ejsStartTokens = $rules['ejs-start'];
+				for (var i = 0, l = ejsStartTokens.length; i < l; i++) {
+					if (ejsStartTokens[i].token === 'comment') {
+						ejsStartTokens[i].regex += '|%';
+					}
+				}
+				var ejsNoRegexTokens = $rules['ejs-no_regex'];
+				for (var i = 0, l = ejsNoRegexTokens.length; i < l; i++) {
+					if (ejsNoRegexTokens[i].token === 'comment') {
+						ejsNoRegexTokens[i].regex += '|%';
+					}
+				}
+				mode.$tokenizer = mode.$tokenizer.constructor(mode.$highlightRules.getRules());
+			});
 			this.focus();
 		},
 

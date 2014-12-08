@@ -80,28 +80,11 @@
 			// イベントのバインド
 			editor.on('change', this.own(this._change));
 		},
-		setMode: function(mode) {
-			var session = this._editor.getSession();
-			if (mode === 'ejs') {
-				// h5-ejs用にカスタマイズ
-				session.on('changeMode', function() {
-					var mode = session.getMode();
-					var m = mode;
-					mode.HighlightRules.call(mode.$highlightRules, '(?:\\[%|\\[\\?|{{)',
-							'(?:%\\]|\\?\\]|}})');
-					mode.$tokenizer = mode.$tokenizer.constructor(mode.$highlightRules.getRules());
-				});
-			}
-			session.setMode('ace/mode/' + mode);
+		getAceEditor: function() {
+			return this._editor;
 		},
-		_change: function() {
-			if (this._textChangeDelayTimer) {
-				clearTimeout(this._textChangeDelayTimer);
-			}
-			this._textChangeDelayTimer = setTimeout(this.own(function() {
-				this._textChangeDelayTimer = null;
-				this.trigger('textChange');
-			}), TEXT_CHANGE_DELAY);
+		setMode: function(mode) {
+			this._editor.getSession().setMode('ace/mode/' + mode);
 		},
 		setValue: function(val) {
 			this._editor.setValue(val, 1);
@@ -115,9 +98,18 @@
 		adjustSize: function() {
 			this._editor.resize(true);
 		},
-		focus:function(){
+		focus: function() {
 			this._editor.focus();
-		}
+		},
+		_change: function() {
+			if (this._textChangeDelayTimer) {
+				clearTimeout(this._textChangeDelayTimer);
+			}
+			this._textChangeDelayTimer = setTimeout(this.own(function() {
+				this._textChangeDelayTimer = null;
+				this.trigger('textChange');
+			}), TEXT_CHANGE_DELAY);
+		},
 	};
 	// =========================================================================
 	//
