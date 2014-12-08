@@ -2839,12 +2839,10 @@ var JavaScriptHighlightRules = require("./javascript_highlight_rules").JavaScrip
 var EjsHighlightRules = function(start, end) {
     HtmlHighlightRules.call(this);
 
-    // FIXME hifive-ejsようにカスタマイズしている。
-    // 外から設定できる方法があればそうする。
     if (!start)
-        start = "(?:\\[%|\\[\\?|{{)";
+        start = "(?:<%|<\\?|{{)";
     if (!end)
-        end = "(?:%\\]|\\?\\]|}})";
+        end = "(?:%>|\\?>|}})";
 
     for (var i in this.$rules) {
         this.$rules[i].unshift({

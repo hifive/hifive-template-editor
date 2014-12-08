@@ -74,7 +74,6 @@
 
 		createEditor: function(element, mode) {
 			var editor = this._editor = ace.edit(element);
-			var session = editor.getSession();
 			if (mode) {
 				this.setMode(mode);
 			}
@@ -82,17 +81,18 @@
 			editor.on('change', this.own(this._change));
 		},
 		setMode: function(mode) {
-			this._editor.getSession().setMode('ace/mode/' + mode);
+			var session = this._editor.getSession();
 			if (mode === 'ejs') {
 				// h5-ejs用にカスタマイズ
-				// FIXME
-				// session.$mode.$highlightRules.addRules({
-				// 'start': [{
-				// token: 'markup.list.meta.tag',
-				// regex: '(?:[%|\[\?|{{)(?![\]}])[-=]?'
-				// }]
-				// });
+				session.on('changeMode', function() {
+					var mode = session.getMode();
+					var m = mode;
+					mode.HighlightRules.call(mode.$highlightRules, '(?:\\[%|\\[\\?|{{)',
+							'(?:%\\]|\\?\\]|}})');
+					mode.$tokenizer = mode.$tokenizer.constructor(mode.$highlightRules.getRules());
+				});
 			}
+			session.setMode('ace/mode/' + mode);
 		},
 		_change: function() {
 			if (this._textChangeDelayTimer) {
