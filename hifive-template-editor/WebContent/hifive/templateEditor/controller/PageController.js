@@ -202,6 +202,9 @@
 
 				this._refreshDividedBox();
 
+				// テンプレートエディタにフォーカス
+				sourceEditorController.focus();
+
 
 				// dividerの位置を修正する
 				// var dividerPos = this.$find('.divider').offset();
@@ -241,6 +244,11 @@
 			// テンプレートタブ以外が選択された場合、リスナーの実行を禁止する
 			sourceEditorController.disableListeners();
 
+			if (context.event.target.hash === '#data') {
+				// データエディタにフォーカス
+				var dataAreaController = controllers[0]._editorController._dataAreaController;
+				dataAreaController.focus();
+			}
 		},
 
 

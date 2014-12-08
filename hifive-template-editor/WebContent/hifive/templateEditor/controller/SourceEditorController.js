@@ -75,6 +75,7 @@
 			this._redoBuffer = [];
 			// Ace Editor
 			this._aceEditorController.createEditor(this.$find('.sourceText')[0], 'ejs');
+			this.focus();
 		},
 
 		_sourceText: null,
@@ -87,13 +88,9 @@
 
 		setText: function(text) {
 			var converted = text.replace(/\x09/g, '    ').replace(/\x0D/g, '');
-
-			$(this.rootElement).text('').focus();
-
 			this._sourceText = converted;
-
-			// hifive.editor.u.execInsertTextCommand(converted);
-			this.rootElement.value = converted;
+			this._aceEditorController.setText(converted);
+			this.focus();
 		},
 
 		getText: function() {
@@ -166,32 +163,36 @@
 			this._aceEditorController.adjustSize();
 		},
 
-		// '{rootElement} keydown': function(context) {
-		// var ev = context.event.originalEvent;
-		// var keyCode = ev.keyCode;
-		//
-		// var needsPreventDefault = false;
-		//
-		// switch (keyCode) {
-		// case 9:
-		// // Chromeの場合、連続する空白文字は強制的に"&nbsp;\x20"の組で表現される。
-		// // そのため、getText()時に&nbsp;を通常のスペースに置換して返している
-		// hifive.editor.u.execInsertTextCommand(' ');
-		// needsPreventDefault = true;
-		// break;
-		// }
-		//
-		// if (needsPreventDefault) {
-		// context.event.preventDefault();
-		// }
-		//
-		// // 入力される度、内容を保存
-		// // this._undoBuffer.push(this.getText());
-		// // if (this._undoBuffer.length > UNDO_BUFFER_SIZE) {
-		// // this._undoBuffer.shift();
-		// // }
-		//
-		// },
+		focus: function() {
+			this._aceEditorController.focus();
+		}
+
+	// '{rootElement} keydown': function(context) {
+	// var ev = context.event.originalEvent;
+	// var keyCode = ev.keyCode;
+	//
+	// var needsPreventDefault = false;
+	//
+	// switch (keyCode) {
+	// case 9:
+	// // Chromeの場合、連続する空白文字は強制的に"&nbsp;\x20"の組で表現される。
+	// // そのため、getText()時に&nbsp;を通常のスペースに置換して返している
+	// hifive.editor.u.execInsertTextCommand(' ');
+	// needsPreventDefault = true;
+	// break;
+	// }
+	//
+	// if (needsPreventDefault) {
+	// context.event.preventDefault();
+	// }
+	//
+	// // 入力される度、内容を保存
+	// // this._undoBuffer.push(this.getText());
+	// // if (this._undoBuffer.length > UNDO_BUFFER_SIZE) {
+	// // this._undoBuffer.shift();
+	// // }
+	//
+	// },
 
 	// '{rootElement} paste': function(context) {
 	// var ev = context.event.originalEvent;

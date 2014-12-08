@@ -146,6 +146,7 @@
 			this.parentController.loadData(url, type, param).then(this.own(function(data) {
 
 				this.setDataText(data);// データをテキストエリアに反映します
+				this.focus();
 
 				// this.createTemplate();
 				$(this.rootElement).trigger('createTemplate');
@@ -182,7 +183,7 @@
 				}
 
 				this.setDataText(data);
-
+				this.focus();
 			} catch (e) {
 				// エラー時は何もしない
 			}
@@ -209,6 +210,10 @@
 		 */
 		adjustSize: function() {
 			this._aceEditorController.adjustSize();
+		},
+
+		focus: function() {
+			this._aceEditorController.focus();
 		}
 	};
 

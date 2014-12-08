@@ -104,7 +104,7 @@
 			}), TEXT_CHANGE_DELAY);
 		},
 		setValue: function(val) {
-			this._editor.setValue(val);
+			this._editor.setValue(val, 1);
 		},
 		getValue: function() {
 			return this._editor.getValue();
@@ -114,6 +114,9 @@
 		 */
 		adjustSize: function() {
 			this._editor.resize(true);
+		},
+		focus:function(){
+			this._editor.focus();
 		}
 	};
 	// =========================================================================
