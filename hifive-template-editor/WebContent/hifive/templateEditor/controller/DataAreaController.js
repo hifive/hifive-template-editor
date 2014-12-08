@@ -183,8 +183,7 @@
 
 				this.setDataText(data);
 
-			}
-			catch (e) {
+			} catch (e) {
 				// エラー時は何もしない
 			}
 		},

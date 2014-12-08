@@ -272,6 +272,10 @@ iframe {
 	position: absolute;
 }
 
+.active .badge-wrapper {
+	display: none; /* アクティブなタブのバッジは非表示 */
+}
+
 .error-badge {
 	color: red;
 }

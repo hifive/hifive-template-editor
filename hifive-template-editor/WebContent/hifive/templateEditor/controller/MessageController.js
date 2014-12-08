@@ -97,7 +97,6 @@
 			});
 		},
 
-
 		/**
 		 * メッセージを表示します
 		 *
@@ -117,7 +116,18 @@
 			this._selectorMap[$el.selector] = setTimeout(function() {
 				$el.css('display', 'none');
 			}, 3000);
+		},
 
+		/**
+		 * メッセージを非表示にします
+		 *
+		 * @param $el メッセージを非表示にする要素
+		 */
+		clearMessage: function($el) {
+			$el.css('display', 'none');
+			if (this._selectorMap[$el.selector]) {
+				clearTimeout(this._selectorMap[$el.selector]);
+			}
 		}
 	};
 

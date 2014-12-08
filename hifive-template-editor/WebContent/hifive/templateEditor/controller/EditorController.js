@@ -651,53 +651,59 @@
 		 */
 		_applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
+			var dataError = null;
+			var templateError = null
+			var data = null;
+			var $message = $('.tab-pane.active .alert-danger');
+
+			$(this.rootElement).trigger('clearMessage', {
+				$el: $message
+			});
 
 			try {
 				// データをテキストエリアから取得してパースします
-				var data = this._dataAreaController.getText();
+				data = this._dataAreaController.getText();
 				if (!data || data === '') {
 					data = null;
 				} else {
 					data = $.parseJSON(data);
 				}
-
-			}
-			catch (e) {
-				// データタブが非アクティブならエラーのバッジを表示
-				var $dataTab = this.$find('.data-tab');
-				if (!$dataTab.hasClass('active')) {
-					$dataTab.find('.error-badge').removeClass('hidden');
-				}
-				var $el = $('.tab-pane.active .alert-danger');
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'テンプレートの生成に失敗しました',
-					'$el': $el
-				});
-				if (this._indicator) {
-					this._indicatorDeferred.resolve();
-				}
-
-				return;
+				// エラーバッジを非表示
+				this.$find('.data-tab .error-badge').addClass('hidden');
+			} catch (e) {
+				dataError = e;
 			}
 
+			var generated = '';
 			try {
 				// テンプレートを生成します
-				var generated = this._generate(template, data);
-				return generated;
-
+				// エラーがある場合はnullのdataで生成して生成します
+				generated = this._generate(template, data);
+				// エラーバッジを非表示
+				this.$find('.template-tab .error-badge').addClass('hidden');
+			} catch (e) {
+				templateError = e;
 			}
-			catch (e) {
-				// activeなタブにエラーメッセージを表示します
-				var $el = $('.tab-pane.active .alert-danger');
+
+			if (dataError || templateError) {
+				// データタブにエラーのバッジを表示
+				if (dataError) {
+					this.$find('.data-tab .error-badge').removeClass('hidden');
+				}
+				if (templateError) {
+					this.$find('.template-tab .error-badge').removeClass('hidden');
+				}
+
 				$(this.rootElement).trigger('showMessage', {
 					'msg': 'テンプレートの生成に失敗しました',
-					'$el': $el
+					'$el': $message
 				});
-
 				if (this._indicator) {
 					this._indicatorDeferred.resolve();
 				}
+				return;
 			}
+			return generated;
 		},
 
 

@@ -159,7 +159,7 @@
 		 *
 		 * @param context
 		 * @prop {string} args.msg メッセージ
-		 * @prop {object} args.el メッセージを表示する要素
+		 * @prop {object} args.$el メッセージを表示する要素
 		 */
 		'{rootElement} showMessage': function(context) {
 			var args = context.evArg;
@@ -167,6 +167,20 @@
 				args.$el = this.$find(args.selector);
 			}
 			this._messageController.alertMessage(args.msg, args.$el);
+		},
+
+		/**
+		 * メッセージを非表示にします
+		 *
+		 * @param context
+		 * @prop {object} args.$el 非表示にするメッセージ要素
+		 */
+		'{rootElement} clearMessage': function(context) {
+			var args = context.evArg;
+			if (args.selector) {
+				args.$el = this.$find(args.selector);
+			}
+			this._messageController.clearMessage(args.$el);
 		},
 
 
