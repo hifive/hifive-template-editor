@@ -78,8 +78,6 @@
 			}
 		},
 
-		_editor: null,
-
 		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
 
 		_textChangeDelayTimer: null,

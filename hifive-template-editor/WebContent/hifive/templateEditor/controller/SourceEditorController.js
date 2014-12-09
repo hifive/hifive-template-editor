@@ -85,20 +85,26 @@
 				var end = '(?:%\\]|\\?\\]|}})';
 				// 開始と終了の区切り文字設定
 				mode.HighlightRules.call(mode.$highlightRules, start, end);
-				// [%のエスケープ([%%) の設定
+				// [%# %]をコメントにする設定と、[%%と%%]([% %]のエスケープ) の設定
 				var $rules = mode.$highlightRules.$rules;
-				var ejsStartTokens = $rules['ejs-start'];
-				for (var i = 0, l = ejsStartTokens.length; i < l; i++) {
-					if (ejsStartTokens[i].token === 'comment') {
-						ejsStartTokens[i].regex += '|%';
-					}
-				}
-				var ejsNoRegexTokens = $rules['ejs-no_regex'];
-				for (var i = 0, l = ejsNoRegexTokens.length; i < l; i++) {
-					if (ejsNoRegexTokens[i].token === 'comment') {
-						ejsNoRegexTokens[i].regex += '|%';
-					}
-				}
+				$rules['start'].unshift({
+					next: 'ejs-comment',
+					token: 'comment.doc',
+					regex: '\\[%#'
+				}, {
+					next: 'start',
+					token: 'comment',
+					regex: '\\[%%'
+				});
+				mode.$highlightRules.addRules({
+					'ejs-comment': [{
+						next: 'start',
+						token: 'comment.doc',
+						regex: '([^%]|^)%\\]'
+					}, {
+						defaultToken: 'comment.doc'
+					}]
+				});
 				mode.$tokenizer = mode.$tokenizer.constructor(mode.$highlightRules.getRules());
 			});
 			this.focus();
@@ -125,45 +131,6 @@
 			// var raw = this.rootElement.innerText;
 			var raw = this._aceEditorController.getValue();
 
-			if (raw === undefined) {
-				// innerTextのない場合(Firefox)、textNodeのtextContentを取得し、<br>を改行にする
-				raw = '';
-				var $rootClone = $(this.rootElement).clone();
-
-				// <ol>タグがあれば除去します。その子要素は残します
-				var $ol = $rootClone.children('ol');
-				$ol.each(function() {
-					var $children = $(this).children();
-
-					$(this).after($children);
-
-					$(this).remove();
-				});
-
-				// $rootの各子要素からテキストを取得します
-				$rootClone.contents().each(function() {
-
-					if (this.nodeType === 3) {
-						raw += this.textContent;// テキストノードならばテキストを取得します
-
-					} else if (this.nodeName === 'BR') {
-						raw += '\n';
-
-					} else {
-						// <li>や<p>ならばその子要素を見ます
-						$(this).contents().each(function() {
-							if (this.nodeType === 3) {
-								raw += this.textContent;
-
-							} else if (this.nodeName === 'BR') {
-								raw += '\n';
-							}
-						});
-					}
-
-				});
-			}
-
 			// ノード中の空白(&nbsp;)を空白文字に変更
 			var text = raw.replace(/\xA0/g, ' ');
 			return text;
@@ -176,7 +143,6 @@
 		getUndoBuffer: function() {
 			return this._undoBuffer;
 		},
-
 
 		getRedoBuffer: function() {
 			return this._redoBuffer;
