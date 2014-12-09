@@ -18,10 +18,10 @@
 		__name: 'hifive.templateEditor.js.dependencyMap',
 
 		map: {
-			'bs3.2': {
-				'js': ['./res/lib/bootstrap3.2/js/bootstrap.js'],
-				'css': ['./res/lib/bootstrap3.2/css/bootstrap.css'],
-				'name': 'bs3.2'
+			'bs3.3': {
+				'js': ['./res/lib/bootstrap/3.3.0/js/bootstrap.js'],
+				'css': ['./res/lib/bootstrap/3.3.0/css/bootstrap.css'],
+				'name': 'bs3.3'
 			},
 
 			'jqm1.3.0': {

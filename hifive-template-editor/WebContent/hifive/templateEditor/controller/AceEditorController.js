@@ -109,7 +109,7 @@
 				this._textChangeDelayTimer = null;
 				this.trigger('textChange');
 			}), TEXT_CHANGE_DELAY);
-		},
+		}
 	};
 	// =========================================================================
 	//

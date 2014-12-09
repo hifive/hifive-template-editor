@@ -26,6 +26,9 @@ the License.
 	<property name="config.dir" value="config" />
 	<property name="min.header.filename" value="min-build-header.txt" />
 	<property name="lib.project.dir" value="lib" />
+	<!-- hifive-resプロジェクトのパス。環境によって適切に書き換えてください -->
+	<property name="hifiveres.dir" value="../../hifive-res/" />
+	<property name="hifiveres.ace.dir" value="${hifiveres.dir}/ext/ace/1.1.8" />
 
 	<path id="base.path">
 		<fileset dir="${lib.project.dir}" includes="**/*.jar" />
@@ -71,6 +74,7 @@ the License.
 			<filelist dir="${src.dir}">
 				<file name="js/dependencyMap.js" />
 				<file name="logic/TemplateEditLogic.js" />
+				<file name="controller/AceEditorController.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/ParameterEditController.js" />
 				<file name="controller/DataAreaController.js" />
@@ -108,6 +112,13 @@ the License.
 				<include name="sample/**/*" />
 				<include name="css/**/*" />
 			</fileset>
+		</copy>
+
+		<!-- hifive-resからresに必要なファイルをコピー -->
+		<property name="res.ace.dir" value="${build.dir}/res/lib/ace" />
+		<mkdir dir="${res.ace.dir}" />
+		<copy todir="${res.ace.dir}">
+			<fileset dir="${hifiveres.ace.dir}" includes="src-min-noconflict/*" />
 		</copy>
 
 		<!-- htmlファイルをbuildに出力 -->
