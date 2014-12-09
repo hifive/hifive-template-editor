@@ -280,6 +280,42 @@ iframe {
 	color: red;
 }
 
+.success-badge {
+	color: #5EC84E;
+}
+
 .warn-badge {
 	color: yellow;
+}
+
+/* プレビューの反映状態 */
+.preview-state {
+	font-size: 42px;
+	line-height: 1.5em;
+	position: absolute;
+	left: -74px;
+	display: none;
+}
+
+.preview-state.success,.preview-state.error {
+	display: block;
+}
+
+.preview-state.success .error-badge {
+	display: none;
+}
+
+.preview-state.error .success-badge {
+	display: none;
+}
+
+.preview-state-detail {
+	position: relative;
+	left: -20px;
+	line-height: 52px;
+}
+
+.preview-state-detail p {
+	margin: auto 0;
+	line-height: 26px
 }

@@ -437,42 +437,32 @@
 			this._enableLibrary();
 		},
 
+		/**
+		 * プレビュー状態の詳細表示
+		 */
+		'.preview-state h5trackstart': function() {
+			this._showPreviewStateDetail();
+		},
+		'.preview-state h5trackend': function() {
+			this._hidePreviewStateDetail();
+		},
 
-		// /**
-		// * UNDO
-		// */
-		// '.undo-button click': function() {
-		// var undoBuffer = this._getUndoBuffer();
-		// var redoBuffer = this._getRedoBuffer();
-		//
-		// if (undoBuffer.length != 0) {
-		// var temp = undoBuffer.pop();
-		//
-		// redoBuffer.push(this._sourceEditorController.getText());
-		//
-		// this.setTemplateText(temp);
-		//
-		// this._sendPreviewMessage();
-		// },
-		//
-		//
-		// /**
-		// * REDO
-		// */
-		// '.redo-button click': function() {
-		// var undoBuffer = this._getUndoBuffer();
-		// var redoBuffer = this._getRedoBuffer();
-		//
-		// if (redoBuffer.length != 0) {
-		// var temp = redoBuffer.pop();
-		//
-		// undoBuffer.push(this._sourceEditorController.getText());
-		//
-		// this.setTemplateText(temp);
-		//
-		// this._sendPreviewMessage();
-		// },
+		/**
+		 * プレビュー状態の詳細表示
+		 */
+		'.preview-state mouseenter': function() {
+			this._showPreviewStateDetail();
+		},
+		'.preview-state mouseleave': function() {
+			this._hidePreviewStateDetail();
+		},
 
+		_showPreviewStateDetail: function() {
+			this.$find('.preview-state-detail').removeClass('hidden');
+		},
+		_hidePreviewStateDetail: function() {
+			this.$find('.preview-state-detail').addClass('hidden');
+		},
 
 		/**
 		 * dividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
@@ -684,6 +674,8 @@
 			} catch (e) {
 				templateError = e;
 			}
+			var $previewState = this.$find('.preview-state');
+			var $previewStateDetail = this.$find('.preview-state-detail').empty();
 
 			if (dataError || templateError) {
 				// データタブにエラーのバッジを表示
@@ -694,18 +686,38 @@
 					this.$find('.template-tab .error-badge').removeClass('hidden');
 				}
 
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'テンプレートの生成に失敗しました',
-					'$el': $message
-				});
+				// プレビュー状態表示を更新
+				$previewState.removeClass('success').addClass('error');
+				if (templateError) {
+					$previewStateDetail.append('<p>[テンプレート] '
+							+ (templateError.detail.message || templateError.message) + '</p>');
+				}
+				if (dataError) {
+					$previewStateDetail.append('<p>[データ] ' + dataError.message + '</p>');
+				}
+				$previewState.data('message', '');
+
 				if (this._indicator) {
 					this._indicatorDeferred.resolve();
 				}
 				return;
 			}
+			// プレビュー状態表示を更新
+			$previewState.removeClass('error').addClass('success');
+			$previewStateDetail.append('<p>[最終更新日時] ' + this._getFormatTime(new Date) + '</p>');
 			return generated;
 		},
 
+		/**
+		 * @param {Date} d
+		 */
+		_getFormatTime: function(d) {
+			function toDouble(num) {
+				return ('0' + num).slice(-2);
+			}
+			return h5.u.str.format('{0}:{1}.{2}', toDouble(d.getHours()), toDouble(d.getMinutes()),
+					toDouble(d.getSeconds()));
+		},
 
 		/**
 		 * テンプレートとデータからテンプレートを生成して返します。

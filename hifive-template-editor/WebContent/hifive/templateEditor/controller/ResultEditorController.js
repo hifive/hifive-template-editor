@@ -243,7 +243,6 @@
 		 * @param
 		 */
 		_changeTarget: function(data) {
-
 			var temp = this._target.html();
 
 			// テンプレートで追加されたDOMをセレクタの検索対象から外すため、テンプレートを除去します
@@ -254,51 +253,31 @@
 			var $el;
 			var selector = data.selector;
 
-			try {
-				if (selector === '') {
-					$el = $(this.rootElement);
-				} else {
-					$el = this.$find(selector);
-				}
-
-			} catch (e) {
-				var data = {
-					type: 'showMessage',
-					msg: '無効なセレクタが入力されています',
-					selector: '.template-alert'
-				};
-
-				this._target.html(temp);// 除去したテンプレートを戻します
-				this._sendMessage(data);
-
-				return;
+			if (selector === '') {
+				$el = $(this.rootElement);
+			} else {
+				$el = this.$find(selector);
 			}
 
 			if ($el.length === 0) {
-				// 指定されたセレクタがない
-				var data = {
+				// 指定されたセレクタに該当する要素がない
+				this._sendMessage({
 					type: 'showMessage',
 					msg: '指定された要素が見つかりません',
-					selector: selector
-				};
-
-				this._target.html(temp);// 除去したテンプレートを戻します
-
-				this._sendMessage(data);
-
+					selector: '.template-alert'
+				});
+				// 除去したテンプレートを戻します
+				this._target.html(temp);
 				return;
 			}
 
 			// テンプレートの適用先を更新
 			this._target = $el;
 
-			var data = {
+			this._sendMessage({
 				type: 'applyTemplate'
-			};
-
-			this._sendMessage(data);
+			});
 		},
-
 
 		/**
 		 * postMessageを送ります
