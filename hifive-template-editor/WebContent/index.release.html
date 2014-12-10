@@ -24,8 +24,8 @@ limitations under the License.
 
 <title>hifive テンプレートエディタ</title>
 
-<link rel="stylesheet"
-	href="res/lib/bootstrap/3.3.0/css/bootstrap.css" media="screen">
+<link rel="stylesheet" href="res/lib/bootstrap/3.3.0/css/bootstrap.css"
+	media="screen">
 
 <link rel="stylesheet" href="res/lib/hifive/h5.css">
 <link rel="stylesheet"
@@ -108,32 +108,8 @@ limitations under the License.
 				<div class="tab-pane active row" id="template">
 
 					<div class="editAreaBar col-xs-12">
-
-						<!-- UNDO,REDO window幅がsm以上のとき表示 -->
-						<div class="col-sm-6 hidden-xs">
-							<!-- <button class="btn btn-primary lineNum-btn">
-								<span class="glyphicon glyphicon-list"></span>
-							</button> -->
-							<!-- <input type="image" src="images/undo_32.png" class="undo-button"> <input type="image"
-								src="images/redo_32.png" class="redo-button"> -->
-						</div>
-
-						<!-- UNDO,REDO window幅がxs以下のとき表示 -->
-						<div class="visible-xs-block col-xs-4">
-							<!-- <div class="btn-group btn-group-sm">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-									Edit <span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="#" class="undo-button">UNDO</a></li>
-									<li><a href="#" class="redo-button">REDO</a></li>
-								</ul>
-							</div> -->
-						</div>
-
-
 						<!-- セレクタ入力ボックス(テンプレート適用先の指定) -->
-						<div class="col-sm-6 col-xs-8">
+						<div class="col-sm-offset-6 col-sm-6">
 							<form class="target-selector">
 								<div class="input-group input-group-sm">
 									<label for="input-selector" class="input-group-addon">セレクタ</label>
@@ -350,8 +326,8 @@ limitations under the License.
 				<!-- ブランクページボタン -->
 				<div class="col-sm-1 col-xs-1">
 					<button class="btn btn-primary btn-sm blank-button pull-right"
-						type="button">
-						<img src="images/file.png" alt="ブランクページをロード" title="ブランクページをロード">
+						title="ブランクページをロード" type="button">
+						<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
 					</button>
 				</div>
 

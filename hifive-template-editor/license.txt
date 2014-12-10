@@ -2,26 +2,6 @@ Unless otherwise stated, all source files are licensed under
 the Apache License, Version 2.0(http://www.apache.org/licenses/LICENSE-2.0).
 
 -----
-Code under:
-WebContent/res/lib/jquery
-
-jQuery
-URL:http://jquery.com/
-License: MIT license
-		https://jquery.org/license/
-Local Modifications: None.
-
------
-Code under:
-WebContent/res/lib/bootstrap3.2
-
-Bootstrap
-URL:https://github.com/twbs/bootstrap/
-License:MIT license
-	https://github.com/twbs/bootstrap/blob/master/LICENSE
-Local Modifications: None.
-
------
 Code:
 WebContent/res/lib/editor-external.css
 
@@ -32,54 +12,11 @@ Local Modifications: None.
 
 -----
 Code under:
-WebContent/res/lib/jqm
-
-jQuery Mobile
-URL:http://jquerymobile.com/
-License:MIT licenses.
-	http://www.opensource.org/licenses/mit-license.php
-Local Modifications: None.
-
------
-Code under:
-WebContene/res/lib/jstree
-
-jsTree
-URL:http://jstree.com/
-License:MIT licenses.
-  http://www.opensource.org/licenses/mit-license.php
-Local Modifications: None.
-
------
-Files:
-WebContent/images/load_32.png
-WebContent/images/reload_32.png
-WebContent/images/undo_32.png
-WebContent/images/redo_32.png
-
-Font Awesome by Dave Gandy
-URL: http://fontawesome.io
-License: SIL OFL 1.1
-	http://scripts.sil.org/OFL
-Local Modifications: Yes
-
------
-Code under:
 lib/closurecompiler
 
 closure-compiler
 URL:https://github.com/google/closure-compiler
 License: Apache License, Version 2.0 (the "License")
-	http://www.apache.org/licenses/LICENSE-2.0
-Local Modifications: None.
-
------
-Code under:
-WebContent/res/lib/hifive
-
-hifive
-URL:https://github.com/hifive/hifivemain
-License:Apache License, Version 2.0 (the "License")
 	http://www.apache.org/licenses/LICENSE-2.0
 Local Modifications: None.
 
