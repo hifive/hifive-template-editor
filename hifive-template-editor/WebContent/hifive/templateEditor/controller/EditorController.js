@@ -33,8 +33,6 @@
 	var BLANK_PAGE = 'blank.html';// ブランクページ
 	var TEMPLATE_ID = 'templateId';
 	var RESULT_EDITOR_CTRL_PATH = 'hifive/templateEditor/controller/ResultEditorController.js';
-	var H5_CSS_PATH = 'res/lib/hifive/h5.css';
-	var H5_JS_PATH = 'res/lib/hifive/h5.js';
 
 
 	// =========================================================================
@@ -77,7 +75,7 @@
 
 		__meta: {
 			_sourceEditorController: {
-				rootElement: '.sourceText'
+				rootElement: '.sourceTextWrapper'
 			},
 			_templateAreaController: {
 				rootElement: '#template'
@@ -105,7 +103,7 @@
 
 		_isCloseConfirmationSet: false,
 
-		_dependencyMap: hifive.templateEditor.js.dependencyMap,
+		_libraryMap: hifive.templateEditor.js.libraryMap,
 
 		_indicator: null,
 
@@ -118,6 +116,16 @@
 		_isBlank: true,// iframeがロードしているページがブランクページかのフラグ
 
 		__ready: function() {
+			// libraryMapからライブラリリストを生成
+			var libraryMap = this._libraryMap.map;
+			for ( var p in libraryMap) {
+				var src = libraryMap[p];
+				if (!src.defaultLoad) {
+					this.view.append('.libraries', 'libraries-control', {
+						data: src
+					});
+				}
+			}
 
 			h5.u.obj.expose('hifive.editor', {
 
@@ -191,14 +199,14 @@
 					// IFrameにhifiveがロードされていなければロードする
 					if (!this._target.contentWindow.h5) {
 						// h5.cssをロード
-						var h5CSSPath = pathname + H5_CSS_PATH;
-						this._insertCSSToIFrame(h5CSSPath).then(this.own(function() {
-							// h5.jsをロード
-							var h5ScriptPath = pathname + H5_JS_PATH;
-							this._insertScriptToIFrame(h5ScriptPath).then(this.own(function() {
-								h5LoadDef.resolve();
-							}));
-						}));
+						this._insertCSSToIFrame(libraryMap.hifive.css).then(
+								this.own(function() {
+									// h5.jsをロード
+									this._insertScriptToIFrame(libraryMap.hifive.js).then(
+											this.own(function() {
+												h5LoadDef.resolve();
+											}));
+								}));
 					} else {
 						h5LoadDef.resolve();
 					}
@@ -208,9 +216,9 @@
 				if (!this._target.contentWindow.jQuery) {
 					var jqPath;
 					if (h5.env.ua.isIE && h5.env.ua.browserVersion <= 8) {
-						jqPath = pathname + 'res/lib/jquery/jquery-1.js';
+						jqPath = libraryMap.jquery1.js;
 					} else {
-						jqPath = pathname + 'res/lib/jquery/jquery-2.js';
+						jqPath = libraryMap.jquery2.js;
 					}
 
 					this._insertScriptToIFrame(jqPath).then(function() {
@@ -277,6 +285,11 @@
 			}
 		},
 
+		'.editArea boxSizeChange ': function() {
+			// データエリアと、ソースエリアにリサイズを通知
+			this._sourceEditorController.adjustSize();
+			this._dataAreaController.adjustSize();
+		},
 
 		'{window} resize': function(context) {
 			this.resizeEditAreaBar();// editAreaBarの高さを調整します
@@ -314,7 +327,7 @@
 
 			this._target.src = url;
 
-			//TODO: ブランクページかどうかの判定方法が雑
+			// TODO: ブランクページかどうかの判定方法が雑
 			if (url !== BLANK_PAGE) {
 				this._disableLibrary();
 				this._isBlank = false;
@@ -331,30 +344,30 @@
 		},
 
 
-		//		'{rootElement} addLineNum': function() {
-		//			var ua = this._selectedClient();
-		//			switch (ua) {
+		// '{rootElement} addLineNum': function() {
+		// var ua = this._selectedClient();
+		// switch (ua) {
 		//
-		//			case 'ch':
-		//				this._sourceEditorController.addLineNumCh();
-		//				break;
+		// case 'ch':
+		// this._sourceEditorController.addLineNumCh();
+		// break;
 		//
-		//			case 'ff':
-		//				this._sourceEditorController.addLineNumFF();
-		//				break;
+		// case 'ff':
+		// this._sourceEditorController.addLineNumFF();
+		// break;
 		//
-		//			case 'ie':
-		//				this._sourceEditorController.addLineNumIE();
-		//				break;
+		// case 'ie':
+		// this._sourceEditorController.addLineNumIE();
+		// break;
 		//
-		//			default:
-		//				$(this.rootElement).trigger('showMessage', {
-		//					'msg': '未対応のブラウザです',
-		//					'selector': $('.tab-pane.active .alert-danger')
-		//				});
-		//				break;
-		//			}
-		//		},
+		// default:
+		// $(this.rootElement).trigger('showMessage', {
+		// 'msg': '未対応のブラウザです',
+		// 'selector': $('.tab-pane.active .alert-danger')
+		// });
+		// break;
+		// }
+		// },
 
 
 		/**
@@ -406,13 +419,15 @@
 				this.$find('.tab-content').css('padding-bottom', height);
 				this._editAreaBarHeight = height;
 			}
+			// データエリアと、ソースエリアにリサイズを通知
+			this._sourceEditorController.adjustSize();
+			this._dataAreaController.adjustSize();
 		},
 
 
 		loadTemplate: function(url) {
 			return this._templateEditorLogic.loadTemplate(url);
 		},
-
 
 		loadData: function(url, type, param) {
 			return this._templateEditorLogic.loadData(url, type, param);
@@ -430,42 +445,32 @@
 			this._enableLibrary();
 		},
 
+		/**
+		 * プレビュー状態の詳細表示
+		 */
+		'.preview-state h5trackstart': function() {
+			this._showPreviewStateDetail();
+		},
+		'.preview-state h5trackend': function() {
+			this._hidePreviewStateDetail();
+		},
 
-		// /**
-		// * UNDO
-		// */
-		// '.undo-button click': function() {
-		// var undoBuffer = this._getUndoBuffer();
-		// var redoBuffer = this._getRedoBuffer();
-		//
-		// if (undoBuffer.length != 0) {
-		// var temp = undoBuffer.pop();
-		//
-		// redoBuffer.push(this._sourceEditorController.getText());
-		//
-		// this.setTemplateText(temp);
-		//
-		//	this._sendPreviewMessage();
-		// },
-		//
-		//
-		// /**
-		// * REDO
-		// */
-		// '.redo-button click': function() {
-		// var undoBuffer = this._getUndoBuffer();
-		// var redoBuffer = this._getRedoBuffer();
-		//
-		// if (redoBuffer.length != 0) {
-		// var temp = redoBuffer.pop();
-		//
-		// undoBuffer.push(this._sourceEditorController.getText());
-		//
-		// this.setTemplateText(temp);
-		//
-		//	this._sendPreviewMessage();
-		// },
+		/**
+		 * プレビュー状態の詳細表示
+		 */
+		'.preview-state mouseenter': function() {
+			this._showPreviewStateDetail();
+		},
+		'.preview-state mouseleave': function() {
+			this._hidePreviewStateDetail();
+		},
 
+		_showPreviewStateDetail: function() {
+			this.$find('.preview-state-detail').removeClass('hidden');
+		},
+		_hidePreviewStateDetail: function() {
+			this.$find('.preview-state-detail').addClass('hidden');
+		},
 
 		/**
 		 * dividerを操作するときに、iframeの上にdivをかぶせる(iframe上でmousemoveイベントを拾えないため)
@@ -487,7 +492,6 @@
 		'.divider h5trackend': function(context, $el) {
 			this._removeIFrameCover();
 		},
-
 
 		/**
 		 * iframeを覆う要素を追加
@@ -558,7 +562,7 @@
 			// 選択されたライブラリのパスをマップから取得します。
 			var libPath = [];
 			for (var i = 0, len = applyLibs.length; i < len; i++) {
-				libPath.push(this._dependencyMap.map[applyLibs[i]]);
+				libPath.push(this._libraryMap.map[applyLibs[i]]);
 			}
 
 			var data = {
@@ -645,51 +649,83 @@
 		 */
 		_applyTemplate: function() {
 			var template = this._sourceEditorController.getText();
+			var dataError = null;
+			var templateError = null
+			var data = null;
+			var $message = $('.tab-pane.active .alert-danger');
+
+			$(this.rootElement).trigger('clearMessage', {
+				$el: $message
+			});
 
 			try {
 				// データをテキストエリアから取得してパースします
-				var data = this.$find('.dataText').val();
+				data = this._dataAreaController.getText();
 				if (!data || data === '') {
 					data = null;
 				} else {
 					data = $.parseJSON(data);
 				}
-
+				// エラーバッジを非表示
+				this.$find('.data-tab .error-badge').addClass('hidden');
 			} catch (e) {
-				// activeなタブにエラーを表示します
-				var $el = $('.tab-pane.active .alert-danger');
-
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'JSONのパースに失敗しました\n' + e.stack,
-					'$el': $el
-				});
-
-				if (this._indicator) {
-					this._indicatorDeferred.resolve();
-				}
-
-				return;
+				dataError = e;
 			}
 
+			var generated = '';
 			try {
 				// テンプレートを生成します
-				var generated = this._generate(template, data);
-				return generated;
-
+				// エラーがある場合はnullのdataで生成して生成します
+				generated = this._generate(template, data);
+				// エラーバッジを非表示
+				this.$find('.template-tab .error-badge').addClass('hidden');
 			} catch (e) {
-				// activeなタブにエラーメッセージを表示します
-				var $el = $('.tab-pane.active .alert-danger');
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'テンプレートの生成に失敗しました\n' + e.stack,
-					'$el': $el
-				});
+				templateError = e;
+			}
+			var $previewState = this.$find('.preview-state');
+			var $previewStateDetail = this.$find('.preview-state-detail').empty();
+
+			if (dataError || templateError) {
+				// データタブにエラーのバッジを表示
+				if (dataError) {
+					this.$find('.data-tab .error-badge').removeClass('hidden');
+				}
+				if (templateError) {
+					this.$find('.template-tab .error-badge').removeClass('hidden');
+				}
+
+				// プレビュー状態表示を更新
+				$previewState.removeClass('success').addClass('error');
+				if (templateError) {
+					$previewStateDetail.append('<p>[テンプレート] '
+							+ (templateError.detail.message || templateError.message) + '</p>');
+				}
+				if (dataError) {
+					$previewStateDetail.append('<p>[データ] ' + dataError.message + '</p>');
+				}
+				$previewState.data('message', '');
 
 				if (this._indicator) {
 					this._indicatorDeferred.resolve();
 				}
+				return;
 			}
+			// プレビュー状態表示を更新
+			$previewState.removeClass('error').addClass('success');
+			$previewStateDetail.append('<p>[最終更新日時] ' + this._getFormatTime(new Date) + '</p>');
+			return generated;
 		},
 
+		/**
+		 * @param {Date} d
+		 */
+		_getFormatTime: function(d) {
+			function toDouble(num) {
+				return ('0' + num).slice(-2);
+			}
+			return h5.u.str.format('{0}:{1}.{2}', toDouble(d.getHours()), toDouble(d.getMinutes()),
+					toDouble(d.getSeconds()));
+		},
 
 		/**
 		 * テンプレートとデータからテンプレートを生成して返します。
@@ -768,6 +804,13 @@
 		},
 
 		_insertScriptToIFrame: function(jsPath) {
+			if ($.isArray(jsPath)) {
+				var promises = [];
+				for (var i = 0, l = jsPath.length; i < l; i++) {
+					promises.push(this._insertScriptToIFrame(jsPath[i]));
+				}
+				return h5.async.when(promises);
+			}
 			var def = this.deferred();
 
 			var script = document.createElement('script');
@@ -789,6 +832,10 @@
 			}));
 
 			script.type = 'text/javascript';
+			if (jsPath[0] !== '/' && jsPath[0] !== '.') {
+				// '.'始まりでも'/'始まりでもなければ、index.htmlからのパスに変換して読込ページでロードする
+				jsPath = location.pathname + jsPath;
+			}
 			script.src = jsPath;
 			this._getIFrameDocument().appendChild(script);
 
@@ -796,6 +843,13 @@
 		},
 
 		_insertCSSToIFrame: function(cssPath) {
+			if ($.isArray(cssPath)) {
+				var promises = [];
+				for (var i = 0, l = cssPath.length; i < l; i++) {
+					promises.push(this._insertCSSToIFrame(cssPath[i]));
+				}
+				return h5.async.when(promises);
+			}
 			var def = h5.async.deferred();
 
 			var css = document.createElement('link');
@@ -810,6 +864,10 @@
 
 			css.type = 'text/css';
 			css.rel = 'stylesheet';
+			if (cssPath[0] !== '/' && cssPath[0] !== '.') {
+				// '.'始まりでも'/'始まりでもなければ、index.htmlからのパスに変換して読込ページでロードする
+				cssPath = location.pathname + cssPath;
+			}
 			css.href = cssPath;
 			this._getIFrameDocument().appendChild(css);
 

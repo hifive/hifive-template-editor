@@ -31,7 +31,6 @@
 	//
 	// =========================================================================
 
-
 	// =========================================================================
 	//
 	// スコープ内静的プロパティ
@@ -71,6 +70,8 @@
 		 */
 		__name: 'hifive.templateEditor.controller.DataAreaController',
 
+		_aceEditorController: hifive.templateEditor.controller.AceEditorController,
+
 		__meta: {
 			_parameterEditController: {
 				rootElement: '.parameter-input'
@@ -79,6 +80,12 @@
 
 		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
 
+		_textChangeDelayTimer: null,
+
+		__ready: function() {
+			// Ace Editor
+			this._aceEditorController.createEditor(this.$find('.dataText')[0], 'json');
+		},
 
 		/**
 		 * パラメータ入力ポップ画面を表示します
@@ -86,12 +93,6 @@
 		'.data-parameter click': function() {
 			this.$find('.parameter-input').css('display', 'block');
 		},
-
-
-		'.dataText keyup': function() {
-			this.trigger('textChange');
-		},
-
 
 		/**
 		 * データタブのラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
@@ -143,8 +144,9 @@
 			this.parentController.loadData(url, type, param).then(this.own(function(data) {
 
 				this.setDataText(data);// データをテキストエリアに反映します
+				this.focus();
 
-				//				this.createTemplate();
+				// this.createTemplate();
 				$(this.rootElement).trigger('createTemplate');
 
 				$(this.rootElement).trigger('showMessage', {
@@ -165,12 +167,11 @@
 			}));
 		},
 
-
 		/**
 		 * データオブジェクトをフォーマットします
 		 */
 		'.format-button click': function() {
-			var data = this.$find('.dataText').val();
+			var data = this._aceEditorController.getValue();
 
 			try {
 				if (!data || data === '') {
@@ -180,15 +181,18 @@
 				}
 
 				this.setDataText(data);
-
+				this.focus();
 			} catch (e) {
-				$(this.rootElement).trigger('showMessage', {
-					'msg': 'JSONのパースに失敗しました\n' + e.stack,
-					'$el': this.$find('.data-alert')
-				});
+				// エラー時は何もしない
 			}
 		},
 
+		/**
+		 * データ入力テキストを取得
+		 */
+		getText: function() {
+			return this._aceEditorController.getValue();
+		},
 
 		/**
 		 * データオブジェクトをテキストエリアに反映します。
@@ -196,9 +200,19 @@
 		 * @param json
 		 */
 		setDataText: function(data) {
-			this.$find('.dataText').val(JSON.stringify(data, null, '  '));
-		}
+			this._aceEditorController.setValue(JSON.stringify(data, null, '  '));
+		},
 
+		/**
+		 * 現在の表示サイズに要素を調整
+		 */
+		adjustSize: function() {
+			this._aceEditorController.adjustSize();
+		},
+
+		focus: function() {
+			this._aceEditorController.focus();
+		}
 	};
 
 	// =========================================================================

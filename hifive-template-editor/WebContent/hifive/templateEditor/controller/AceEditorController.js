@@ -23,14 +23,12 @@
 	// TODO 別ファイルで定義されている定数・変数・関数等を別の名前で使用する場合にここに記述します。
 	// 例：var getDeferred = h5.async.deferred;
 
-	// var getComponentCreator = hifive.editor.u.getComponentCreator;
-
 	// =========================================================================
 	//
 	// スコープ内定数
 	//
 	// =========================================================================
-
+	var TEXT_CHANGE_DELAY = 100;
 
 	// =========================================================================
 	//
@@ -42,13 +40,9 @@
 	// スコープ内静的変数
 	// =============================
 
-	// TODO このスコープで共有される変数（クラス変数）を記述します。
-	// 例：var globalCounter = 0;
-
 	// =============================
 	// スコープ内静的関数
 	// =============================
-
 
 	// =========================================================================
 	//
@@ -56,88 +50,73 @@
 	//
 	// =========================================================================
 
-
-
 	// =========================================================================
 	//
 	// メインコード（コントローラ・ロジック等）
 	//
 	// =========================================================================
 
-	var messageController = {
+	var aceEditorController = {
+		/**
+		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 */
+		__name: 'hifive.templateEditor.controller.AceEditorController',
 
 		/**
-		 * @memberOf hifive.templateEditor.controller.messageController
+		 * textChange待機用タイマーID
 		 */
-		__name: 'hifive.templateEditor.controller.MessageController',
-
-		_templateTimer: null,// テンプレートタブのメッセージ表示用タイマー
-
-		_templateErrTimer: null,// テンプレートタブのエラーメッセージ表示用タイマー
-
-		_dataTimer: null, // データタブのメッセージ表示用タイマー
-
-		_dataErrTimer: null, // データタブのエラーメッセージ表示用タイマー
-
-		_previewTimer: null,// プレビューのメッセージ表示用タイマー
-
-		_previewErrTimer: null,// プレビューのエラーメッセージ表示用タイマー
-
-		_selectorMap: {},
-
-
-		__ready: function() {
-			$.extend(this._selectorMap, {
-				'.template-alert': this._templateErrTimer,
-				'.template-msg': this._templateTimer,
-				'.data-alert': this._dataErrTimer,
-				'.data-msg': this._dataTimer,
-				'.preview-alert': this._previewErrTimer,
-				'.preview-msg': this._previewTimer
-			});
-		},
+		_textChangeDelayTimer: null,
 
 		/**
-		 * メッセージを表示します
-		 *
-		 * @param msg 表示するメッセージ
-		 * @param $el メッセージを表示する要素
+		 * Aceエディタインスタンス
 		 */
-		alertMessage: function(msg, $el) {
+		_editor: null,
 
-			$el.text(msg);
-			$el.css('display', 'block');
-
-
-			if (this._selectorMap[$el.selector]) {
-				clearTimeout(this._selectorMap[$el.selector]);
+		createEditor: function(element, mode) {
+			var editor = this._editor = ace.edit(element);
+			if (mode) {
+				this.setMode(mode);
 			}
-
-			this._selectorMap[$el.selector] = setTimeout(function() {
-				$el.css('display', 'none');
-			}, 3000);
+			// イベントのバインド
+			editor.on('change', this.own(this._change));
 		},
-
+		getAceEditor: function() {
+			return this._editor;
+		},
+		setMode: function(mode) {
+			this._editor.getSession().setMode('ace/mode/' + mode);
+		},
+		setValue: function(val) {
+			this._editor.setValue(val, 1);
+		},
+		getValue: function() {
+			return this._editor.getValue();
+		},
 		/**
-		 * メッセージを非表示にします
-		 *
-		 * @param $el メッセージを非表示にする要素
+		 * 現在の表示サイズに要素を調整
 		 */
-		clearMessage: function($el) {
-			$el.css('display', 'none');
-			if (this._selectorMap[$el.selector]) {
-				clearTimeout(this._selectorMap[$el.selector]);
+		adjustSize: function() {
+			this._editor.resize(true);
+		},
+		focus: function() {
+			this._editor.focus();
+		},
+		_change: function() {
+			if (this._textChangeDelayTimer) {
+				clearTimeout(this._textChangeDelayTimer);
 			}
+			this._textChangeDelayTimer = setTimeout(this.own(function() {
+				this._textChangeDelayTimer = null;
+				this.trigger('textChange');
+			}), TEXT_CHANGE_DELAY);
 		}
 	};
-
-
 	// =========================================================================
 	//
 	// 外部公開
 	//
 	// =========================================================================
 
-	h5.core.expose(messageController);
+	h5.core.expose(aceEditorController);
 
 })(jQuery);

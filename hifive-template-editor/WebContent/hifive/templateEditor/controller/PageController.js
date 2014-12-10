@@ -159,7 +159,7 @@
 		 *
 		 * @param context
 		 * @prop {string} args.msg メッセージ
-		 * @prop {object} args.el メッセージを表示する要素
+		 * @prop {object} args.$el メッセージを表示する要素
 		 */
 		'{rootElement} showMessage': function(context) {
 			var args = context.evArg;
@@ -167,6 +167,20 @@
 				args.$el = this.$find(args.selector);
 			}
 			this._messageController.alertMessage(args.msg, args.$el);
+		},
+
+		/**
+		 * メッセージを非表示にします
+		 *
+		 * @param context
+		 * @prop {object} args.$el 非表示にするメッセージ要素
+		 */
+		'{rootElement} clearMessage': function(context) {
+			var args = context.evArg;
+			if (args.selector) {
+				args.$el = this.$find(args.selector);
+			}
+			this._messageController.clearMessage(args.$el);
 		},
 
 
@@ -187,6 +201,9 @@
 				sourceEditorController.enableListeners();
 
 				this._refreshDividedBox();
+
+				// テンプレートエディタにフォーカス
+				sourceEditorController.focus();
 
 
 				// dividerの位置を修正する
@@ -227,6 +244,11 @@
 			// テンプレートタブ以外が選択された場合、リスナーの実行を禁止する
 			sourceEditorController.disableListeners();
 
+			if (context.event.target.hash === '#data') {
+				// データエディタにフォーカス
+				var dataAreaController = controllers[0]._editorController._dataAreaController;
+				dataAreaController.focus();
+			}
 		},
 
 
@@ -282,8 +304,3 @@
 	h5.core.expose(pageController);
 
 })(jQuery);
-
-// ---- Init ---- //
-$(function() {
-	h5.core.controller('body', hifive.templateEditor.controller.PageController);
-});

@@ -17,7 +17,7 @@ the License.
 	<property name="webcontent.dir" value="WebContent" />
 	<property name="webinf.dir" value="WEB-INF" />
 	<property name="index.release" value="index.release.html" />
-	<property name="blank" value="blank.html" />
+	<property name="blank.release" value="blank.release.html" />
 	<property name="src.dir" value="${webcontent.dir}/hifive/templateEditor" />
 	<property name="build.dir" value="${webcontent.dir}/build" />
 	<property name="min.src.dir" value="${build.dir}/hifive/templateEditor" />
@@ -26,6 +26,8 @@ the License.
 	<property name="config.dir" value="config" />
 	<property name="min.header.filename" value="min-build-header.txt" />
 	<property name="lib.project.dir" value="lib" />
+	<!-- hifive-resプロジェクトのパス。環境によって適切に書き換えてください -->
+	<property name="hifiveres.dir" value="../../hifive-res/" />
 
 	<path id="base.path">
 		<fileset dir="${lib.project.dir}" includes="**/*.jar" />
@@ -69,8 +71,9 @@ the License.
 		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
 		<concat destfile="${build.tmp.dir}/preConcat.js" outputencoding="UTF-8">
 			<filelist dir="${src.dir}">
-				<file name="js/dependencyMap.js" />
+				<file name="js/libraryMap.release.js" />
 				<file name="logic/TemplateEditLogic.js" />
+				<file name="controller/AceEditorController.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/ParameterEditController.js" />
 				<file name="controller/DataAreaController.js" />
@@ -110,9 +113,37 @@ the License.
 			</fileset>
 		</copy>
 
+		<!-- hifive-resからresに必要なファイルをコピー -->
+		<property name="build.lib.dir" value="${build.dir}/res/lib" />
+		<!-- ace -->
+		<mkdir dir="${build.lib.dir}/ace" />
+		<copy todir="${build.lib.dir}/ace">
+			<fileset dir="${hifiveres.dir}/ext/ace/1.1.8" includes="src-min-noconflict/*" />
+		</copy>
+		<!-- hifive -->
+		<mkdir dir="${build.lib.dir}/hifive" />
+		<copy todir="${build.lib.dir}/hifive">
+			<fileset dir="${hifiveres.dir}/fw/current" />
+		</copy>
+		<!-- bootstrap -->
+		<mkdir dir="${build.lib.dir}/bootstrap" />
+		<copy todir="${build.lib.dir}/bootstrap">
+			<fileset dir="${hifiveres.dir}/ext/bootstrap/" includes="3.3.0/**/*" />
+		</copy>
+		<!-- jquery -->
+		<mkdir dir="${build.lib.dir}/jquery" />
+		<copy todir="${build.lib.dir}/jquery">
+			<fileset dir="${hifiveres.dir}/ext/jquery/" includes="jquery-1.js,jquery-2.js" />
+		</copy>
+		<!-- jqm -->
+		<mkdir dir="${build.lib.dir}/jqm" />
+		<copy todir="${build.lib.dir}/jqm">
+			<fileset dir="${hifiveres.dir}/ext/jqplugins/jqm" includes="1.3.0/**/*,1.4.2/**/*" />
+		</copy>
+
 		<!-- htmlファイルをbuildに出力 -->
 		<copy file="${webcontent.dir}/${index.release}" tofile="${build.dir}/index.html" />
-		<copy file="${webcontent.dir}/${blank}" tofile="${build.dir}/blank.html" />
+		<copy file="${webcontent.dir}/${blank.release}" tofile="${build.dir}/blank.html" />
 
 		<!-- tmpフォルダの削除 -->
 		<delete dir="${build.tmp.dir}" />
