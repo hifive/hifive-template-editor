@@ -121,7 +121,7 @@
 		setText: function(text) {
 			var converted = text.replace(/\x09/g, '    ').replace(/\x0D/g, '');
 			this._sourceText = converted;
-			this._aceEditorController.setText(converted);
+			this._aceEditorController.setValue(converted);
 			this.focus();
 		},
 
