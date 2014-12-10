@@ -33,8 +33,6 @@
 	var BLANK_PAGE = 'blank.html';// ブランクページ
 	var TEMPLATE_ID = 'templateId';
 	var RESULT_EDITOR_CTRL_PATH = 'hifive/templateEditor/controller/ResultEditorController.js';
-	var H5_CSS_PATH = 'res/lib/hifive/h5.css';
-	var H5_JS_PATH = 'res/lib/hifive/h5.js';
 
 
 	// =========================================================================
@@ -118,6 +116,16 @@
 		_isBlank: true,// iframeがロードしているページがブランクページかのフラグ
 
 		__ready: function() {
+			// dependencyMapからライブラリリストを生成
+			var dependencyMap = this._dependencyMap.map;
+			for ( var p in dependencyMap) {
+				var src = dependencyMap[p];
+				if (!src.defaultLoad) {
+					this.view.append('.libraries', 'libraries-control', {
+						data: src
+					});
+				}
+			}
 
 			h5.u.obj.expose('hifive.editor', {
 
@@ -191,14 +199,14 @@
 					// IFrameにhifiveがロードされていなければロードする
 					if (!this._target.contentWindow.h5) {
 						// h5.cssをロード
-						var h5CSSPath = pathname + H5_CSS_PATH;
-						this._insertCSSToIFrame(h5CSSPath).then(this.own(function() {
-							// h5.jsをロード
-							var h5ScriptPath = pathname + H5_JS_PATH;
-							this._insertScriptToIFrame(h5ScriptPath).then(this.own(function() {
-								h5LoadDef.resolve();
-							}));
-						}));
+						this._insertCSSToIFrame(dependencyMap.hifive.css).then(
+								this.own(function() {
+									// h5.jsをロード
+									this._insertScriptToIFrame(dependencyMap.hifive.js).then(
+											this.own(function() {
+												h5LoadDef.resolve();
+											}));
+								}));
 					} else {
 						h5LoadDef.resolve();
 					}
@@ -208,9 +216,9 @@
 				if (!this._target.contentWindow.jQuery) {
 					var jqPath;
 					if (h5.env.ua.isIE && h5.env.ua.browserVersion <= 8) {
-						jqPath = pathname + 'res/lib/jquery/jquery-1.js';
+						jqPath = dependencyMap.jquery1.js;
 					} else {
-						jqPath = pathname + 'res/lib/jquery/jquery-2.js';
+						jqPath = dependencyMap.jquery2.js;
 					}
 
 					this._insertScriptToIFrame(jqPath).then(function() {
@@ -796,6 +804,13 @@
 		},
 
 		_insertScriptToIFrame: function(jsPath) {
+			if ($.isArray(jsPath)) {
+				var promises = [];
+				for (var i = 0, l = jsPath.length; i < l; i++) {
+					promises.push(this._insertScriptToIFrame(jsPath[i]));
+				}
+				return h5.async.when(promises);
+			}
 			var def = this.deferred();
 
 			var script = document.createElement('script');
@@ -817,6 +832,10 @@
 			}));
 
 			script.type = 'text/javascript';
+			if (jsPath[0] !== '/' && jsPath[0] !== '.') {
+				// '.'始まりでも'/'始まりでもなければ、index.htmlからのパスに変換して読込ページでロードする
+				jsPath = location.pathname + jsPath;
+			}
 			script.src = jsPath;
 			this._getIFrameDocument().appendChild(script);
 
@@ -824,6 +843,13 @@
 		},
 
 		_insertCSSToIFrame: function(cssPath) {
+			if ($.isArray(cssPath)) {
+				var promises = [];
+				for (var i = 0, l = cssPath.length; i < l; i++) {
+					promises.push(this._insertCSSToIFrame(cssPath[i]));
+				}
+				return h5.async.when(promises);
+			}
 			var def = h5.async.deferred();
 
 			var css = document.createElement('link');
@@ -838,6 +864,10 @@
 
 			css.type = 'text/css';
 			css.rel = 'stylesheet';
+			if (cssPath[0] !== '/' && cssPath[0] !== '.') {
+				// '.'始まりでも'/'始まりでもなければ、index.htmlからのパスに変換して読込ページでロードする
+				cssPath = location.pathname + cssPath;
+			}
 			css.href = cssPath;
 			this._getIFrameDocument().appendChild(css);
 
