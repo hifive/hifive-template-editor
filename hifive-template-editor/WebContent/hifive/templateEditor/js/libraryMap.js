@@ -13,9 +13,9 @@
  */
 
 (function($) {
-	var dependencyMap = {
+	var libraryMap = {
 
-		__name: 'hifive.templateEditor.js.dependencyMap',
+		__name: 'hifive.templateEditor.js.libraryMap',
 
 		map: {
 			'bs3.3.0': {
@@ -65,5 +65,5 @@
 		}
 	};
 
-	h5.core.expose(dependencyMap);
+	h5.core.expose(libraryMap);
 })(jQuery);

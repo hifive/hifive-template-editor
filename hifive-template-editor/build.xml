@@ -71,7 +71,7 @@ the License.
 		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
 		<concat destfile="${build.tmp.dir}/preConcat.js" outputencoding="UTF-8">
 			<filelist dir="${src.dir}">
-				<file name="js/dependencyMap.release.js" />
+				<file name="js/libraryMap.release.js" />
 				<file name="logic/TemplateEditLogic.js" />
 				<file name="controller/AceEditorController.js" />
 				<file name="controller/SourceEditorController.js" />

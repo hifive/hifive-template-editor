@@ -103,7 +103,7 @@
 
 		_isCloseConfirmationSet: false,
 
-		_dependencyMap: hifive.templateEditor.js.dependencyMap,
+		_libraryMap: hifive.templateEditor.js.libraryMap,
 
 		_indicator: null,
 
@@ -116,10 +116,10 @@
 		_isBlank: true,// iframeがロードしているページがブランクページかのフラグ
 
 		__ready: function() {
-			// dependencyMapからライブラリリストを生成
-			var dependencyMap = this._dependencyMap.map;
-			for ( var p in dependencyMap) {
-				var src = dependencyMap[p];
+			// libraryMapからライブラリリストを生成
+			var libraryMap = this._libraryMap.map;
+			for ( var p in libraryMap) {
+				var src = libraryMap[p];
 				if (!src.defaultLoad) {
 					this.view.append('.libraries', 'libraries-control', {
 						data: src
@@ -199,10 +199,10 @@
 					// IFrameにhifiveがロードされていなければロードする
 					if (!this._target.contentWindow.h5) {
 						// h5.cssをロード
-						this._insertCSSToIFrame(dependencyMap.hifive.css).then(
+						this._insertCSSToIFrame(libraryMap.hifive.css).then(
 								this.own(function() {
 									// h5.jsをロード
-									this._insertScriptToIFrame(dependencyMap.hifive.js).then(
+									this._insertScriptToIFrame(libraryMap.hifive.js).then(
 											this.own(function() {
 												h5LoadDef.resolve();
 											}));
@@ -216,9 +216,9 @@
 				if (!this._target.contentWindow.jQuery) {
 					var jqPath;
 					if (h5.env.ua.isIE && h5.env.ua.browserVersion <= 8) {
-						jqPath = dependencyMap.jquery1.js;
+						jqPath = libraryMap.jquery1.js;
 					} else {
-						jqPath = dependencyMap.jquery2.js;
+						jqPath = libraryMap.jquery2.js;
 					}
 
 					this._insertScriptToIFrame(jqPath).then(function() {
@@ -562,7 +562,7 @@
 			// 選択されたライブラリのパスをマップから取得します。
 			var libPath = [];
 			for (var i = 0, len = applyLibs.length; i < len; i++) {
-				libPath.push(this._dependencyMap.map[applyLibs[i]]);
+				libPath.push(this._libraryMap.map[applyLibs[i]]);
 			}
 
 			var data = {
