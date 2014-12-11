@@ -357,7 +357,9 @@
 
 			url = $.trim(url);
 
-			if (url.length === 0) {
+			if (!url.length) {
+				// URL指定無しならブランクページ表示
+				this._showBlankPage();
 				return;
 			}
 
@@ -422,6 +424,65 @@
 			this.trigger('sendMsg', {
 				'data': data
 			});
+		},
+
+		/**
+		 * ブランクページ表示ボタンクリック
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 */
+		'.blank-button click': function() {
+			this._showBlankPage();
+		},
+
+		/**
+		 * プレビュー状態の詳細表示開始(タッチ)
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 */
+		'.preview-state touchstart': function() {
+			this._showPreviewStateDetail();
+		},
+
+		/**
+		 * プレビュー状態の詳細表示終了(タッチ)
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 */
+		'.preview-state touchend': function() {
+			this._hidePreviewStateDetail();
+		},
+
+		/**
+		 * プレビュー状態の詳細表示開始(マウス)
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 */
+		'.preview-state mouseenter': function() {
+			this._showPreviewStateDetail();
+		},
+
+		/**
+		 * プレビュー状態の詳細表示終了(マウス)
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 */
+		'.preview-state mouseleave': function() {
+			this._hidePreviewStateDetail();
+		},
+
+		/**
+		 * プレビューにブランクページを表示します
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 * @private
+		 */
+		_showBlankPage: function() {
+			this._previewTarget.src = BLANK_PAGE;
+
+			this._isBlank = true;
+
+			this._enableLibrary();
 		},
 
 		/**
@@ -490,55 +551,6 @@
 		},
 
 		/**
-		 * プレビューにブランクページを表示します
-		 *
-		 * @memberOf hifive.templateEditor.controller.EditorController
-		 */
-		'.blank-button click': function() {
-			this._previewTarget.src = BLANK_PAGE;
-
-			this._isBlank = true;
-
-			this._enableLibrary();
-		},
-
-		/**
-		 * プレビュー状態の詳細表示開始(タッチ)
-		 *
-		 * @memberOf hifive.templateEditor.controller.EditorController
-		 */
-		'.preview-state touchstart': function() {
-			this._showPreviewStateDetail();
-		},
-
-		/**
-		 * プレビュー状態の詳細表示終了(タッチ)
-		 *
-		 * @memberOf hifive.templateEditor.controller.EditorController
-		 */
-		'.preview-state touchend': function() {
-			this._hidePreviewStateDetail();
-		},
-
-		/**
-		 * プレビュー状態の詳細表示開始(マウス)
-		 *
-		 * @memberOf hifive.templateEditor.controller.EditorController
-		 */
-		'.preview-state mouseenter': function() {
-			this._showPreviewStateDetail();
-		},
-
-		/**
-		 * プレビュー状態の詳細表示終了(マウス)
-		 *
-		 * @memberOf hifive.templateEditor.controller.EditorController
-		 */
-		'.preview-state mouseleave': function() {
-			this._hidePreviewStateDetail();
-		},
-
-		/**
 		 * プレビュー状態の詳細を表示する
 		 *
 		 * @memberOf hifive.templateEditor.controller.EditorController
@@ -600,7 +612,6 @@
 		_removeIFrameCover: function() {
 			this.$find('.iframeCover').remove();
 		},
-
 
 		/**
 		 * 画面にインジケータを表示します
