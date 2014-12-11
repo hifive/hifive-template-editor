@@ -16,8 +16,6 @@ the License.
 <project name="h5devtool-builder" basedir="." default="build">
 	<property name="webcontent.dir" value="WebContent" />
 	<property name="webinf.dir" value="WEB-INF" />
-	<property name="index.release" value="index.release.html" />
-	<property name="blank.release" value="blank.release.html" />
 	<property name="src.dir" value="${webcontent.dir}/hifive/templateEditor" />
 	<property name="build.dir" value="${webcontent.dir}/build" />
 	<property name="min.src.dir" value="${build.dir}/hifive/templateEditor" />
@@ -145,9 +143,37 @@ the License.
 			<fileset dir="${hifiveres.dir}/ext/ejslint" />
 		</copy>
 
-		<!-- htmlファイルをbuildに出力 -->
-		<copy file="${webcontent.dir}/${index.release}" tofile="${build.dir}/index.html" />
-		<copy file="${webcontent.dir}/${blank.release}" tofile="${build.dir}/blank.html" />
+		<!-- htmlファイルをtmpに出力 -->
+		<copy file="${webcontent.dir}/index.html" tofile="${build.tmp.dir}/index.html" />
+		<copy file="${webcontent.dir}/blank.html" tofile="${build.tmp.dir}/blank.html" />
+		<!-- htmlファイルのcss,jsをリリース版ように置換 -->
+		<!-- {##dev-start##}から{##dev-end##}の箇所を削除 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##dev-start##\}.*?\{##dev-end##\} --\&gt;" />
+		</replaceregexp>
+		<!-- {##release-start##}から{##release-end##}までの箇所を有効化 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##release-start##\}" />
+		</replaceregexp>
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\{##release-end##\} --\&gt;" />
+		</replaceregexp>
+		<!-- jQuery読み分けのHTMLコメント記述のエスケープを解除 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="\&lt;!--">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;\\\!--" />
+		</replaceregexp>
+		<replaceregexp encoding="UTF-8" flags="gs" replace="--\&gt;">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="--\\\&gt;" />
+		</replaceregexp>
+		<!-- 置換したhtmlファイルをbuildに出力 -->
+		<copy todir="${build.dir}">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+		</copy>
 
 		<!-- tmpフォルダの削除 -->
 		<delete dir="${build.tmp.dir}" />
