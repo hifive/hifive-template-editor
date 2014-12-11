@@ -50,15 +50,15 @@ limitations under the License.
 
 <script
 	src="res/lib/hifive-ui-library/components/dividedBox/src/DividedBox.js"></script>
-<script src="res/lib/ejs/ejs_fulljslint.js"></script>
+<script src="/hifive-res/ext/ejslint/ejs_fulljslint.js"></script>
 
 <script src="hifive/templateEditor/js/libraryMap.js"></script>
-<script src="hifive/templateEditor/logic/TemplateEditLogic.js"></script>
+<script src="hifive/templateEditor/logic/TemplateLoadLogic.js"></script>
 <script src="hifive/templateEditor/controller/AceEditorController.js"></script>
 <script src="hifive/templateEditor/controller/SourceEditorController.js"></script>
 <script
 	src="hifive/templateEditor/controller/ParameterEditController.js"></script>
-<script src="hifive/templateEditor/controller/DataAreaController.js"></script>
+<script src="hifive/templateEditor/controller/DataEditorController.js"></script>
 <script src="hifive/templateEditor/controller/TemplateAreaController.js"></script>
 <script src="hifive/templateEditor/controller/EditorController.js"></script>
 <script src="hifive/templateEditor/controller/MessageController.js"></script>
@@ -162,34 +162,21 @@ limitations under the License.
 							</form>
 						</div>
 					</div>
-
-					<!-- <div class="dividedBox horizontal row"> -->
-					<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-
 					<!-- テンプレート文字列表示エリア -->
 					<div class="sourceTextWrapper col-xs-12">
 						<textarea id="sourceText" class="sourceText"></textarea>
 					</div>
-					<!-- <div class="sourceText pageWrapper col-xs-12">
-						contentEditable="true"
-					</div> -->
 
 					<!-- メッセージ表示画面 -->
-					<div class="alert alert-success template-msg" role="alert"></div>
+					<div class="alert alert-success template-msg hidden" role="alert"></div>
 					<!-- エラーメッセージ表示画面 -->
-					<div class="alert alert-danger template-alert" role="alert"></div>
-
-					<!-- <div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div> -->
-					<!-- </div> -->
+					<div class="alert alert-danger template-alert hidden" role="alert"></div>
 				</div>
 
 
 				<!-- 【データ】タブ -->
 				<div class="tab-pane row" id="data" style="margin: 0px;">
-
 					<div class="editAreaBar col-xs-12">
-
-
 						<div class="col-sm-6 hidden-xs">
 							<!-- フォーマットボタン -->
 							<button class="btn btn-primary btn-sm format-button ">フォーマット</button>
@@ -271,7 +258,7 @@ limitations under the License.
 					</div>
 
 					<!-- パラメータ入力画面 -->
-					<div class="parameter-input">
+					<div class="parameter-input hidden">
 						<i class="close-button">×</i>
 						<table class="parameter-input-table">
 							<thead>
@@ -298,11 +285,10 @@ limitations under the License.
 					</div>
 
 					<!-- メッセージ表示画面 -->
-					<div class="alert alert-success data-msg" role="alert"></div>
+					<div class="alert alert-success data-msg hidden" role="alert"></div>
 					<!-- エラーメッセージ表示画面 -->
-					<div class="alert alert-danger data-alert" role="alert"></div>
+					<div class="alert alert-danger data-alert hidden" role="alert"></div>
 				</div>
-
 
 				<!-- 【カスタムCSS】タブ -->
 				<!--
@@ -321,10 +307,8 @@ limitations under the License.
 						</div>
 				-->
 
-
 				<!-- 【設定】タブ -->
 				<div class="tab-pane container" id="setting">
-
 					<h3>ライブラリ</h3>
 					<div class="row">
 						<div class="col-xs-12">
@@ -390,9 +374,9 @@ limitations under the License.
 				<iframe></iframe>
 			</div>
 			<!-- エラーメッセージ表示画面 -->
-			<div class="alert alert-danger preview-alert" role="alert"></div>
+			<div class="alert alert-danger preview-alert hidden" role="alert"></div>
 			<!-- メッセージ表示画面 -->
-			<div class="alert alert-success preview-msg" role="alert"></div>
+			<div class="alert alert-success preview-msg hidden" role="alert"></div>
 		</div>
 	</div>
 </body>

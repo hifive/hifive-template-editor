@@ -76,7 +76,7 @@ the License.
 				<file name="controller/AceEditorController.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/ParameterEditController.js" />
-				<file name="controller/DataAreaController.js" />
+				<file name="controller/DataEditorController.js" />
 				<file name="controller/TemplateAreaController.js" />
 				<file name="controller/EditorController.js" />
 				<file name="controller/MessageController.js" />
@@ -139,6 +139,11 @@ the License.
 		<mkdir dir="${build.lib.dir}/jqm" />
 		<copy todir="${build.lib.dir}/jqm">
 			<fileset dir="${hifiveres.dir}/ext/jqplugins/jqm" includes="1.3.0/**/*,1.4.2/**/*" />
+		</copy>
+		<!-- ejslint -->
+		<mkdir dir="${build.lib.dir}/ejs" />
+		<copy todir="${build.lib.dir}/ejs">
+			<fileset dir="${hifiveres.dir}/ext/ejslint" />
 		</copy>
 
 		<!-- htmlファイルをbuildに出力 -->
