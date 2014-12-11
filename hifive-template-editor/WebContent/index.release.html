@@ -108,8 +108,32 @@ limitations under the License.
 				<div class="tab-pane active row" id="template">
 
 					<div class="editAreaBar col-xs-12">
+
+						<!-- UNDO,REDO window幅がsm以上のとき表示 -->
+						<div class="col-sm-6 hidden-xs">
+							<!-- <button class="btn btn-primary lineNum-btn">
+								<span class="glyphicon glyphicon-list"></span>
+							</button> -->
+							<!-- <input type="image" src="images/undo_32.png" class="undo-button"> <input type="image"
+								src="images/redo_32.png" class="redo-button"> -->
+						</div>
+
+						<!-- UNDO,REDO window幅がxs以下のとき表示 -->
+						<div class="visible-xs-block col-xs-4">
+							<!-- <div class="btn-group btn-group-sm">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									Edit <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#" class="undo-button">UNDO</a></li>
+									<li><a href="#" class="redo-button">REDO</a></li>
+								</ul>
+							</div> -->
+						</div>
+
+
 						<!-- セレクタ入力ボックス(テンプレート適用先の指定) -->
-						<div class="col-sm-offset-6 col-sm-6">
+						<div class="col-sm-6 col-xs-8">
 							<form class="target-selector">
 								<div class="input-group input-group-sm">
 									<label for="input-selector" class="input-group-addon">セレクタ</label>
@@ -128,34 +152,21 @@ limitations under the License.
 							</form>
 						</div>
 					</div>
-
-					<!-- <div class="dividedBox horizontal row"> -->
-					<!-- FIXME pageWrapperがついてないとPaletteがドロップしない -->
-
 					<!-- テンプレート文字列表示エリア -->
 					<div class="sourceTextWrapper col-xs-12">
 						<textarea id="sourceText" class="sourceText"></textarea>
 					</div>
-					<!-- <div class="sourceText pageWrapper col-xs-12">
-						contentEditable="true"
-					</div> -->
 
 					<!-- メッセージ表示画面 -->
-					<div class="alert alert-success template-msg" role="alert"></div>
+					<div class="alert alert-success template-msg hidden" role="alert"></div>
 					<!-- エラーメッセージ表示画面 -->
-					<div class="alert alert-danger template-alert" role="alert"></div>
-
-					<!-- <div class="componentPalette col-xs-3" data-h5-controller="c:ComponentPaletteController"></div> -->
-					<!-- </div> -->
+					<div class="alert alert-danger template-alert hidden" role="alert"></div>
 				</div>
 
 
 				<!-- 【データ】タブ -->
 				<div class="tab-pane row" id="data" style="margin: 0px;">
-
 					<div class="editAreaBar col-xs-12">
-
-
 						<div class="col-sm-6 hidden-xs">
 							<!-- フォーマットボタン -->
 							<button class="btn btn-primary btn-sm format-button ">フォーマット</button>
@@ -264,11 +275,10 @@ limitations under the License.
 					</div>
 
 					<!-- メッセージ表示画面 -->
-					<div class="alert alert-success data-msg" role="alert"></div>
+					<div class="alert alert-success data-msg hidden" role="alert"></div>
 					<!-- エラーメッセージ表示画面 -->
-					<div class="alert alert-danger data-alert" role="alert"></div>
+					<div class="alert alert-danger data-alert hidden" role="alert"></div>
 				</div>
-
 
 				<!-- 【カスタムCSS】タブ -->
 				<!--
@@ -287,10 +297,8 @@ limitations under the License.
 						</div>
 				-->
 
-
 				<!-- 【設定】タブ -->
 				<div class="tab-pane container" id="setting">
-
 					<h3>ライブラリ</h3>
 					<div class="row">
 						<div class="col-xs-12">
@@ -356,9 +364,9 @@ limitations under the License.
 				<iframe></iframe>
 			</div>
 			<!-- エラーメッセージ表示画面 -->
-			<div class="alert alert-danger preview-alert" role="alert"></div>
+			<div class="alert alert-danger preview-alert hidden" role="alert"></div>
 			<!-- メッセージ表示画面 -->
-			<div class="alert alert-success preview-msg" role="alert"></div>
+			<div class="alert alert-success preview-msg hidden" role="alert"></div>
 		</div>
 	</div>
 </body>

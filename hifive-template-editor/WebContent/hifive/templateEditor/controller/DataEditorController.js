@@ -20,11 +20,6 @@
 	//
 	// =========================================================================
 
-	// TODO 別ファイルで定義されている定数・変数・関数等を別の名前で使用する場合にここに記述します。
-	// 例：var getDeferred = h5.async.deferred;
-
-	// var getComponentCreator = hifive.editor.u.getComponentCreator;
-
 	// =========================================================================
 	//
 	// スコープ内定数
@@ -41,13 +36,9 @@
 	// スコープ内静的変数
 	// =============================
 
-	// TODO このスコープで共有される変数（クラス変数）を記述します。
-	// 例：var globalCounter = 0;
-
 	// =============================
 	// スコープ内静的関数
 	// =============================
-
 
 	// =========================================================================
 	//
@@ -55,126 +46,127 @@
 	//
 	// =========================================================================
 
-
-
 	// =========================================================================
 	//
 	// メインコード（コントローラ・ロジック等）
 	//
 	// =========================================================================
-
-	var dataAreaController = {
+	/**
+	 * データ編集部分のコントローラ
+	 *
+	 * @class
+	 * @name hifive.templateEditor.controller.DataEditorController
+	 */
+	var dataEditorController = {
 
 		/**
-		 * @memberOf hifive.templateEditor.controller.dataAreaController
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
 		 */
-		__name: 'hifive.templateEditor.controller.DataAreaController',
+		__name: 'hifive.templateEditor.controller.DataEditorController',
 
+		/**
+		 * Aceエディタコントローラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 * @private
+		 * @type {hifive.templateEditor.controller.AceEditorController}
+		 */
 		_aceEditorController: hifive.templateEditor.controller.AceEditorController,
 
+		/**
+		 * パラメータ編集コントローラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 * @private
+		 * @type {hifive.templateEditor.controller.ParameterEditController}
+		 */
+		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
+
+		/**
+		 * コントローラメタ定義
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 * @private
+		 */
 		__meta: {
 			_parameterEditController: {
 				rootElement: '.parameter-input'
 			}
 		},
 
-		_parameterEditController: hifive.templateEditor.controller.ParameterEditController,
-
-		_textChangeDelayTimer: null,
-
+		/**
+		 * 初期化処理
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 * @private
+		 */
 		__ready: function() {
 			// Ace Editor
 			this._aceEditorController.createEditor(this.$find('.dataText')[0], 'json');
 		},
 
 		/**
-		 * パラメータ入力ポップ画面を表示します
+		 * パラメータ入力ポップ画面を表示
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
 		 */
 		'.data-parameter click': function() {
-			this.$find('.parameter-input').css('display', 'block');
+			$(this._parameterEditController.rootElement).removeClass('hidden');
 		},
-
-		/**
-		 * データタブのラジオボタンが切り替わった時、もう一方のラジオボタンも切り替えます
-		 *
-		 * @param context
-		 * @param $el
-		 */
-		'.sendType change': function(context, $el) {
-			var type = $el[0].value;
-
-			this.$find('.sendType[value="' + type + '"]').each(function() {
-				$(this).prop('checked', 'checked');
-			});
-		},
-
 
 		/**
 		 * 指定されたurlでデータオブジェクトを取得します
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
 		 */
 		'.load-data submit': function(context, $el) {
 			context.event.preventDefault();
-
-			var url = $el.find('input').val();
-
-			if (url === '') {
+			var url = $.trim($el.find('input').val());
+			if (!url) {
 				// URLが未入力であればメッセージを表示します
 				$(this.rootElement).trigger('showMessage', {
-					'msg': 'URLを指定してください',
-					'$el': this.$find('.data-alert')
+					msg: 'URLを指定してください',
+					target: this.$find('.data-alert')
 				});
-
 				return;
 			}
+			// パラメータを取得
+			var param = this._parameterEditController.getParameter();
 
-			var param = this._parameterEditController.getParameter();// パラメータを取得します
+			// 送信方法(GET/POST)を取得
+			var type = $('.sendType:checked').val();
 
-			var type = null;
-			var $elm = $('.sendType');
-
-			// 送信方法を取得(GET/POST)します
-			for (var i = 0, len = $elm.length; i < len; i++) {
-				if ($($elm[i]).prop('checked')) {
-					type = $elm[i].value;
-					break;
-				}
-			}
-
-			// データを取得します
+			// データを取得
 			this.parentController.loadData(url, type, param).then(this.own(function(data) {
-
-				this.setDataText(data);// データをテキストエリアに反映します
+				// データをエディタに反映
+				this.setTextByObject(data);
 				this.focus();
 
-				// this.createTemplate();
-				$(this.rootElement).trigger('createTemplate');
-
 				$(this.rootElement).trigger('showMessage', {
-					'msg': 'データの取得が完了しました',
-					'$el': this.$find('.data-msg')
+					msg: 'データの取得が完了しました',
+					target: this.$find('.data-msg')
 				});
-
 			}), this.own(function(xhr, textStatus) {
-				// 取得に失敗したらエラーメッセージを表示します
+				// 取得に失敗したらエラーメッセージを表示
 				var msg = 'status:' + xhr.status;
-
 				msg += (textStatus === 'parsererror') ? '\nJSONへのパースに失敗しました' : '\nデータの取得に失敗しました';
-
 				$(this.rootElement).trigger('showMessage', {
-					'msg': msg,
-					'$el': this.$find('.data-alert')
+					msg: msg,
+					target: this.$find('.data-alert')
 				});
 			}));
 		},
 
 		/**
-		 * データオブジェクトをフォーマットします
+		 * エディタに入力された内容をフォーマット
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
 		 */
 		'.format-button click': function() {
 			var data = this._aceEditorController.getValue();
 
 			try {
-				if (!data || data === '') {
+				if (!data) {
 					data = null;
 				} else {
 					data = $.parseJSON(data);
@@ -189,27 +181,48 @@
 
 		/**
 		 * データ入力テキストを取得
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 * @returns {String}
 		 */
 		getText: function() {
 			return this._aceEditorController.getValue();
 		},
 
 		/**
-		 * データオブジェクトをテキストエリアに反映します。
+		 * データオブジェクトをJSON文字列にしてエディタにセットします
 		 *
-		 * @param json
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 * @param {Object} data
 		 */
-		setDataText: function(data) {
-			this._aceEditorController.setValue(JSON.stringify(data, null, '  '));
+		setTextByObject: function(data) {
+			this.setText(JSON.stringify(data, null, '  '));
 		},
 
 		/**
-		 * 現在の表示サイズに要素を調整
+		 * 文字列をエディタにセットします。
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 * @param {String} str
+		 */
+		setText: function(str) {
+			this._aceEditorController.setValue(str);
+		},
+
+		/**
+		 * 現在の表示サイズにエディタのサイズを調整
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
 		 */
 		adjustSize: function() {
 			this._aceEditorController.adjustSize();
 		},
 
+		/**
+		 * エディタにフォーカスします
+		 *
+		 * @memberOf hifive.templateEditor.controller.DataEditorController
+		 */
 		focus: function() {
 			this._aceEditorController.focus();
 		}
@@ -221,6 +234,6 @@
 	//
 	// =========================================================================
 
-	h5.core.expose(dataAreaController);
+	h5.core.expose(dataEditorController);
 
 })(jQuery);

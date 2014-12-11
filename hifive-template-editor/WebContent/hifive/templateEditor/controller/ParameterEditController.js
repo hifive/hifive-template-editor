@@ -54,13 +54,24 @@
 	// メインコード（コントローラ・ロジック等）
 	//
 	// =========================================================================
-
+	/**
+	 * パラメータ編集コントローラ
+	 *
+	 * @class
+	 * @name hifive.templateEditor.controller.ParameterEditController
+	 */
 	var parameterEditController = {
 		/**
 		 * @memberOf hifive.templateEditor.controller.ParameterEditController
 		 */
 		__name: 'hifive.templateEditor.controller.ParameterEditController',
 
+		/**
+		 * 初期化処理
+		 *
+		 * @memberOf hifive.templateEditor.controller.ParameterEditController
+		 * @private
+		 */
 		__ready: function() {
 			// TODO テンプレートを使用する
 			this.view.register('parameter-edit-tr', this
@@ -69,6 +80,8 @@
 
 		/**
 		 * 入力されている値からパラメータオブジェクトを作成する
+		 *
+		 * @memberOf hifive.templateEditor.controller.ParameterEditController
 		 */
 		getParameter: function() {
 			var $tr = $('.parameter-input-table tbody tr');
@@ -96,10 +109,20 @@
 			return existParam ? parameterObj : null;
 		},
 
+		/**
+		 * 閉じるボタンクリック
+		 *
+		 * @memberOf hifive.templateEditor.controller.ParameterEditController
+		 */
 		'.close-button click': function() {
-			$(this.rootElement).css('display', 'none');
+			$(this.rootElement).addClass('hidden');
 		},
 
+		/**
+		 * 入力内容が変更された時のハンドラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.ParameterEditController
+		 */
 		'input change': function(context, $target) {
 			// 一番最後のinputへの入力なら、新規追加
 			var $tr = $target.parents('tr');
@@ -108,6 +131,11 @@
 			}
 		},
 
+		/**
+		 * フォーカスが外れた時のハンドラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.ParameterEditController
+		 */
 		'input.param-name blur': function(context, $target) {
 			if ($.trim($target.val())) {
 				return;

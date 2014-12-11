@@ -72,12 +72,11 @@ the License.
 		<concat destfile="${build.tmp.dir}/preConcat.js" outputencoding="UTF-8">
 			<filelist dir="${src.dir}">
 				<file name="js/libraryMap.release.js" />
-				<file name="logic/TemplateEditLogic.js" />
+				<file name="logic/TemplateLoadLogic.js" />
 				<file name="controller/AceEditorController.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/ParameterEditController.js" />
 				<file name="controller/DataEditorController.js" />
-				<file name="controller/TemplateAreaController.js" />
 				<file name="controller/EditorController.js" />
 				<file name="controller/MessageController.js" />
 				<file name="controller/PageController.js" />

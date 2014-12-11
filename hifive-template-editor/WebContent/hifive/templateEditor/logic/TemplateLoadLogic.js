@@ -14,12 +14,12 @@
 
 (function($) {
 
-	var templateEditLogic = {
+	var templateLoadLogic = {
 
 		/**
-		 * @memberof hifive.templateEditor.logic.TemplateEditLogic
+		 * @memberof hifive.templateEditor.logic.TemplateLoadLogic
 		 */
-		__name: 'hifive.templateEditor.logic.TemplateEditLogic',
+		__name: 'hifive.templateEditor.logic.TemplateLoadLogic',
 
 		/**
 		 * 指定されたurlからデータオブジェクトを取得します（戻り値はJSONと仮定）
@@ -47,6 +47,6 @@
 
 	};
 
-	h5.core.expose(templateEditLogic);
+	h5.core.expose(templateLoadLogic);
 
 })(jQuery);

@@ -20,15 +20,11 @@
 	//
 	// =========================================================================
 
-	// TODO 別ファイルで定義されている定数・変数・関数等を別の名前で使用する場合にここに記述します。
-	// 例：var getDeferred = h5.async.deferred;
-
 	// =========================================================================
 	//
 	// スコープ内定数
 	//
 	// =========================================================================
-
 
 
 	// =========================================================================
@@ -40,9 +36,6 @@
 	// =============================
 	// スコープ内静的変数
 	// =============================
-
-	// TODO このスコープで共有される変数（クラス変数）を記述します。
-	// 例：var globalCounter = 0;
 
 	// =============================
 	// スコープ内静的関数
@@ -56,124 +49,140 @@
 	// =========================================================================
 
 
-
 	// =========================================================================
 	//
 	// メインコード（コントローラ・ロジック等）
 	//
 	// =========================================================================
-
+	/**
+	 * ページコントローラ
+	 *
+	 * @class
+	 * @name hifive.templateEditor.controller.PageController
+	 */
 	var pageController = {
-
 		/**
 		 * @memberOf hifive.templateEditor.controller.PageController
 		 */
 		__name: 'hifive.templateEditor.controller.PageController',
 
+		/**
+		 * コントローラのメタ定義
+		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
+		 * @private
+		 */
 		__meta: {
 			_editorController: '#ejsEditorRoot',
 			_messageController: this.rootElement
 		},
 
+		/**
+		 * エディタコントローラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
+		 * @private
+		 */
 		_editorController: hifive.templateEditor.controller.EditorController,
 
+		/**
+		 * メッセージコントローラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
+		 * @private
+		 */
 		_messageController: hifive.templateEditor.controller.MessageController,
 
-		_query: null,
-
-		_templateURL: null,
-
-		_dataURL: null,
-
-
+		/**
+		 * 初期化
+		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
+		 * @private
+		 */
 		__ready: function() {
-
 			// クエリパラメータを取得
-			var query = location.search;
+			if (!location.search) {
+				return;
+			}
+			var query = this._parseQueryParameters(location.search);
 
-			if (query) {
-				this._query = this._parseQueryParameters(query);
+			var dataURL = query.data;
+			// データを取得し、セットします
+			if (dataURL) {
+				// urlを入力欄に入れます
+				this.$find('.input-data-url').each(function() {
+					$(this).val(dataURL);
+				});
 
-				var dataURL = this._query.data;
-				// データを取得し、セットします
-				if (dataURL) {
-					// urlを入力欄に入れます
-					this.$find('.input-data-url').each(function() {
-						$(this).val(dataURL);
-					});
+				// データを取得し、テキストエリアに表示します
+				var dataDef = this._editorController.loadData(dataURL).then(
+						this.own(function(data) {
+							this._editorController._dataEditorController.setTextByObject(data);
+						}),
 
-					// データを取得し、テキストエリアに表示します
-					var dataDef = this._editorController.loadData(dataURL).then(
-							this.own(function(data) {
-								this._editorController._dataAreaController.setDataText(data);
-							}),
+						this.own(function(xhr, textStatus) {
 
-							this.own(function(xhr, textStatus) {
+							var $el = this.$find('.template-alert');
+							var msg = 'status:' + xhr.status;
 
-								var $el = this.$find('.template-alert');
-								var msg = 'status:' + xhr.status;
-
-								if (textStatus === 'parsererror') {
-									msg = msg + '\nデータはJSON型を指定してください';
-									this._messageController.alertMessage(msg, $el);
-									return;
-								}
-
-								msg = msg + '\nデータの取得に失敗しました';
+							if (textStatus === 'parsererror') {
+								msg = msg + '\nデータはJSON型を指定してください';
 								this._messageController.alertMessage(msg, $el);
-							}));
-				}
+								return;
+							}
 
-				var templateURL = this._query.template;
-				// テンプレートを取得し、セットします
-				if (templateURL) {
-					var templateDef = this._editorController.loadTemplate(templateURL).then(
+							msg = msg + '\nデータの取得に失敗しました';
+							this._messageController.alertMessage(msg, $el);
+						}));
+			}
 
-					this.own(function(template) {
-						template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
-						this._editorController.setTemplateText(template);
-					}),
+			var templateURL = query.template;
+			// テンプレートを取得し、セットします
+			if (templateURL) {
+				var templateDef = this._editorController.loadTemplate(templateURL).then(
 
-					this.own(function(xhr) {
-						var $el = this.$find('.template-alert');
-						var msg = 'status:' + xhr.status;
-						msg = msg + '\nテンプレートの取得に失敗しました';
+				this.own(function(template) {
+					template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
+					this._editorController.setTemplateText(template);
+				}),
 
-						this._messageController.alertMessage(msg, $el);
-					}));
-				}
+				this.own(function(xhr) {
+					var $el = this.$find('.template-alert');
+					var msg = 'status:' + xhr.status;
+					msg = msg + '\nテンプレートの取得に失敗しました';
 
-				if (dataURL && templateURL) {
-					var def = [dataDef, templateDef];
+					this._messageController.alertMessage(msg, $el);
+				}));
+			}
 
-					h5.async.when(def).done(this.own(function() {
-						this.$find('#ejsEditorRoot').trigger('applyTemplate');
-					}));
-				}
+			if (dataURL && templateURL) {
+				var def = [dataDef, templateDef];
+
+				h5.async.when(def).done(this.own(function() {
+					this.$find('#ejsEditorRoot').trigger('applyTemplate');
+				}));
 			}
 		},
-
 
 		/**
 		 * メッセージを表示します
 		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
 		 * @param context
-		 * @prop {string} args.msg メッセージ
-		 * @prop {object} args.$el メッセージを表示する要素
+		 * @prop {String} context.evArg.msg メッセージ
+		 * @prop {String|jQuery|DOM} context.evArg.target メッセージを表示する要素
 		 */
 		'{rootElement} showMessage': function(context) {
 			var args = context.evArg;
-			if (args.selector) {
-				args.$el = this.$find(args.selector);
-			}
-			this._messageController.alertMessage(args.msg, args.$el);
+			this._messageController.alertMessage(args.msg, $(args.target));
 		},
 
 		/**
 		 * メッセージを非表示にします
 		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
 		 * @param context
-		 * @prop {object} args.$el 非表示にするメッセージ要素
+		 * @prop {String|jQuery|DOM} context.evArg.target メッセージを表示する要素
 		 */
 		'{rootElement} clearMessage': function(context) {
 			var args = context.evArg;
@@ -183,9 +192,11 @@
 			this._messageController.clearMessage(args.$el);
 		},
 
-
 		/**
 		 * タブが切り替わり、対応するコンテントが表示されたときのイベントハンドラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
+		 * @param {Object} context
 		 */
 		'.nav-tabs shown.bs.tab': function(context) {
 
@@ -196,49 +207,11 @@
 			var sourceEditorController = controllers[0]._editorController._sourceEditorController;
 
 			if (context.event.target.hash === '#template') {
-
 				// テンプレートタブが選択された場合、リスナーの実行を許可する
 				sourceEditorController.enableListeners();
-
 				this._refreshDividedBox();
-
 				// テンプレートエディタにフォーカス
 				sourceEditorController.focus();
-
-
-				// dividerの位置を修正する
-				// var dividerPos = this.$find('.divider').offset();
-				// if (dividerPos) {
-				// var dividerTop = dividerPos.top;
-				//
-				// var inputAreaSize = this.$find('.dividedBox').outerWidth();// テンプレートタブのエディタ部分の幅
-				// var dividerLeft = inputAreaSize * 0.75;// dividerのleftの位置
-				//
-				// this.$find('.divider').offset({
-				// top: dividerTop,
-				// left: dividerLeft
-				// });
-				//
-				// // ツリー部分の位置を修正する
-				// var palettePos = this.$find('.componentPalette').offset();
-				// var dividerWidth = this.$find('.divider').outerWidth();
-				//
-				// var paletteTop = palettePos.top;
-				// var paletteLeft = dividerLeft + dividerWidth;
-				//
-				// this.$find('.componentPalette').offset({
-				// top: paletteTop,
-				// left: paletteLeft
-				// });
-				//
-				//
-				// // テンプレート編集部分の位置を修正する
-				// this.$find('.sourceText').outerWidth(dividerLeft);
-				//
-				//
-				// this._refreshDividedBox();
-				//
-				// }
 				return;
 			}
 			// テンプレートタブ以外が選択された場合、リスナーの実行を禁止する
@@ -246,14 +219,16 @@
 
 			if (context.event.target.hash === '#data') {
 				// データエディタにフォーカス
-				var dataAreaController = controllers[0]._editorController._dataAreaController;
-				dataAreaController.focus();
+				var dataEditorController = controllers[0]._editorController._dataEditorController;
+				dataEditorController.focus();
 			}
 		},
 
-
 		/**
 		 * dividedBoxをリフレッシュします
+		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
+		 * @private
 		 */
 		_refreshDividedBox: function() {
 			var dividedBoxes = h5.core.controllerManager.getControllers($('body'), {
@@ -266,17 +241,18 @@
 			}
 		},
 
-
+		/**
+		 * リクエストパラメータをパースします
+		 *
+		 * @memberOf hifive.templateEditor.controller.PageController
+		 * @returns {Object}
+		 */
 		_parseQueryParameters: function(query) {
 			var param = query.slice(1);
-
 			var ary = param.split('&');
-
 			var map = {};
 			for (var i = 0, len = ary.length; i < len; i++) {
-
-				temp = ary[i].split('=');// [key,value]
-
+				var temp = ary[i].split('=');// [key,value]
 				var key = temp[0];
 
 				var value;
@@ -288,11 +264,8 @@
 
 				map[key] = value;
 			}
-
 			return map;
 		}
-
-
 	};
 
 	// =========================================================================

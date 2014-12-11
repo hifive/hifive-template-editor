@@ -20,15 +20,12 @@
 	//
 	// =========================================================================
 
-	// TODO 別ファイルで定義されている定数・変数・関数等を別の名前で使用する場合にここに記述します。
-	// 例：var getDeferred = h5.async.deferred;
 
 	// =========================================================================
 	//
 	// スコープ内定数
 	//
 	// =========================================================================
-
 
 
 	// =========================================================================
@@ -41,11 +38,6 @@
 	// スコープ内静的変数
 	// =============================
 
-	// TODO このスコープで共有される変数（クラス変数）を記述します。
-	// 例：var globalCounter = 0;
-
-	// var DEFAULT_TARGET = parent.$(window);
-
 	// =============================
 	// スコープ内静的関数
 	// =============================
@@ -57,39 +49,57 @@
 	//
 	// =========================================================================
 
-
-
 	// =========================================================================
 	//
 	// メインコード（コントローラ・ロジック等）
 	//
 	// =========================================================================
-
-
+	/**
+	 * プレビュー画面のコントローラ
+	 *
+	 * @class
+	 * @name hifive.templateEditor.controller.ResultEditorController
+	 */
 	var resultEditorController = {
-
 		/**
 		 * @memberOf hifive.templateEditor.controller.ResultEditorController
 		 */
 		__name: 'hifive.templateEditor.controller.ResultEditorController',
 
-		_target: null,// テンプレート適用先
+		/**
+		 * テンプレート適用先
+		 *
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
+		 */
+		_$target: null,
 
-		_hasJQM: null,// jQuery Mobile 1.3.0が読み込まれているとtrue
+		/**
+		 * jQuery Mobileが読み込まれているとtrue
+		 *
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
+		 */
+		_hasJQM: null,
 
+		/**
+		 * 初期化処理
+		 *
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
+		 */
 		__ready: function() {
 			//TODO: bodyにするとjqm1.3.0でcreateイベントをトリガしたときにエラーが起こる
-			this._target = $('.dummy');
-
+			this._$target = $('.dummy');
 			this._sendMessage({
 				type: 'getLibraryPath'
 			});
 		},
 
-
 		/**
 		 * postMessageを受け取った時のイベントハンドラ。
 		 *
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
 		 * @param context
 		 */
 		'{window} message': function(context) {
@@ -126,16 +136,17 @@
 			}
 		},
 
-
 		/**
 		 * テンプレートを反映します
 		 *
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
 		 * @param data
 		 */
 		_preview: function(data) {
 
 			// テンプレートを流し込みます
-			this._target.html(data.template);
+			this._$target.html(data.template);
 
 			// jqmを読み込んでいる場合、要素追加後に初期化処理を促します
 			if (this._hasJQM) {
@@ -151,10 +162,11 @@
 		/**
 		 * チェックされたライブラリをロードします
 		 *
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
 		 * @param context
 		 */
 		_beginLoadLibrary: function(data) {
-
 			var path = data.path;
 			if ($.type(path) !== 'array') {
 				path = [path];
@@ -194,15 +206,16 @@
 					});
 				}));
 			}));
-
 		},
 
 
 		/**
 		 * CSSファイルをロードします
 		 *
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
 		 * @param cssPaths
-		 * @returns
+		 * @returns {Promise}
 		 */
 		_loadCSS: function(cssPaths) {
 			var def = h5.async.deferred();
@@ -233,21 +246,23 @@
 				css.rel = 'stylesheet';
 				css.href = cssPaths[i];
 			}
-			return def;
+			return def.promise();
 		},
 
 
 		/**
 		 * テンプレートの適用先を変更し、再描画します
 		 *
-		 * @param
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
+		 * @param {Object} data
 		 */
 		_changeTarget: function(data) {
-			var temp = this._target.html();
+			var temp = this._$target.html();
 
 			// テンプレートで追加されたDOMをセレクタの検索対象から外すため、テンプレートを除去します
-			if (this._target) {
-				this._target.empty();
+			if (this._$target) {
+				this._$target.empty();
 			}
 
 			var $el;
@@ -264,15 +279,15 @@
 				this._sendMessage({
 					type: 'showMessage',
 					msg: '指定された要素が見つかりません',
-					selector: '.template-alert'
+					target: '.template-alert'
 				});
 				// 除去したテンプレートを戻します
-				this._target.html(temp);
+				this._$target.html(temp);
 				return;
 			}
 
 			// テンプレートの適用先を更新
-			this._target = $el;
+			this._$target = $el;
 
 			this._sendMessage({
 				type: 'applyTemplate'
@@ -282,18 +297,17 @@
 		/**
 		 * postMessageを送ります
 		 *
-		 * @param data
+		 * @memberOf hifive.templateEditor.controller.ResultEditorController
+		 * @private
+		 * @param {Object} data
 		 */
 		_sendMessage: function(data) {
 			var myOrigin = location.protocol + '//' + location.host;
 
 			parent.postMessage(h5.u.obj.serialize(data), myOrigin);
 		}
-
 	};
-
 	h5.core.expose(resultEditorController);
-
 })(jQuery);
 
 // ---Init--- //

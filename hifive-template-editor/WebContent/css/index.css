@@ -153,14 +153,8 @@ iframe {
 	font-size: 16px;
 }
 
-.libraryMessage {
-	display: none;
-}
-
 /** パラメータ入力 **/
 .parameter-input {
-	/* デフォルト非表示 */
-	display: none;
 	position: absolute;
 	right: 0;
 	top: 50px;
@@ -212,58 +206,23 @@ iframe {
 	padding-bottom: 0px;
 }
 
-/* テンプレートタブのエラーメッセージ表示画面 */
-.template-alert {
-	display: none;
-	width: 70%;
+/* メッセージ表示 */
+.alert {
 	position: absolute;
 	right: 18px;
 	top: 50px;
 }
 
-/* 〃のエラーメッセージ表示画面 */
-.template-msg {
-	display: none;
-	width: 25%;
-	position: absolute;
-	right: 18px;
-	top: 50px;
-}
-
-/* データタブのエラーメッセージ表示画面 */
-.data-alert {
-	display: none;
-	width: 70%;
-	position: absolute;
-	right: 18px;
-	top: 50px;
-}
-
-/* 〃のエラーメッセージ表示画面 */
-.data-msg {
-	display: none;
-	width: 25%;
-	position: absolute;
-	right: 18px;
-	top: 50px;
-}
-
-/* プレビューのエラーメッセージ表示画面 */
-.preview-alert {
-	display: none;
-	width: 70%;
-	position: absolute;
-	right: 18px;
+.previewArea .alert {
 	top: 56px;
 }
 
-/* プレビューのメッセージ表示画面 */
-.preview-msg {
-	display: none;
+.alert-success {
 	width: 25%;
-	position: absolute;
-	right: 18px;
-	top: 56px;
+}
+
+.alert-danger {
+	width: 25%;
 }
 
 /* エラー、警告のバッジ */

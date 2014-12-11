@@ -20,11 +20,6 @@
 	//
 	// =========================================================================
 
-	// TODO 別ファイルで定義されている定数・変数・関数等を別の名前で使用する場合にここに記述します。
-	// 例：var getDeferred = h5.async.deferred;
-
-	// var getComponentCreator = hifive.editor.u.getComponentCreator;
-
 	// =========================================================================
 	//
 	// スコープ内定数
@@ -42,9 +37,6 @@
 	// スコープ内静的変数
 	// =============================
 
-	// TODO このスコープで共有される変数（クラス変数）を記述します。
-	// 例：var globalCounter = 0;
-
 	// =============================
 	// スコープ内静的関数
 	// =============================
@@ -57,35 +49,85 @@
 	// =========================================================================
 
 
-
 	// =========================================================================
 	//
 	// メインコード（コントローラ・ロジック等）
 	//
 	// =========================================================================
-
+	/**
+	 * メッセージコントローラ
+	 *
+	 * @class
+	 * @name hifive.templateEditor.controller.MessageController
+	 */
 	var messageController = {
-
 		/**
-		 * @memberOf hifive.templateEditor.controller.messageController
+		 * @memberOf hifive.templateEditor.controller.MessageController
 		 */
 		__name: 'hifive.templateEditor.controller.MessageController',
 
-		_templateTimer: null,// テンプレートタブのメッセージ表示用タイマー
+		/**
+		 * テンプレートタブのメッセージ表示用タイマー
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
+		_templateTimer: null,
 
-		_templateErrTimer: null,// テンプレートタブのエラーメッセージ表示用タイマー
+		/**
+		 * テンプレートタブのエラーメッセージ表示用タイマー
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
+		_templateErrTimer: null,
 
-		_dataTimer: null, // データタブのメッセージ表示用タイマー
+		/**
+		 * データタブのメッセージ表示用タイマー
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
+		_dataTimer: null,
 
+		/**
+		 * データタブのエラーメッセージ表示用タイマー
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
 		_dataErrTimer: null, // データタブのエラーメッセージ表示用タイマー
 
+		/**
+		 * プレビューのメッセージ表示用タイマー
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
 		_previewTimer: null,// プレビューのメッセージ表示用タイマー
 
-		_previewErrTimer: null,// プレビューのエラーメッセージ表示用タイマー
+		/**
+		 * プレビューのエラーメッセージ表示用タイマー
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
+		_previewErrTimer: null,
 
+		/**
+		 * 表示している要素のselectorと表示しているメッセージタイマーIDのマップ
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
 		_selectorMap: {},
 
-
+		/**
+		 * 初期化
+		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
+		 * @private
+		 */
 		__ready: function() {
 			$.extend(this._selectorMap, {
 				'.template-alert': this._templateErrTimer,
@@ -100,31 +142,30 @@
 		/**
 		 * メッセージを表示します
 		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
 		 * @param msg 表示するメッセージ
 		 * @param $el メッセージを表示する要素
 		 */
 		alertMessage: function(msg, $el) {
-
 			$el.text(msg);
-			$el.css('display', 'block');
-
-
+			$el.removeClass('hidden');
 			if (this._selectorMap[$el.selector]) {
 				clearTimeout(this._selectorMap[$el.selector]);
 			}
 
 			this._selectorMap[$el.selector] = setTimeout(function() {
-				$el.css('display', 'none');
+				$el.addClass('hidden');
 			}, 3000);
 		},
 
 		/**
 		 * メッセージを非表示にします
 		 *
+		 * @memberOf hifive.templateEditor.controller.MessageController
 		 * @param $el メッセージを非表示にする要素
 		 */
 		clearMessage: function($el) {
-			$el.css('display', 'none');
+			$el.addClass('hidden');
 			if (this._selectorMap[$el.selector]) {
 				clearTimeout(this._selectorMap[$el.selector]);
 			}
