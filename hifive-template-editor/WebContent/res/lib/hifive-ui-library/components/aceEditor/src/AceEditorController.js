@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2014 NS Solutions Corporation
+ * Copyright (C) 2014 NS Solutions Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -29,7 +29,7 @@
 	var EVENT_TEXT_CHANGE = 'textChange';
 
 	/** EVENT_TEXT_CHANGEイベントを遅延させる時間(ms) */
-	var TEXT_CHANGE_DELAY = 100;
+	var TEXT_CHANGE_DEFAULT_DELAY = 100;
 
 	// =========================================================================
 	//
@@ -61,98 +61,113 @@
 	 * Aceエディタを扱うコントローラ
 	 *
 	 * @class
-	 * @name hifive.templateEditor.controller.AceEditorController
+	 * @name h5.ui.components.aceEditor.controller.AceEditorController
 	 */
 	var aceEditorController = {
 		/**
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 */
-		__name: 'hifive.templateEditor.controller.AceEditorController',
+		__name: 'h5.ui.components.aceEditor.controller.AceEditorController',
 
 		/**
 		 * textChange待機用タイマーID
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 */
-		_textChangeDelayTimer: null,
+		_textChangeDelayr: null,
+
+		/**
+		 * textChange待機時間
+		 *
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
+		 */
+		_textChangeDelay: TEXT_CHANGE_DEFAULT_DELAY,
 
 		/**
 		 * Aceエディタインスタンス
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 */
-		_editor: null,
+		editor: null,
 
 		/**
-		 * Aceエディタを作成する
+		 * エディタコンテナ
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 */
-		createEditor: function(element, mode) {
-			var editor = this._editor = ace.edit(element);
-			if (mode) {
-				this.setMode(mode);
-			}
+		$editorContainer: null,
+
+		/**
+		 * 初期化処理。コントローラバインド時にAceエディタを作成する
+		 *
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
+		 */
+		__ready: function() {
+			this.editor = ace.edit(this.rootElement);
+			this.$editorContainer = $(this.editor.container);
 			// イベントのバインド
-			editor.on('change', this.own(this._change));
+			this.editor.on('change', this.own(this._change));
 		},
 
 		/**
-		 * Aceエディタインスタンスの取得
+		 * エディタの現在のEditorSessionを取得
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
-		 * @returns {Editor}
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
+		 * @param {String} mode
 		 */
-		getAceEditor: function() {
-			return this._editor;
+		getSession: function(mode) {
+			return this.editor.getSession();
 		},
 
 		/**
 		 * エディタのモードを設定('html','js','ejs'など)
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 * @param {String} mode
 		 */
 		setMode: function(mode) {
-			this._editor.getSession().setMode('ace/mode/' + mode);
+			this.editor.getSession().setMode('ace/mode/' + mode);
 		},
 
 		/**
 		 * エディタに文字列を入力する
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 * @param {String} val
 		 */
 		setValue: function(val) {
-			this._editor.setValue(val, 1);
+			this.editor.setValue(val, 1);
 		},
 
 		/**
 		 * エディタに入力された文字列を取得
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 * @returns {String}
 		 */
 		getValue: function() {
-			return this._editor.getValue();
+			return this.editor.getValue();
 		},
 
 		/**
 		 * 現在の表示サイズに要素を調整
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 */
 		adjustSize: function() {
-			this._editor.resize(true);
+			this.editor.resize(true);
 		},
 
 		/**
-		 * エディタにフォーカスを合わせる
+		 * エディタの内容が変更された時のイベント(textChangeイベント)をあげるときの遅延時間の設定
+		 * <p>
+		 * デフォルトは100msです
+		 * </p>
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @param {time} 遅延時間(ms)。 0を指定した場合は遅延なし。
 		 */
-		focus: function() {
-			this._editor.focus();
+		setTextChangeDelay: function(time) {
+			this._textChangeDelay = time;
 		},
 
 		/**
@@ -161,19 +176,25 @@
 		 * 変更時にこのコントローラからtextChangeイベントをあげる
 		 * </p>
 		 *
-		 * @memberOf hifive.templateEditor.controller.AceEditorController
+		 * @memberOf h5.ui.components.aceEditor.controller.AceEditorController
 		 * @private
 		 */
 		_change: function() {
 			// textChangeイベントを遅延させてあげる
 			// (setValue時やペースト時にエディタのchangeイベントが連続して発生するため)
-			if (this._textChangeDelayTimer) {
-				clearTimeout(this._textChangeDelayTimer);
+			if (this._textChangeDelayr) {
+				clearTimeout(this._textChangeDelayr);
 			}
-			this._textChangeDelayTimer = setTimeout(this.own(function() {
-				this._textChangeDelayTimer = null;
+			if (this._textChangeDelay <= 0) {
+				// 遅延なし
 				this.trigger(EVENT_TEXT_CHANGE);
-			}), TEXT_CHANGE_DELAY);
+				return;
+			}
+			var that = this;
+			this._textChangeDelayr = setTimeout(this.own(function() {
+				that._textChangeDelayr = null;
+				that.$editorContainer.trigger(EVENT_TEXT_CHANGE);
+			}), this._textChangeDelay);
 		}
 	};
 	// =========================================================================

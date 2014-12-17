@@ -69,9 +69,9 @@
 		 *
 		 * @memberOf hifive.templateEditor.controller.DataEditorController
 		 * @private
-		 * @type {hifive.templateEditor.controller.AceEditorController}
+		 * @type {h5.ui.components.aceEditor.controller.AceEditorController}
 		 */
-		_aceEditorController: hifive.templateEditor.controller.AceEditorController,
+		_aceEditorController: h5.ui.components.aceEditor.controller.AceEditorController,
 
 		/**
 		 * パラメータ編集コントローラ
@@ -91,6 +91,9 @@
 		__meta: {
 			_parameterEditController: {
 				rootElement: '.parameter-input'
+			},
+			_aceEditorController: {
+				rootElement: '.dataText'
 			}
 		},
 
@@ -101,8 +104,8 @@
 		 * @private
 		 */
 		__ready: function() {
-			// Ace Editor
-			this._aceEditorController.createEditor(this.$find('.dataText')[0], 'json');
+			// AceEditorにjsonモードを指定
+			this._aceEditorController.setMode('json');
 		},
 
 		/**
@@ -140,7 +143,7 @@
 			this.parentController.loadData(url, type, param).then(this.own(function(data) {
 				// データをエディタに反映
 				this.setTextByObject(data);
-				this.focus();
+				this._aceEditorController.editor.focus();
 
 				$(this.rootElement).trigger('showMessage', {
 					msg: 'データの取得が完了しました',
@@ -173,7 +176,7 @@
 				}
 
 				this.setDataText(data);
-				this.focus();
+				this._aceEditorController.editor.focus();
 			} catch (e) {
 				// エラー時は何もしない
 			}
@@ -224,7 +227,7 @@
 		 * @memberOf hifive.templateEditor.controller.DataEditorController
 		 */
 		focus: function() {
-			this._aceEditorController.focus();
+			this._aceEditorController.editor.focus();
 		}
 	};
 

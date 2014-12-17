@@ -69,7 +69,19 @@
 		 * @memberOf hifive.templateEditor.controller.SourceEditorController
 		 * @private
 		 */
-		_aceEditorController: hifive.templateEditor.controller.AceEditorController,
+		_aceEditorController: h5.ui.components.aceEditor.controller.AceEditorController,
+
+		/**
+		 * コントローラメタ定義
+		 *
+		 * @memberOf hifive.templateEditor.controller.SourceEditorController
+		 * @private
+		 */
+		__meta: {
+			_aceEditorController: {
+				rootElement: '.sourceText'
+			}
+		},
 
 		/**
 		 * 初期化処理
@@ -78,14 +90,10 @@
 		 * @private
 		 */
 		__ready: function() {
-			this._undoBuffer = [];
-			this._redoBuffer = [];
-			// Ace Editorの作成
-			this._aceEditorController.createEditor(this.$find('.sourceText')[0], 'ejs');
-
+			// Aceエディタの設定
+			var editor = this._aceEditorController.editor;
+			var session = this._aceEditorController.getSession();
 			// h5-ejs用にカスタマイズ
-			var editor = this._aceEditorController.getAceEditor();
-			var session = editor.getSession();
 			session.on('changeMode', function() {
 				var mode = session.getMode();
 				var start = '(?:\\[%|\\[\\?|{{)';
@@ -114,7 +122,10 @@
 				});
 				mode.$tokenizer = mode.$tokenizer.constructor(mode.$highlightRules.getRules());
 			});
-			this.focus();
+			// ejsモードに設定
+			this._aceEditorController.setMode('ejs');
+			// フォーカス
+			editor.focus();
 		},
 
 		/**
@@ -126,7 +137,7 @@
 		setText: function(text) {
 			var converted = text.replace(/\x09/g, '    ').replace(/\x0D/g, '');
 			this._aceEditorController.setValue(converted);
-			this.focus();
+			this._aceEditorController.editor.focus();
 		},
 
 		/**
@@ -154,7 +165,7 @@
 		 * @memberOf hifive.templateEditor.controller.SourceEditorController
 		 */
 		focus: function() {
-			this._aceEditorController.focus();
+			this._aceEditorController.editor.focus();
 		}
 	};
 
