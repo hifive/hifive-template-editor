@@ -71,7 +71,6 @@ the License.
 			<filelist dir="${src.dir}">
 				<file name="js/libraryMap.release.js" />
 				<file name="logic/TemplateLoadLogic.js" />
-				<file name="controller/AceEditorController.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/ParameterEditController.js" />
 				<file name="controller/DataEditorController.js" />
