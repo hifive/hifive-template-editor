@@ -57,7 +57,7 @@
 			},
 
 			hifive: {
-				js: ['/hifive-res/fw/current/ejs-h5mod.js', '/hifive-res/fw/current/h5.js',],
+				js: ['/hifive-res/fw/current/ejs-h5mod.js', '/hifive-res/fw/current/h5.js'],
 				css: ['/hifive-res/fw/current/h5.css'],
 				name: '',
 				defaultLoad: true
