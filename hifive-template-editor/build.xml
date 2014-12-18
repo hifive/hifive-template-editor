@@ -21,6 +21,7 @@ the License.
 	<property name="min.src.dir" value="${build.dir}/hifive/templateEditor" />
 	<property name="build.tmp.dir" value="${build.dir}/tmp" />
 	<property name="build.min.filename" value="templateEditor.min.js" />
+	<property name="resultEditorController.filename" value="ResultEditorController.js" />
 	<property name="config.dir" value="config" />
 	<property name="min.header.filename" value="min-build-header.txt" />
 	<property name="lib.project.dir" value="lib" />
@@ -95,6 +96,19 @@ the License.
 		<concat destfile="${min.src.dir}/${build.min.filename}">
 			<header file="${build.tmp.dir}/${min.header.filename}" />
 			<filelist dir="${build.tmp.dir}" files="${build.min.filename}" />
+		</concat>
+
+		<!-- ResultEditorControllerをmin版にする -->
+		<jscomp compilationLevel="simple" debug="false" output="${build.tmp.dir}/controller/${resultEditorController.filename}">
+			<sources dir="${src.dir}/controller">
+				<file name="${resultEditorController.filename}" />
+			</sources>
+		</jscomp>
+		<!-- min版のヘッダ挿入 -->
+		<!-- ヘッダとソースを結合してbuildに出力 -->
+		<concat destfile="${min.src.dir}/controller/${resultEditorController.filename}">
+			<header file="${build.tmp.dir}/${min.header.filename}" />
+			<filelist dir="${build.tmp.dir}/controller" files="${resultEditorController.filename}" />
 		</concat>
 
 		<!-- 必要なファイルをbuildにコピー -->
