@@ -13,7 +13,7 @@ or implied. See the License for the specific language governing permissions and 
 the License.
 
 -->
-<project name="h5devtool-builder" basedir="." default="build">
+<project name="h5devtool-builder" basedir="." default="build-release">
 	<property name="webcontent.dir" value="WebContent" />
 	<property name="webinf.dir" value="WEB-INF" />
 	<property name="src.dir" value="${webcontent.dir}/hifive/templateEditor" />
@@ -61,7 +61,81 @@ the License.
 		<echo message="gitCommitId: ${gitCommitId}" />
 	</target>
 
-	<target name="build" depends="clean,getVersion,getGitHash">
+	<target name="copy-html">
+		<!-- htmlファイルをtmpに出力 -->
+		<copy file="${webcontent.dir}/index.html" tofile="${build.tmp.dir}/index.html" />
+		<copy file="${webcontent.dir}/blank.html" tofile="${build.tmp.dir}/blank.html" />
+	</target>
+
+	<target name="replace-minify" depends="copy-html">
+		<!-- min版を使うように置換 -->
+		<!-- {##minify-start##}から{##minify-end##}の箇所を削除してmin版を読み込むよう変更 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="&lt;script src=&quot;hifive/templateEditor/templateEditor.min.js&quot;&gt;&lt;/script&gt;">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##minify-start##\}.*?\{##minify-end##\} --\&gt;" />
+		</replaceregexp>
+		<!-- {##dev-start/endv##}タグの削除 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##dev-start##\} --&gt;" />
+		</replaceregexp>
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="&lt;\!-- \{##dev-end##\} --\&gt;" />
+		</replaceregexp>
+		<!-- {##release-start##}から{##release-end##}までの箇所を削除 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##release-start##\}.*?\{##release-end##\} --\&gt;" />
+		</replaceregexp>
+	</target>
+
+	<target name="replace-release">
+		<!-- min版を使うように置換 -->
+		<!-- {##minify-start##}から{##minify-end##}の箇所を削除してmin版を読み込むよう変更 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="&lt;script src=&quot;hifive/templateEditor/templateEditor.min.js&quot;&gt;&lt;/script&gt;">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##minify-start##\}.*?\{##minify-end##\} --\&gt;" />
+		</replaceregexp>
+		<!-- htmlファイルのcss,jsをリリース版ように置換 -->
+		<!-- {##dev-start##}から{##dev-end##}の箇所を削除 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##dev-start##\}.*?\{##dev-end##\} --\&gt;" />
+		</replaceregexp>
+		<!-- {##release-start##}から{##release-end##}までの箇所を有効化 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;!-- \{##release-start##\}" />
+		</replaceregexp>
+		<replaceregexp encoding="UTF-8" flags="gs" replace="">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\{##release-end##\} --\&gt;" />
+		</replaceregexp>
+		<!-- jQuery読み分けのHTMLコメント記述のエスケープを解除 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="\&lt;!--">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="\&lt;\\\!--" />
+		</replaceregexp>
+		<replaceregexp encoding="UTF-8" flags="gs" replace="--\&gt;">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+			<regexp pattern="--\\\&gt;" />
+		</replaceregexp>
+	</target>
+
+	<target name="setLibralyMap-release">
+		<property name="libralyMap.src" value="js/libraryMap.release.js" />
+	</target>
+	<target name="setLibralyMap-minify">
+		<property name="libralyMap.src" value="js/libraryMap.js" />
+	</target>
+
+	<target name="pre-build">
+		<!-- tmpからhtmlをコピー -->
+		<copy todir="${build.dir}">
+			<fileset dir="${build.tmp.dir}" includes="*.html" />
+		</copy>
+
 		<!-- タイムスタンプを取得 -->
 		<tstamp>
 			<format property="timestamp" pattern="yyyy/MM/dd HH:mm:ss.SSS (Z)" />
@@ -70,7 +144,7 @@ the License.
 		<!-- ClosureCompilerを使ってmin版の作成。コンパイル後にヘッダ追記するので、build.tmp.dirにいったん出力する -->
 		<concat destfile="${build.tmp.dir}/preConcat.js" outputencoding="UTF-8">
 			<filelist dir="${src.dir}">
-				<file name="js/libraryMap.release.js" />
+				<file name="${libralyMap.src}" />
 				<file name="logic/TemplateLoadLogic.js" />
 				<file name="controller/SourceEditorController.js" />
 				<file name="controller/ParameterEditController.js" />
@@ -122,6 +196,19 @@ the License.
 				<include name="css/**/*" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="build-minify" depends="clean,setLibralyMap-minify,replace-minify,pre-build" description="hifive-resのリソースを使用するビルド版の作成">
+		<!-- tmpフォルダの削除 -->
+		<delete dir="${build.tmp.dir}" />
+
+		<property name="output.dir" location="${build.dir}" />
+		<echo message="ビルドしたファイルを${output.dir}に出力しました。" />
+	</target>
+
+	<target name="build-release" depends="clean,setLibralyMap-release,replace-release,pre-build" description="必要なリソースを全て含めたビルド版の作成">
+		<!-- tmpフォルダの削除 -->
+		<delete dir="${build.tmp.dir}" />
 
 		<!-- hifive-resからresに必要なファイルをコピー -->
 		<property name="build.lib.dir" value="${build.dir}/res/lib" />
@@ -156,50 +243,10 @@ the License.
 			<fileset dir="${hifiveres.dir}/ext/ejslint" />
 		</copy>
 
-		<!-- htmlファイルをtmpに出力 -->
-		<copy file="${webcontent.dir}/index.html" tofile="${build.tmp.dir}/index.html" />
-		<copy file="${webcontent.dir}/blank.html" tofile="${build.tmp.dir}/blank.html" />
-		<!-- htmlファイルのcss,jsをリリース版ように置換 -->
-		<!-- {##dev-start##}から{##dev-end##}の箇所を削除 -->
-		<replaceregexp encoding="UTF-8" flags="gs" replace="">
-			<fileset dir="${build.tmp.dir}" includes="*.html" />
-			<regexp pattern="\&lt;!-- \{##dev-start##\}.*?\{##dev-end##\} --\&gt;" />
-		</replaceregexp>
-		<!-- {##release-start##}から{##release-end##}までの箇所を有効化 -->
-		<replaceregexp encoding="UTF-8" flags="gs" replace="">
-			<fileset dir="${build.tmp.dir}" includes="*.html" />
-			<regexp pattern="\&lt;!-- \{##release-start##\}" />
-		</replaceregexp>
-		<replaceregexp encoding="UTF-8" flags="gs" replace="">
-			<fileset dir="${build.tmp.dir}" includes="*.html" />
-			<regexp pattern="\{##release-end##\} --\&gt;" />
-		</replaceregexp>
-		<!-- jQuery読み分けのHTMLコメント記述のエスケープを解除 -->
-		<replaceregexp encoding="UTF-8" flags="gs" replace="\&lt;!--">
-			<fileset dir="${build.tmp.dir}" includes="*.html" />
-			<regexp pattern="\&lt;\\\!--" />
-		</replaceregexp>
-		<replaceregexp encoding="UTF-8" flags="gs" replace="--\&gt;">
-			<fileset dir="${build.tmp.dir}" includes="*.html" />
-			<regexp pattern="--\\\&gt;" />
-		</replaceregexp>
-		<!-- 置換したhtmlファイルをbuildに出力 -->
-		<copy todir="${build.dir}">
-			<fileset dir="${build.tmp.dir}" includes="*.html" />
-		</copy>
-
 		<!-- tmpフォルダの削除 -->
 		<delete dir="${build.tmp.dir}" />
 
 		<property name="output.dir" location="${build.dir}" />
 		<echo message="ビルドしたファイルを${output.dir}に出力しました。" />
-	</target>
-
-	<target name="setHeadVersion">
-		<property name="versionNumber" value="0.0.0" />
-	</target>
-
-	<target name="build-head" depends="setHeadVersion, build">
-
 	</target>
 </project>
