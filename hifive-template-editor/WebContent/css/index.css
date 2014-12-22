@@ -30,6 +30,33 @@ input[type="text"] {
 	color: #000;
 }
 
+.input-file-wrapper {
+	position: relative;
+}
+
+.input-file-wrapper label {
+	position: absolute;
+	color: rgb(85, 85, 85);;
+	top: 0;
+	width: 100%;
+	text-align: center;
+	height: 30px;
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	top: 0;
+}
+
+.input-file-wrapper input[type="file"] {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	opacity: 0.0;
+}
+
 .nav-tabs,.nav-tabs a {
 	height: 35px;
 }

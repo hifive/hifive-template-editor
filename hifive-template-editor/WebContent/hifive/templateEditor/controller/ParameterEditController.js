@@ -67,18 +67,6 @@
 		__name: 'hifive.templateEditor.controller.ParameterEditController',
 
 		/**
-		 * 初期化処理
-		 *
-		 * @memberOf hifive.templateEditor.controller.ParameterEditController
-		 * @private
-		 */
-		__ready: function() {
-			// TODO テンプレートを使用する
-			this.view.register('parameter-edit-tr', this
-					.$find('.parameter-input-table tbody tr:first')[0].outerHTML);
-		},
-
-		/**
 		 * 入力されている値からパラメータオブジェクトを作成する
 		 *
 		 * @memberOf hifive.templateEditor.controller.ParameterEditController

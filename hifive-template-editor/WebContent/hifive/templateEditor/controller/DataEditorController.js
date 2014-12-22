@@ -140,7 +140,7 @@
 			var type = $('.sendType:checked').val();
 
 			// データを取得
-			this.parentController.loadData(url, type, param).then(this.own(function(data) {
+			this.parentController.loadData(url, type, param).done(this.own(function(data) {
 				// データをエディタに反映
 				this.setTextByObject(data);
 				this._aceEditorController.editor.focus();
@@ -148,14 +148,6 @@
 				$(this.rootElement).trigger('showMessage', {
 					msg: 'データの取得が完了しました',
 					target: this.$find('.data-msg')
-				});
-			}), this.own(function(xhr, textStatus) {
-				// 取得に失敗したらエラーメッセージを表示
-				var msg = 'status:' + xhr.status;
-				msg += (textStatus === 'parsererror') ? '\nJSONへのパースに失敗しました' : '\nデータの取得に失敗しました';
-				$(this.rootElement).trigger('showMessage', {
-					msg: msg,
-					target: this.$find('.data-alert')
 				});
 			}));
 		},

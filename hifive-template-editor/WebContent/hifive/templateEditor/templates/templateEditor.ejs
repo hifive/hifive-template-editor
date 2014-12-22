@@ -1,0 +1,21 @@
+<script type="text/ejs" id="libraries-control">
+	<div class="control-group">
+		<label class="checkbox-inline">
+		    <input class="lib" type="checkbox" value="[%= data.name %]" [%= data.defaultChecked?'checked':''%] />
+		    [%= data.label %]
+		</label>
+	</div>
+</script>
+
+<script type="text/ejs" id="select-ejsid">
+	[% for(var i = 0, l = ids.length; i < l; i++) { %]
+		<option value="[%= ids[i] %]">[%= ids[i] %]</option>
+	[% } %]
+</script>
+
+<script type="text/ejs" id="parameter-edit-tr">
+	<tr class="control-group ">
+		<td class="nameCell"><input class="param-name form-control input-sm" type="text" value=""></td>
+		<td class="valueCell"><input class="param-value form-control input-sm" name="" type="text" value=""></td>
+	</tr>
+</script>

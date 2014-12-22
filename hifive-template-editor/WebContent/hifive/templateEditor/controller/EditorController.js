@@ -156,6 +156,15 @@
 		 */
 		_isBlank: true,
 
+
+		/**
+		 * テンプレートマップ
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 * @private
+		 */
+		_templateMap: {},
+
 		/**
 		 * 初期化処理
 		 *
@@ -395,11 +404,39 @@
 		 * @memberOf hifive.templateEditor.controller.EditorController
 		 * @param {Object} context
 		 */
-		'.applyLibBtn click': function(context) {
+		'.load-ejs-file submit': function(context, $el) {
 			// インジケータを表示します
 			this._showIndicator();
+			context.event.preventDefault();
+			var url = $.trim($el.find('input[name="ejs-url"]').val());
+			if (url) {
+				this.loadTemplate(url);
+			}
+		},
 
-			this._previewTarget.contentDocument.location.reload(true);
+		/**
+		 * テンプレートIDを選択した時のイベントハンドラ
+		 */
+		'.select-ejsid change': function(context, $el) {
+			var id = $el.val();
+			var content = this._templateMap[id];
+			this._sourceEditorController.setText(content);
+		},
+
+		/**
+		 * テンプレートファイルを選択された時のイベントハンドラ
+		 */
+		'input[name="ejs-file"] change': function(context) {
+			var file = context.event.originalEvent.target.files[0];
+			var type = file.type;
+			this._sourceEditorController.setText(type);
+			var reader = new FileReader();
+			reader.addEventListener('load', this
+					.own(function() {
+						this.setTemplates(this._templateLoadLogic
+								.parseTemplateFileContents(reader.result));
+					}));
+			reader.readAsText(file, 'utf-8');
 		},
 
 		/**
@@ -500,16 +537,6 @@
 		},
 
 		/**
-		 * テンプレートエディタに文字列をセットします
-		 *
-		 * @memberOf hifive.templateEditor.controller.EditorController
-		 * @param {String} text
-		 */
-		setTemplateText: function(text) {
-			this._sourceEditorController.setText(text);
-		},
-
-		/**
 		 * editAreaBarの高さが変わっていたらeditAreaの高さを修正します
 		 *
 		 * @memberOf hifive.templateEditor.controller.EditorController
@@ -534,7 +561,15 @@
 		 * @returns {Promise}
 		 */
 		loadTemplate: function(url) {
-			return this._templateLoadLogic.loadTemplate(url);
+			return this._templateLoadLogic.loadTemplate(url).done(this.own(function(resource) {
+				this.setTemplates(resource.templates);
+			})).fail(this.own(function(xhr) {
+				var $el = this.$find('.template-alert');
+				var msg = 'status:' + xhr.status;
+				msg = msg + '\nテンプレートの取得に失敗しました';
+
+				this._messageController.alertMessage(msg, $el);
+			}));
 		},
 
 		/**
@@ -547,7 +582,40 @@
 		 * @returns {Promise}
 		 */
 		loadData: function(url, type, param) {
-			return this._templateLoadLogic.loadData(url, type, param);
+			return this._templateLoadLogic.loadData(url, type, param).fail(
+					this.own(function(xhr, textStatus) {
+						// 取得に失敗したらエラーメッセージを表示
+						var msg = 'status:' + xhr.status;
+						msg += (textStatus === 'parsererror') ? '\nJSONへのパースに失敗しました'
+								: '\nデータの取得に失敗しました';
+						$(this.rootElement).trigger('showMessage', {
+							msg: msg,
+							target: this.$find('.data-alert')
+						});
+					}));
+		},
+
+		/**
+		 * ViewTemplate配列を登録します
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 * @param {ViewTempate[]} templates
+		 */
+		setTemplates: function(templates) {
+			this._templateMap = {};
+			var ids = [];
+			for (var i = 0, l = templates.length; i < l; i++) {
+				var template = templates[i];
+				var id = template.id;
+				var contents = template.contents;
+				ids.push(id);
+				this._templateMap[id] = contents;
+			}
+			// indexが0のテンプレートを設定
+			this._sourceEditorController.setText(templates[0].contents);
+			this.view.update('.select-ejsid', 'select-ejsid', {
+				ids: ids
+			});
 		},
 
 		/**

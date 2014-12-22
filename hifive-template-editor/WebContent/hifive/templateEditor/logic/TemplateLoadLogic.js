@@ -14,6 +14,23 @@
 
 (function($) {
 
+	var ERR_MSG_TEMPLATE_FILE_INVALID_ELEMENT = 'テンプレートファイルに<script>タグ以外の記述があります。テンプレートファイルは全て<script>タグで囲んだテンプレートを記述してください';
+	var ERR_MSG_TEMPLATE_FILE_NO_TEMPLATE = 'テンプレートファイルに<script>タグの記述がありません。テンプレートファイルは全て<script>タグで囲んだテンプレートを記述してください';
+	var ERR_MSG_TEMPLATE_INVALID_ID = 'テンプレートIDが指定されていません。空や空白でない文字列で指定してください。';
+
+
+	/**
+	 * ViewTemplateクラス
+	 */
+	function ViewTemplate(id, content) {
+		this.id = id;
+		this.contents = content
+	}
+
+	/**
+	 * @class
+	 * @name
+	 */
 	var templateLoadLogic = {
 
 		/**
@@ -39,12 +56,63 @@
 		 * 指定されたurlからテンプレ―トを取得します
 		 */
 		loadTemplate: function(url) {
-			return h5.ajax({
-				url: url,
+			var dfd = this.deferred();
+			h5.ajax(url, {
 				dataType: 'text'
+			}).done(this.own(function(content) {
+				var textResources = this.parseTemplateFileContents(content);
+				// resolveする
+				dfd.resolve({
+					url: url,
+					templates: textResources
+				});
+			})).fail(function(errorObj) {
+				// リソースの取得に失敗
+				dfd.reject({
+					message: ERR_MSG_TEMPLATE_AJAX,
+					url: url,
+					detail: detail
+				});
 			});
-		}
+			return dfd.promise();
+		},
 
+		/**
+		 * テンプレートファイル記述文字列をパースしてViewTemplateの配列を返します
+		 */
+		parseTemplateFileContents: function(content) {
+			// コンテンツからscript要素を取得
+			var $elements = $(content).filter(function() {
+				// IE8以下で、要素内にSCRIPTタグが含まれていると、jQueryが</SCRIPT>をunknownElementとして扱ってしまう。
+				// nodeTypeを見てコメントノードも除去して、tagNameが'/SCRIPT'のものも除去する。
+				return this.nodeType === 1 && this.tagName.indexOf('/') !== 1;
+			});
+			var textResources = [];
+			if ($elements.not('script[type="text/ejs"]').length > 0) {
+				// テンプレート記述以外のタグがあ場合はエラー
+				this.throwCustomError({
+					message: ERR_MSG_TEMPLATE_FILE_INVALID_ELEMENT
+				});
+			}
+			if ($elements.length === 0) {
+				// テンプレート記述が一つもない場合はエラー
+				this.throwCustomError({
+					message: ERR_MSG_TEMPLATE_FILE_NO_TEMPLATE
+				});
+			}
+			// script要素からViewTemplateを作成
+			$elements.each(function() {
+				var id = $.trim(this.id);
+				if (!id) {
+					this.throwCustomError({
+						message: ERR_MSG_TEMPLATE_INVALID_ID
+					});
+				}
+				var content = $.trim(this.innerHTML);
+				textResources.push(new ViewTemplate(id, content));
+			});
+			return textResources;
+		}
 	};
 
 	h5.core.expose(templateLoadLogic);

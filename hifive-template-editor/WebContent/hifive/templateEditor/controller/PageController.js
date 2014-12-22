@@ -66,6 +66,8 @@
 		 */
 		__name: 'hifive.templateEditor.controller.PageController',
 
+		__templates: 'hifive/templateEditor/templates/templateEditor.ejs',
+
 		/**
 		 * コントローラのメタ定義
 		 *
@@ -107,61 +109,37 @@
 			var query = this._parseQueryParameters(location.search);
 
 			var dataURL = query.data;
+			var dataDef = null;
 			// データを取得し、セットします
 			if (dataURL) {
 				// urlを入力欄に入れます
-				this.$find('.input-data-url').each(function() {
-					$(this).val(dataURL);
-				});
+				this.$find('input[name="data-url"]').val(dataURL);
 
 				// データを取得し、テキストエリアに表示します
-				var dataDef = this._editorController.loadData(dataURL).then(
-						this.own(function(data) {
-							this._editorController._dataEditorController.setTextByObject(data);
-						}),
-
-						this.own(function(xhr, textStatus) {
-
-							var $el = this.$find('.template-alert');
-							var msg = 'status:' + xhr.status;
-
-							if (textStatus === 'parsererror') {
-								msg = msg + '\nデータはJSON型を指定してください';
-								this._messageController.alertMessage(msg, $el);
-								return;
-							}
-
-							msg = msg + '\nデータの取得に失敗しました';
-							this._messageController.alertMessage(msg, $el);
-						}));
+				dataDef = this._editorController.loadData(dataURL).done(this.own(function(data) {
+					this._editorController._dataEditorController.setTextByObject(data);
+				}));
 			}
 
 			var templateURL = query.template;
+			var templateDef = null;
 			// テンプレートを取得し、セットします
 			if (templateURL) {
-				var templateDef = this._editorController.loadTemplate(templateURL).then(
-
-				this.own(function(template) {
-					template = template.replace(/<script.*>/, '').replace(/<\/script>/, '');
-					this._editorController.setTemplateText(template);
-				}),
-
-				this.own(function(xhr) {
-					var $el = this.$find('.template-alert');
-					var msg = 'status:' + xhr.status;
-					msg = msg + '\nテンプレートの取得に失敗しました';
-
-					this._messageController.alertMessage(msg, $el);
-				}));
+				// urlを入力欄に入れます
+				this.$find('input[name="ejs-url"]').val(templateURL);
+				templateDef = this._editorController.loadTemplate(templateURL);
 			}
 
-			if (dataURL && templateURL) {
-				var def = [dataDef, templateDef];
-
-				h5.async.when(def).done(this.own(function() {
-					this.$find('#ejsEditorRoot').trigger('applyTemplate');
-				}));
+			if (!dataURL && !templateURL) {
+				return;
 			}
+			var readyDfd = h5.async.deferred();
+			h5.async.when(dataDef, templateDef).done(this.own(function() {
+				this.$find('#ejsEditorRoot').trigger('applyTemplate');
+			})).always(function() {
+				readyDfd.resolve();
+			});
+			return readyDfd.promise();
 		},
 
 		/**
