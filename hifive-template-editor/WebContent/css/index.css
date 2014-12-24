@@ -32,6 +32,11 @@ input[type="text"] {
 
 .input-file-wrapper {
 	position: relative;
+	height: 30px;
+}
+
+.input-file-wrapper>* {
+	height: 100%;
 }
 
 .input-file-wrapper label {
