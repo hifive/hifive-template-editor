@@ -190,6 +190,7 @@ the License.
 			<fileset dir="${webcontent.dir}">
 				<include name="hifive/**/*.html" />
 				<include name="hifive/**/ResultEditorController.js" />
+				<include name="hifive/**/templates/*" />
 				<include name="images/**/*" />
 				<include name="res/**/*" />
 				<include name="sample/**/*" />
