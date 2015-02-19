@@ -406,11 +406,11 @@
 		 */
 		'.load-ejs-file submit': function(context, $el) {
 			// インジケータを表示します
-			this._showIndicator();
 			context.event.preventDefault();
 			var url = $.trim($el.find('input[name="ejs-url"]').val());
 			if (url) {
-				this.loadTemplate(url);
+				this._showIndicator();
+				this.loadTemplate(url).always(this.own(this._hideIndicator));
 			}
 		},
 
@@ -568,7 +568,10 @@
 				var msg = 'status:' + xhr.status;
 				msg = msg + '\nテンプレートの取得に失敗しました';
 
-				this._messageController.alertMessage(msg, $el);
+				$(this.rootElement).trigger('showMessage', {
+					msg: msg,
+					target: $el
+				});
 			}));
 		},
 

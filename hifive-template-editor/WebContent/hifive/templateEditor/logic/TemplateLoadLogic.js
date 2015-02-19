@@ -18,7 +18,6 @@
 	var ERR_MSG_TEMPLATE_FILE_NO_TEMPLATE = 'テンプレートファイルに<script>タグの記述がありません。テンプレートファイルは全て<script>タグで囲んだテンプレートを記述してください';
 	var ERR_MSG_TEMPLATE_INVALID_ID = 'テンプレートIDが指定されていません。空や空白でない文字列で指定してください。';
 
-
 	/**
 	 * ViewTemplateクラス
 	 */
@@ -60,7 +59,11 @@
 			h5.ajax(url, {
 				dataType: 'text'
 			}).done(this.own(function(content) {
-				var textResources = this.parseTemplateFileContents(content);
+				try {
+					var textResources = this.parseTemplateFileContents(content);
+				} catch (e) {
+					dfd.reject(e);
+				}
 				// resolveする
 				dfd.resolve({
 					url: url,
@@ -68,11 +71,7 @@
 				});
 			})).fail(function(errorObj) {
 				// リソースの取得に失敗
-				dfd.reject({
-					message: ERR_MSG_TEMPLATE_AJAX,
-					url: url,
-					detail: detail
-				});
+				dfd.reject(errorObj);
 			});
 			return dfd.promise();
 		},
