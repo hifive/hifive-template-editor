@@ -90,23 +90,17 @@
 			var textResources = [];
 			if ($elements.not('script[type="text/ejs"]').length > 0) {
 				// テンプレート記述以外のタグがあ場合はエラー
-				this.throwCustomError({
-					message: ERR_MSG_TEMPLATE_FILE_INVALID_ELEMENT
-				});
+				throw new Error(ERR_MSG_TEMPLATE_FILE_INVALID_ELEMENT);
 			}
 			if ($elements.length === 0) {
 				// テンプレート記述が一つもない場合はエラー
-				this.throwCustomError({
-					message: ERR_MSG_TEMPLATE_FILE_NO_TEMPLATE
-				});
+				throw new Error(ERR_MSG_TEMPLATE_FILE_NO_TEMPLATE);
 			}
 			// script要素からViewTemplateを作成
 			$elements.each(function() {
 				var id = $.trim(this.id);
 				if (!id) {
-					this.throwCustomError({
-						message: ERR_MSG_TEMPLATE_INVALID_ID
-					});
+					throw new Error(ERR_MSG_TEMPLATE_INVALID_ID);
 				}
 				var content = $.trim(this.innerHTML);
 				textResources.push(new ViewTemplate(id, content));
