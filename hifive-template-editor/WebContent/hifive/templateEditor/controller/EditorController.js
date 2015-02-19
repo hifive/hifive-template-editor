@@ -253,6 +253,22 @@
 					});
 					readyDfd.resolve();
 				}));
+
+				// テンプレートが記述されていたら読み込む
+				var $templates = $(this._previewTarget.contentWindow.document).find(
+						'script[type="text/ejs"]');
+				if (!$templates.length || !confirm('プレビューページの中にテンプレートが含まれています。ロードしますか？')) {
+					return;
+				}
+				var templates = [];
+				$templates.each(function() {
+					var $this = $(this);
+					templates.push({
+						id: $this.attr('id'),
+						contents: $this.html()
+					});
+				});
+				this.setTemplates(templates);
 			}));
 			// ブランクページを設定
 			this._previewTarget.src = BLANK_PAGE;
