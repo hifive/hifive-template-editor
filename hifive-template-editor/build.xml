@@ -63,6 +63,7 @@ the License.
 
 	<target name="copy-html">
 		<!-- htmlファイルをtmpに出力 -->
+		<mkdir dir="${build.tmp.dir}"/>
 		<copy file="${webcontent.dir}/index.html" tofile="${build.tmp.dir}/index.html" />
 		<copy file="${webcontent.dir}/blank.html" tofile="${build.tmp.dir}/blank.html" />
 	</target>
@@ -90,7 +91,7 @@ the License.
 		</replaceregexp>
 	</target>
 
-	<target name="replace-release">
+	<target name="replace-release" depends="copy-html">
 		<!-- min版を使うように置換 -->
 		<!-- {##minify-start##}から{##minify-end##}の箇所を削除してmin版を読み込むよう変更 -->
 		<replaceregexp encoding="UTF-8" flags="gs" replace="&lt;script src=&quot;hifive/templateEditor/templateEditor.min.js&quot;&gt;&lt;/script&gt;">
@@ -243,9 +244,6 @@ the License.
 		<copy todir="${build.lib.dir}/ejs">
 			<fileset dir="${hifiveres.dir}/ext/ejslint" />
 		</copy>
-
-		<!-- tmpフォルダの削除 -->
-		<delete dir="${build.tmp.dir}" />
 
 		<property name="output.dir" location="${build.dir}" />
 		<echo message="ビルドしたファイルを${output.dir}に出力しました。" />
