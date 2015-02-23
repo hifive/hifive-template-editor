@@ -251,6 +251,17 @@
 						msg: msg,
 						target: this.$find('.preview-msg')
 					});
+					// セレクタが指定済みなら適用する
+					var selector = this.$find('.input-selector').val();
+					if (selector) {
+						var data = {
+							type: 'changeTarget',
+							selector: selector
+						};
+						this.trigger('sendMsg', {
+							'data': data
+						});
+					}
 					readyDfd.resolve();
 				}));
 
