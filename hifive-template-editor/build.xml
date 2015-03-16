@@ -25,6 +25,8 @@ the License.
 	<property name="config.dir" value="config" />
 	<property name="min.header.filename" value="min-build-header.txt" />
 	<property name="lib.project.dir" value="lib" />
+	<!-- html中のバージョン表記(ビルド時に置換されるキーワード) -->
+	<property name="version.description" value="ver.HEAD" />
 	<!-- hifive-resプロジェクトのパス。環境によって適切に書き換えてください -->
 	<property name="hifiveres.dir" value="../../hifive-res/" />
 
@@ -63,18 +65,28 @@ the License.
 
 	<target name="copy-html">
 		<!-- htmlファイルをtmpに出力 -->
-		<mkdir dir="${build.tmp.dir}"/>
+		<mkdir dir="${build.tmp.dir}" />
 		<copy file="${webcontent.dir}/index.html" tofile="${build.tmp.dir}/index.html" />
 		<copy file="${webcontent.dir}/blank.html" tofile="${build.tmp.dir}/blank.html" />
 	</target>
 
-	<target name="replace-minify" depends="copy-html">
+	<target name="replace-common" depends="getVersion,copy-html">
+		<!-- minify時、release時共通の置換処理を行う -->
 		<!-- min版を使うように置換 -->
 		<!-- {##minify-start##}から{##minify-end##}の箇所を削除してmin版を読み込むよう変更 -->
 		<replaceregexp encoding="UTF-8" flags="gs" replace="&lt;script src=&quot;hifive/templateEditor/templateEditor.min.js&quot;&gt;&lt;/script&gt;">
 			<fileset dir="${build.tmp.dir}" includes="*.html" />
 			<regexp pattern="\&lt;!-- \{##minify-start##\}.*?\{##minify-end##\} --\&gt;" />
 		</replaceregexp>
+
+		<!-- バージョン番号 -->
+		<replaceregexp encoding="UTF-8" flags="gs" replace="ver.${versionNumber}">
+			<fileset dir="${build.tmp.dir}" includes="index.html" />
+			<regexp pattern="${version.description}" />
+		</replaceregexp>
+	</target>
+
+	<target name="replace-minify" depends="replace-common">
 		<!-- {##dev-start/endv##}タグの削除 -->
 		<replaceregexp encoding="UTF-8" flags="gs" replace="">
 			<fileset dir="${build.tmp.dir}" includes="*.html" />
@@ -91,13 +103,7 @@ the License.
 		</replaceregexp>
 	</target>
 
-	<target name="replace-release" depends="copy-html">
-		<!-- min版を使うように置換 -->
-		<!-- {##minify-start##}から{##minify-end##}の箇所を削除してmin版を読み込むよう変更 -->
-		<replaceregexp encoding="UTF-8" flags="gs" replace="&lt;script src=&quot;hifive/templateEditor/templateEditor.min.js&quot;&gt;&lt;/script&gt;">
-			<fileset dir="${build.tmp.dir}" includes="*.html" />
-			<regexp pattern="\&lt;!-- \{##minify-start##\}.*?\{##minify-end##\} --\&gt;" />
-		</replaceregexp>
+	<target name="replace-release" depends="replace-common">
 		<!-- htmlファイルのcss,jsをリリース版ように置換 -->
 		<!-- {##dev-start##}から{##dev-end##}の箇所を削除 -->
 		<replaceregexp encoding="UTF-8" flags="gs" replace="">

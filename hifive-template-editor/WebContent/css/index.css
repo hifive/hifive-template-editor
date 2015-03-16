@@ -30,6 +30,11 @@ input[type="text"] {
 	color: #000;
 }
 
+.footer {
+	position: absolute;
+	bottom: 0;
+}
+
 .input-file-wrapper {
 	position: relative;
 	height: 30px;
@@ -100,6 +105,7 @@ input[type="text"] {
 	height: 100%;
 	width: 100%;
 	margin: 0px;
+	position: relative;
 }
 
 .dividedBox.horizontal {
