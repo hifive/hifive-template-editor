@@ -500,6 +500,17 @@
 		},
 
 		/**
+		 * ライブラリ設定時のイベントハンドラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 */
+		'.applyLibBtn click': function() {
+			// blankページを表示するだけ
+			// 設定済みの内容に従ってblankページが表示される
+			this._showBlankPage();
+		},
+
+		/**
 		 * プレビュー状態の詳細表示開始(タッチ)
 		 *
 		 * @memberOf hifive.templateEditor.controller.EditorController
@@ -533,15 +544,6 @@
 		 */
 		'.preview-state mouseleave': function() {
 			this._hidePreviewStateDetail();
-		},
-
-		/**
-		 * ライブラリ設定時のイベントハンドラ
-		 *
-		 * @memberOf hifive.templateEditor.controller.EditorController
-		 */
-		'.applyLibBtn click': function() {
-			this._getLibraryPath();
 		},
 
 		/**
