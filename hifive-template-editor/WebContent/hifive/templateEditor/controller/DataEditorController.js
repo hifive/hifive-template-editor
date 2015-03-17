@@ -167,7 +167,7 @@
 					data = $.parseJSON(data);
 				}
 
-				this.setDataText(data);
+				this.setTextByObject(data);
 				this._aceEditorController.editor.focus();
 			} catch (e) {
 				// エラー時は何もしない
