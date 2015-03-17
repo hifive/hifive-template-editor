@@ -536,6 +536,15 @@
 		},
 
 		/**
+		 * ライブラリ設定時のイベントハンドラ
+		 *
+		 * @memberOf hifive.templateEditor.controller.EditorController
+		 */
+		'.applyLibBtn click': function() {
+			this._getLibraryPath();
+		},
+
+		/**
 		 * プレビューにブランクページを表示します
 		 *
 		 * @memberOf hifive.templateEditor.controller.EditorController

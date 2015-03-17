@@ -222,6 +222,13 @@
 			var numLoaded = 0;
 
 			for (var i = 0, len = cssPaths.length; i < len; i++) {
+				var path = cssPaths[i];
+				var $head = $('head');
+				if ($head.find('link[href="' + path + '"]').length) {
+					// 読み込み済みのcssは読み込まない
+					continue;
+				}
+
 				var css = document.createElement('link');
 
 				$(css).load(function() {
@@ -241,7 +248,7 @@
 					});
 				}));
 
-				$('head')[0].appendChild(css);
+				$head[0].appendChild(css);
 				css.type = 'text/css';
 				css.rel = 'stylesheet';
 				css.href = cssPaths[i];
