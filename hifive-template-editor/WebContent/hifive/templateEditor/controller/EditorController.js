@@ -212,8 +212,6 @@
 					this._indicator.message('スクリプトをロードしています');
 				}
 
-				var pathname = location.pathname;
-
 				// jquery,hifive,ResultEditorControllerを順番にロード
 				h5.async.deferred().resolve().then(this.own(function() {
 					if (this._previewTarget.contentWindow.jQuery) {
@@ -243,7 +241,7 @@
 						return;
 					}
 					// ResultEditorControllerをロード
-					var resultEditorCtrlPath = pathname + RESULT_EDITOR_CTRL_PATH;
+					var resultEditorCtrlPath = RESULT_EDITOR_CTRL_PATH;
 					return this._insertScriptToIFrame(resultEditorCtrlPath);
 				})).done(this.own(function() {
 					var msg = 'ページのロードが完了しました';
@@ -1056,7 +1054,9 @@
 			script.type = 'text/javascript';
 			if (jsPath[0] !== '/' && jsPath[0] !== '.') {
 				// '.'始まりでも'/'始まりでもなければ、index.htmlからのパスに変換して読込ページでロードする
-				jsPath = location.pathname + jsPath;
+				var pathname = location.pathname;
+				pathname = pathname.slice(0, pathname.lastIndexOf('/') + 1);
+				jsPath = pathname + jsPath;
 			}
 			script.src = jsPath;
 			this._getIFrameHeadElement().appendChild(script);
