@@ -137,7 +137,7 @@ the License.
 		<property name="libralyMap.src" value="js/libraryMap.js" />
 	</target>
 
-	<target name="pre-build">
+	<target name="pre-build" depends="getGitHash">
 		<!-- tmpからhtmlをコピー -->
 		<copy todir="${build.dir}">
 			<fileset dir="${build.tmp.dir}" includes="*.html" />
